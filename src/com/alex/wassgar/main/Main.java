@@ -2,6 +2,7 @@ package com.alex.wassgar.main;
 
 import org.apache.log4j.Level;
 
+import com.alex.wassgar.action.Action;
 import com.alex.wassgar.utils.InitLogging;
 import com.alex.wassgar.utils.UsefulMethod;
 import com.alex.wassgar.utils.Variables;
@@ -99,7 +100,7 @@ public class Main
 		try
 			{
 			Variables.getLogger().info("End init, Launching main process");
-			
+			new Action();
 			}
 		catch (Exception exc)
 			{

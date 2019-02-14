@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
+import com.alex.wassgar.misc.User;
 import com.alex.wassgar.misc.storedUUID;
 
 
@@ -72,6 +73,7 @@ public class Variables
 	private static eMailSender eMSender;
 	private static String mainConfigFileDirectory;
 	private static ArrayList<String[][]> mainConfig;
+	private static ArrayList<User> userList;
 	private static String configFileName;
 	private static String userFileName;
 	private static boolean CUCMReachable;
@@ -233,6 +235,21 @@ public class Variables
 	public static void setAXLConnectionToCUCMV105(com.cisco.axlapiservice10.AXLPort aXLConnectionToCUCMV105)
 		{
 		AXLConnectionToCUCMV105 = aXLConnectionToCUCMV105;
+		}
+
+	public static ArrayList<User> getUserList() throws Exception
+		{
+		if(userList == null)
+			{
+			Variables.getLogger().debug("Initialisation of userlist");
+			Variables.setUserList(UsefulMethod.initUserList(Variables.getUserFileName()));
+			}
+		return userList;
+		}
+
+	public static void setUserList(ArrayList<User> userList)
+		{
+		Variables.userList = userList;
 		}
 	
 	/*2019*//*RATEL Alexandre 8)*/

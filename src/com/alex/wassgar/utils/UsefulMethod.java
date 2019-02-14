@@ -16,6 +16,7 @@ import javax.xml.ws.BindingProvider;
 import org.apache.log4j.Level;
 
 import com.alex.wassgar.misc.SimpleRequest;
+import com.alex.wassgar.misc.User;
 import com.alex.wassgar.utils.Variables.cucmAXLVersion;
 import com.alex.wassgar.utils.Variables.itemType;
 
@@ -443,11 +444,60 @@ public class UsefulMethod
 		}
 	
 	/**
+	 * Method used to initialize user list
+	 * @throws Exception 
+	 */
+	public static ArrayList<User> initUserList(String fileName) throws Exception
+		{
+		ArrayList<User> myList = new ArrayList<User>();
+		ArrayList<String[][]> myTempList;
+		
+		myTempList = readUserFile(fileName);
+		
+		for(String[][] sTab: myTempList)
+			{
+			myList.add(new User(UsefulMethod.getItemByName("firstname", sTab),
+					UsefulMethod.getItemByName("lastname", sTab),
+					UsefulMethod.getItemByName("extension", sTab),
+					UsefulMethod.getItemByName("email", sTab),
+					UsefulMethod.getItemByName("cucmid", sTab),
+					UsefulMethod.getItemByName("salesforceid", sTab),
+					Boolean.parseBoolean(UsefulMethod.getItemByName("incomingcallpopup", sTab)),
+					Boolean.parseBoolean(UsefulMethod.getItemByName("reverselookup", sTab)),
+					Boolean.parseBoolean(UsefulMethod.getItemByName("emailreminder", sTab))));
+			}
+		
+		return myList;
+		}
+	
+	
+	/**
 	 * Method used to read the user file
 	 */
-	public void readUserFile()
+	private static ArrayList<String[][]> readUserFile(String fileName) throws Exception
 		{
+		String file;
+		ArrayList<String> listParams = new ArrayList<String>();
 		
+		try
+			{
+			file = xMLReader.fileRead(".\\"+fileName);
+			
+			listParams.add("users");
+			listParams.add("user");
+			return xMLGear.getResultListTab(file, listParams);
+			}
+		catch(FileNotFoundException fnfexc)
+			{
+			fnfexc.printStackTrace();
+			throw new FileNotFoundException("The "+fileName+" file was not found : "+fnfexc.getMessage());
+			}
+		catch(Exception exc)
+			{
+			exc.printStackTrace();
+			Variables.getLogger().error(exc.getMessage(),exc);
+			throw new Exception("ERROR with the file : "+fileName+" : "+exc.getMessage());
+			}
 		}
 	
 	
