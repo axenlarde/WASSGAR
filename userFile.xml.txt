@@ -1,0 +1,23 @@
+<!--
+User file
+
+Contains all the activated users
+-->
+
+<xml>
+	<users>
+		<user>
+			<firstname>Alexandre</firstname>
+			<lastname>RATEL</lastname>
+			<extension>123456</extension>
+			<email>alexandre.ratel@spie.com</email>
+			<cucmid>oizeuoirpuzeporduzpoeinrucza</cucmid>
+			<salesforceid>ejrlnezjrlkezjrzncjrl</salesforceid>
+			<options>
+				<incomingcallpopup>true</incomingcallpopup><!--Boolean : Launch a new salesforcetab in case of incoming call-->
+				<reverselookup>true</reverselookup><!--Boolean : Change the caller name if found in salesforce-->
+				<emailreminder>true</emailreminder><!--Boolean : sen an email to the user to ask to comment the call-->
+			</options>
+		</user>
+	</users>
+</xml>
