@@ -5,5 +5,12 @@
 	<classpathentry kind="lib" path="C:/JAVAOxygen/WASSGAR/lib/jdom.jar"/>
 	<classpathentry kind="lib" path="C:/JAVAOxygen/WASSGAR/lib/log4j-1.2.17.jar"/>
 	<classpathentry kind="lib" path="C:/JAVAOxygen/WASSGAR/lib/mail.jar"/>
+	<classpathentry kind="lib" path="C:/JAVAOxygen/WASSGAR/lib/cryptojce.jar"/>
+	<classpathentry kind="lib" path="C:/JAVAOxygen/WASSGAR/lib/cryptojcommon.jar"/>
+	<classpathentry kind="lib" path="C:/JAVAOxygen/WASSGAR/lib/jcmFIPS.jar"/>
+	<classpathentry kind="lib" path="C:/JAVAOxygen/WASSGAR/lib/jtapi.jar"/>
+	<classpathentry kind="lib" path="C:/JAVAOxygen/WASSGAR/lib/jtracing.jar"/>
+	<classpathentry kind="lib" path="C:/JAVAOxygen/WASSGAR/lib/sslj.jar"/>
+	<classpathentry kind="lib" path="C:/JAVAOxygen/WASSGAR/lib/updater.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
