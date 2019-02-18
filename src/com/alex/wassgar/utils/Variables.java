@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
+import com.alex.wassgar.jtapi.Observer;
 import com.alex.wassgar.misc.User;
 import com.alex.wassgar.misc.storedUUID;
 
@@ -87,6 +88,9 @@ public class Variables
 	/**	AXL	**/
 	private static com.cisco.axlapiservice10.AXLPort AXLConnectionToCUCMV105;//Connection to CUCM version 105
 	
+	/** JTAPI **/
+	private static ArrayList<Observer> observerList;
+	
 	/**************
      * Constructor
      **************/
@@ -94,7 +98,7 @@ public class Variables
 		{
 		configFileName = "configFile.xml";
 		userFileName = "userFile.xml";
-		
+		observerList = new ArrayList<Observer>();
 		}
 
 	public static String getSoftwareName()
@@ -250,6 +254,16 @@ public class Variables
 	public static void setUserList(ArrayList<User> userList)
 		{
 		Variables.userList = userList;
+		}
+
+	public static ArrayList<Observer> getObserverList()
+		{
+		return observerList;
+		}
+
+	public static void setObserverList(ArrayList<Observer> observerList)
+		{
+		Variables.observerList = observerList;
 		}
 	
 	/*2019*//*RATEL Alexandre 8)*/

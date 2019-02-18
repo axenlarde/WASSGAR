@@ -10,6 +10,7 @@ Overal configuration file
 		<javaversiondetection>disable</javaversiondetection><!--enable, disable-->
 		<minjavaversion>1.6:16</minjavaversion><!--Minimum java version allowed-->
 		<splitter>+</splitter>
+		<logunansweredcalls>true</logunansweredcalls><!--Log unanswered calls in salesforce--><!--true,false-->
 		<!--Smtp parameters-->
 		<smtpemailport>25</smtpemailport>
 		<smtpemailprotocol>smtp</smtpemailprotocol>
