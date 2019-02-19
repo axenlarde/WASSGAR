@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
+import com.alex.wassgar.jtapi.Call;
 import com.alex.wassgar.jtapi.Observer;
 import com.alex.wassgar.misc.User;
 import com.alex.wassgar.misc.storedUUID;
@@ -65,12 +66,32 @@ public class Variables
 		delete,
 		update
 		};
+	
+	/**
+	 * Call status
+	 */
+	public enum callStatus
+		{
+		starting,
+		inProgress,
+		ended
+		};
+		
+	/**
+	 * Call type
+	 */
+	public enum callType
+		{
+		incoming,
+		outgoing
+		};
 		
 	/**	MISC	**/
 	private static String softwareName;
 	private static String softwareVersion;
 	private static cucmAXLVersion CUCMVersion;
 	private static Logger logger;
+	private static Logger callLogger;
 	private static eMailSender eMSender;
 	private static String mainConfigFileDirectory;
 	private static ArrayList<String[][]> mainConfig;
@@ -79,6 +100,8 @@ public class Variables
 	private static String userFileName;
 	private static boolean CUCMReachable;
 	private static ArrayList<storedUUID> uuidList;
+	private static boolean advancedLogs;
+	private static ArrayList<Call> callList;
 	
 	/**	Language management	**/
 	public enum language{english,french};
@@ -99,6 +122,7 @@ public class Variables
 		configFileName = "configFile.xml";
 		userFileName = "userFile.xml";
 		observerList = new ArrayList<Observer>();
+		callList = new ArrayList<Call>();
 		}
 
 	public static String getSoftwareName()
@@ -264,6 +288,36 @@ public class Variables
 	public static void setObserverList(ArrayList<Observer> observerList)
 		{
 		Variables.observerList = observerList;
+		}
+
+	public static boolean isAdvancedLogs()
+		{
+		return advancedLogs;
+		}
+
+	public static void setAdvancedLogs(boolean advancedLogs)
+		{
+		Variables.advancedLogs = advancedLogs;
+		}
+
+	public static Logger getCallLogger()
+		{
+		return callLogger;
+		}
+
+	public static void setCallLogger(Logger callLogger)
+		{
+		Variables.callLogger = callLogger;
+		}
+
+	public static ArrayList<Call> getCallList()
+		{
+		return callList;
+		}
+
+	public static void setCallList(ArrayList<Call> callList)
+		{
+		Variables.callList = callList;
 		}
 	
 	/*2019*//*RATEL Alexandre 8)*/

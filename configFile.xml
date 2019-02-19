@@ -6,6 +6,7 @@ Overal configuration file
 	<config>
 		<!--Misc parameters-->
 		<log4j>DEBUG</log4j><!--Logging level : ERROR,INFO,DEBUG-->
+		<advancedcalllogs>false</advancedcalllogs><!--Activate the advanced call traces, Warning : really verbose !-->
 		<language>english</language><!--french,english-->
 		<javaversiondetection>disable</javaversiondetection><!--enable, disable-->
 		<minjavaversion>1.6:16</minjavaversion><!--Minimum java version allowed-->
@@ -19,7 +20,7 @@ Overal configuration file
 		<smtpemailpassword></smtpemailpassword>
 		<smtpemailreceiver>alexandre.ratel@spie.com</smtpemailreceiver><!--One or more destinations separated by ;-->
 		<!--Cti parameters-->
-		<ctihost>10.0.1.172</ctihost><!--IP or name of the cti server-->
+		<ctihost>10.20.147.202</ctihost><!--IP or name of the cti server  10.0.1.172-->
 		<ctidelay>1000</ctidelay><!--Cti delay-->
 		<ctiusername>WASSGAR</ctiusername><!--Cti username-->
 		<ctipassword>CCMCisco92</ctipassword><!--Cti user password-->

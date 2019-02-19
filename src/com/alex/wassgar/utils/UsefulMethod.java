@@ -196,6 +196,12 @@ public class UsefulMethod
 		Variables.getLogger().info("Log level found in the configuration file : "+Variables.getLogger().getLevel().toString());
 		/*************/
 		
+		/***********
+		 * Advanced log
+		 */
+		Variables.setAdvancedLogs(Boolean.parseBoolean(UsefulMethod.getTargetOption("advancedcalllogs")));
+		/************/
+		
 		/************
 		 * Etc...
 		 */

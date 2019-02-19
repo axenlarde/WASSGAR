@@ -94,8 +94,15 @@ public class Main
 			}
 		/*************/
 		
+		/****************
+		 * Initialization of the call logging
+		 */
+		Variables.setCallLogger(InitLogging.infoModeInit(Variables.getSoftwareName()+"_CallLogs.txt"));
+		Variables.getCallLogger().setLevel(Level.INFO);
+		/*************/
+		
 		/*******************
-		 * Start main user interface
+		 * Start main interface
 		 */
 		try
 			{

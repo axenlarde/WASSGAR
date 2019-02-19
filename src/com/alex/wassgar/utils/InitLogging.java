@@ -47,6 +47,28 @@ public class InitLogging
 		return logger;
 		}
 	
+	public static Logger infoModeInit(String logFileName)
+		{
+		//Logger logger = Logger.getLogger(Main.class);
+		Logger logger = Logger.getLogger("");
+		
+		PatternLayout myPattern = new PatternLayout("%d{dd/MM/yyyy - HH:mm:ss} - %m%n");
+		
+		//File appender setup
+		RollingFileAppender myR = new RollingFileAppender();
+		myR.setName("myFileAppender");
+		myR.setFile(logFileName);
+		myR.setMaxFileSize("1000KB");
+		myR.setMaxBackupIndex(7);
+		myR.setLayout(myPattern);
+		myR.activateOptions();
+		
+		//We finally add the appenders to the logger
+		logger.addAppender(myR);
+		
+		return logger;
+		}
+	
 	
 	/*2013*//*RATEL Alexandre 8)*/
 	}

@@ -12,6 +12,7 @@ import javax.telephony.callcontrol.events.CallCtlEv;
 
 import com.alex.wassgar.misc.User;
 import com.alex.wassgar.utils.Variables;
+import com.alex.wassgar.utils.Variables.callType;
 import com.cisco.jtapi.JTAPIDecoder;
 import com.cisco.jtapi.TermConnActiveEvImpl;
 import com.cisco.jtapi.extensions.CiscoAddressObserver;
@@ -75,102 +76,158 @@ public class Observer implements CallControlCallObserver, MediaCallObserver, Cis
 	@Override
 	public void callChangedEvent(CallEv[] events)
 		{
-		if(events != null)
+		
+		try
 			{
-			for (int i = 0; i < events.length; i++)
+			if(events != null)
 				{
-				if(events[i].isNewMetaEvent())
+				for (int i = 0; i < events.length; i++)
 					{
-					Variables.getLogger().debug("Call Meta code : "+JTAPIDecoder.getMetaCode( events[i].getMetaCode() ));
-					}
-				
-				if(events[i] instanceof ConnEv)
-					{
-					Variables.getLogger().debug(((ConnEv)events[i]).getConnection().getAddress().getName());
-					CiscoConnection conn  = (CiscoConnection) ((ConnEv)events[i]).getConnection();
-					Variables.getLogger().debug (  " " + conn.getConnectionID());
-                    Variables.getLogger().debug( " " + JTAPIDecoder.getCallCtlCauseFromReason(((CiscoCallEv)events[i]).getCiscoFeatureReason()));
-					}
-				else if ( events[i] instanceof TermConnEv )
-					{
-					Variables.getLogger().debug ( ((TermConnEv)events[i]).getTerminalConnection().getTerminal().getName() );
-                    Variables.getLogger().debug( " " + JTAPIDecoder.getCallCtlCauseFromReason(((CiscoCallEv)events[i]).getCiscoFeatureReason()));
-					}
-				else if ( events[i] instanceof CallEv )
-					{
-					Variables.getLogger().debug ( "callID=" + ((CallEv)events[i]).getID() );
-					if ( events[i] instanceof CiscoCallChangedEv )
+					if(events[i].getID() == TermConnRingingEv.ID)
 						{
-						CiscoCallChangedEv ev = (CiscoCallChangedEv)events[i];
-						Variables.getLogger().debug ("Surviving= " + ev.getSurvivingCall().getCallID().getCallManagerID() + "/" + ev.getSurvivingCall().getCallID().getGlobalCallID() );
-						Variables.getLogger().debug (" origcall= " + ev.getOriginalCall().getCallID().getCallManagerID() + "/" + ev.getOriginalCall().getCallID().getGlobalCallID() );
-						if (ev.getConnection() != null )
+						/**
+						 * To capture only the relevant event we check that the
+						 * called number is the good one
+						 */
+						
+						CiscoCall localCall = (CiscoCall)((TermConnRingingEv) events[i]).getCall();
+						CiscoPartyInfo calledParty = localCall.getCalledPartyInfo();
+						CiscoPartyInfo callingParty = localCall.getCurrentCallingPartyInfo();
+						
+						if(calledParty.getAddress().getName().equals(this.line.getName()))
 							{
-							 Variables.getLogger().debug(" address= " + ev.getConnection().getAddress().getName());
-							 Variables.getLogger().debug(" connectionID = " + ev.getConnection().getConnectionID() );
-
+							ManageCallList.addCall(new Call(user,
+									line,
+									Integer.toString(localCall.getCallID().getGlobalCallID()),
+									calledParty,
+									callingParty,
+									callType.incoming));
 							}
-						 if (ev.getTerminalConnection() != null )
-							{
-							Variables.getLogger().debug (ev.getTerminalConnection().getTerminal().getName());
-							}
-
 						}
-					Variables.getLogger().debug( " " + JTAPIDecoder.getCallCtlCauseFromReason(((CiscoCallEv)events[i]).getCiscoFeatureReason()));
-					}
-
-				Variables.getLogger().debug ( " Cause: " + JTAPIDecoder.getCause( events[i].getCause() ) );
-				if ( events[i] instanceof CallCtlEv )
-					{
-					Variables.getLogger().debug ( " CallControlCause: " + JTAPIDecoder.getCallCtlCause( ((CallCtlEv)events[i]).getCallControlCause() ) );
-					}
-				Variables.getLogger().debug ( "\n" );
-               
-                CiscoCall localCall;
-                
-                Variables.getLogger().debug("#ID : "+JTAPIDecoder.getEvent(events[i].getID()));
-                
-				switch ( events[i].getID () )
-					{
-				case CallCtlConnOfferedEv.ID:
-                    localCall = (CiscoCall)((CallCtlConnOfferedEv) events[i]).getCall(); 
-                    printCallInfo(localCall);
-                    Variables.getLogger().debug("CallingPartyIpAddr=" + ((CiscoCallCtlConnOfferedEv)events[i]).getCallingPartyIpAddr());
-					offered ( (CallCtlConnOfferedEv) events[i] );                   
-					break;
-				case CallCtlConnAlertingEv.ID:
-					alerting ( (CallCtlConnAlertingEv) events[i] );
-                    localCall = (CiscoCall)((CallCtlConnAlertingEv) events[i]).getCall(); 
-                    printCallInfo(localCall);
-					break;
-                case CallCtlConnEstablishedEv.ID:
-                    localCall = (CiscoCall)((CallCtlConnEstablishedEv) events[i]).getCall(); 
-                    printCallInfo(localCall);
-                    break;
-				case MediaTermConnDtmfEv.ID:
-					digit ( (MediaTermConnDtmfEv) events[i] );
-					break;
-				default:
-					localCall = (CiscoCall)events[i].getCall();
-					printCallInfo(localCall);
-					}
-				
-				
-				/*
-				if(events[i] instanceof TermConnActiveEvImpl)
-					{
+					else if(events[i].getID() == CallCtlConnEstablishedEv.ID)
+						{
+						/**
+						 * To capture only the relevant event we check that the 
+						 * calling number is the good one
+						 */
+						
+						CiscoCall localCall = (CiscoCall)((CallCtlConnEstablishedEv) events[i]).getCall();
+						CiscoPartyInfo calledParty = localCall.getCalledPartyInfo();
+						CiscoPartyInfo callingParty = localCall.getCurrentCallingPartyInfo();
+						
+						if(callingParty.getAddress().getName().equals(this.line.getName()))
+							{
+							ManageCallList.addCall(new Call(user,
+									line,
+									Integer.toString(localCall.getCallID().getGlobalCallID()),
+									calledParty,
+									callingParty,
+									callType.outgoing));
+							}
+						}
+					else if(events[i].getID() == CallObservationEndedEv.ID)
+						{
+						/**
+						 * To capture only the relevant event we check that the 
+						 * calling number is the good one
+						 */
+						
+						CiscoCall localCall = (CiscoCall)((CallObservationEndedEv) events[i]).getCall();
+						
+						ManageCallList.endCall(Integer.toString(localCall.getCallID().getGlobalCallID()));
+						}
 					
-					Variables.getLogger().debug("The following call is in progress on the line "+line.getName()+" : "+
-							"Cause : "+events[i].getCause()+
-							"ID : "+events[i].getID()+
-							"String : "+events[i].toString()+
-							"Call state : "+events[i].getCall().getState()+
-							"Call string : "+events[i].getCall().toString());
+					//Variables.getLogger().debug("### "+events[i].getClass().getName());//Temp
 					
-					}*/
-				
-				//Variables.getLogger().debug("Line "+line.getName()+" event : "+events[i].getClass().getName());
+					/***********************
+					 * In case of advanced debug needs, we can turn on the advanced call debugging
+					 * WARNING : Really verbose !
+					 */
+					if(Variables.isAdvancedLogs())
+						{
+						if(events[i].isNewMetaEvent())
+							{
+							Variables.getLogger().debug("Call Meta code : "+JTAPIDecoder.getMetaCode( events[i].getMetaCode() ));
+							}
+						
+						if(events[i] instanceof ConnEv)
+							{
+							Variables.getLogger().debug(((ConnEv)events[i]).getConnection().getAddress().getName());
+							CiscoConnection conn  = (CiscoConnection) ((ConnEv)events[i]).getConnection();
+							Variables.getLogger().debug (  " " + conn.getConnectionID());
+		                    Variables.getLogger().debug( " " + JTAPIDecoder.getCallCtlCauseFromReason(((CiscoCallEv)events[i]).getCiscoFeatureReason()));
+							}
+						else if ( events[i] instanceof TermConnEv )
+							{
+							Variables.getLogger().debug ( ((TermConnEv)events[i]).getTerminalConnection().getTerminal().getName() );
+		                    Variables.getLogger().debug( " " + JTAPIDecoder.getCallCtlCauseFromReason(((CiscoCallEv)events[i]).getCiscoFeatureReason()));
+							}
+						else if ( events[i] instanceof CallEv )
+							{
+							Variables.getLogger().debug ( "callID=" + ((CallEv)events[i]).getID() );
+							if ( events[i] instanceof CiscoCallChangedEv )
+								{
+								CiscoCallChangedEv ev = (CiscoCallChangedEv)events[i];
+								Variables.getLogger().debug ("Surviving= " + ev.getSurvivingCall().getCallID().getCallManagerID() + "/" + ev.getSurvivingCall().getCallID().getGlobalCallID() );
+								Variables.getLogger().debug (" origcall= " + ev.getOriginalCall().getCallID().getCallManagerID() + "/" + ev.getOriginalCall().getCallID().getGlobalCallID() );
+								if (ev.getConnection() != null )
+									{
+									 Variables.getLogger().debug(" address= " + ev.getConnection().getAddress().getName());
+									 Variables.getLogger().debug(" connectionID = " + ev.getConnection().getConnectionID() );
+		
+									}
+								 if (ev.getTerminalConnection() != null )
+									{
+									Variables.getLogger().debug (ev.getTerminalConnection().getTerminal().getName());
+									}
+		
+								}
+							Variables.getLogger().debug( " " + JTAPIDecoder.getCallCtlCauseFromReason(((CiscoCallEv)events[i]).getCiscoFeatureReason()));
+							}
+		
+						Variables.getLogger().debug ( " Cause: " + JTAPIDecoder.getCause( events[i].getCause() ) );
+						if ( events[i] instanceof CallCtlEv )
+							{
+							Variables.getLogger().debug ( " CallControlCause: " + JTAPIDecoder.getCallCtlCause( ((CallCtlEv)events[i]).getCallControlCause() ) );
+							}
+						Variables.getLogger().debug ( "\n" );
+		               
+		                CiscoCall localCall;
+		                
+		                Variables.getLogger().debug("#ID : "+JTAPIDecoder.getEvent(events[i].getID()));
+		                
+						switch ( events[i].getID () )
+							{
+						case CallCtlConnOfferedEv.ID:
+		                    localCall = (CiscoCall)((CallCtlConnOfferedEv) events[i]).getCall(); 
+		                    printCallInfo(localCall);
+		                    Variables.getLogger().debug("CallingPartyIpAddr=" + ((CiscoCallCtlConnOfferedEv)events[i]).getCallingPartyIpAddr());
+							offered ( (CallCtlConnOfferedEv) events[i] );                   
+							break;
+						case CallCtlConnAlertingEv.ID:
+							alerting ( (CallCtlConnAlertingEv) events[i] );
+		                    localCall = (CiscoCall)((CallCtlConnAlertingEv) events[i]).getCall(); 
+		                    printCallInfo(localCall);
+							break;
+		                case CallCtlConnEstablishedEv.ID:
+		                    localCall = (CiscoCall)((CallCtlConnEstablishedEv) events[i]).getCall(); 
+		                    printCallInfo(localCall);
+		                    break;
+						case MediaTermConnDtmfEv.ID:
+							digit ( (MediaTermConnDtmfEv) events[i] );
+							break;
+						default:
+							Variables.getLogger().debug("Default event");
+							localCall = (CiscoCall)events[i].getCall();
+							printCallInfo(localCall);
+							}
+						}
+					}
 				}
+			}
+		catch (Exception e)
+			{
+			Variables.getLogger().error("ERROR : JTAPI : "+e.getMessage(),e);
 			}
 		}
 	
