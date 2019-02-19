@@ -79,6 +79,17 @@ public class Call
 				callingParty.getAddress().getName());
 		}
 	
+	/**
+	 * Return the line extension followed by the callID
+	 * Used to compare this call to another one
+	 * Indeed, the callID is the same for the calling and the called party but we sometime need 
+	 * to count calls for both party
+	 */
+	public String getInfo()
+		{
+		return line.getName()+callID;
+		}
+	
 	
 	public String getCallID()
 		{

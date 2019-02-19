@@ -86,6 +86,9 @@ public class Observer implements CallControlCallObserver, MediaCallObserver, Cis
 					if(events[i].getID() == TermConnRingingEv.ID)
 						{
 						/**
+						 * To manage incoming calls
+						 */
+						/**
 						 * To capture only the relevant event we check that the
 						 * called number is the good one
 						 */
@@ -106,6 +109,9 @@ public class Observer implements CallControlCallObserver, MediaCallObserver, Cis
 						}
 					else if(events[i].getID() == CallCtlConnEstablishedEv.ID)
 						{
+						/**
+						 * To manage outgoing calls
+						 */
 						/**
 						 * To capture only the relevant event we check that the 
 						 * calling number is the good one
@@ -128,13 +134,12 @@ public class Observer implements CallControlCallObserver, MediaCallObserver, Cis
 					else if(events[i].getID() == CallObservationEndedEv.ID)
 						{
 						/**
-						 * To capture only the relevant event we check that the 
-						 * calling number is the good one
+						 * To manage call ending
 						 */
 						
 						CiscoCall localCall = (CiscoCall)((CallObservationEndedEv) events[i]).getCall();
 						
-						ManageCallList.endCall(Integer.toString(localCall.getCallID().getGlobalCallID()));
+						ManageCallList.endCall(line.getName(),Integer.toString(localCall.getCallID().getGlobalCallID()));
 						}
 					
 					//Variables.getLogger().debug("### "+events[i].getClass().getName());//Temp

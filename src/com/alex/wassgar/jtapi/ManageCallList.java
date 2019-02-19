@@ -13,12 +13,12 @@ public class ManageCallList
 	/**
 	 * Add call to the list
 	 */
-	public static void addCall(Call call)
+	public synchronized static void addCall(Call call)
 		{
 		boolean found = false;
 		for(Call c : Variables.getCallList())
 			{
-			if(c.getCallID().equals(call.getCallID()))
+			if(c.getInfo().equals(call.getLine().getName()+call.getCallID()))
 				{
 				found = true;
 				break;
@@ -28,7 +28,7 @@ public class ManageCallList
 		if(!found)
 			{
 			Variables.getCallList().add(call);
-			Variables.getLogger().debug("JTAPI : New call added to the list : "+call.getCallID());
+			Variables.getLogger().debug("JTAPI : Line "+call.getLine().getName()+", new call added to the list : "+call.getCallID());
 			Variables.getLogger().debug("Line "+call.getLine().getName()+" Type "+call.getType().name()+" Called "+call.getCalledParty().getAddress().getName()+" Calling "+call.getCallingParty().getAddress().getName());
 			}
 		}
@@ -37,27 +37,36 @@ public class ManageCallList
 	 * Used to get a call
 	 * @throws Exception 
 	 */
-	public static Call getCall(String callID) throws Exception
+	public synchronized static Call getCall(String extension, String callID) throws Exception
 		{
 		for(Call c : Variables.getCallList())
 			{
-			if(c.getCallID().equals(callID))return c;
+			if(c.getInfo().equals(extension+callID))return c;
 			}
 		
-		throw new Exception("JTAPI : Call not found in the list : "+callID);
+		throw new Exception("JTAPI : For the line "+extension+", a call was not found in the list : "+callID);
 		}
 	
 	/**
 	 * Used to end a call
+	 * 
+	 * In this case, we just need the call ID. Indeed, if multiple party are using the same callID
+	 * it means that they are all part of the same call. So if the call ends for one, it ends for all
 	 */
-	public static void endCall(String callID)
+	public synchronized static void endCall(String extension, String callID)
 		{
 		for(Call c : Variables.getCallList())
 			{
-			if((c.getCallID().equals(callID)) && c.getStatus().equals(callStatus.inProgress))
+			if((c.getInfo().equals(extension+callID)) && c.getStatus().equals(callStatus.inProgress))
 				{
 				c.callEnds();
 				Variables.getLogger().debug("Line "+c.getLine().getName()+" call "+callID+" ends, duration : "+c.getFormatDuration());
+				
+				/**
+				 * Each time a call ends, we remove it from the list
+				 */
+				Variables.getCallList().remove(c);
+				break;
 				}
 			}
 		}

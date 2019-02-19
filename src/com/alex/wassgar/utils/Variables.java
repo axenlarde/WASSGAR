@@ -155,7 +155,7 @@ public class Variables
 		CUCMVersion = cUCMVersion;
 		}
 
-	public static Logger getLogger()
+	public synchronized static Logger getLogger()
 		{
 		return logger;
 		}
@@ -165,7 +165,7 @@ public class Variables
 		Variables.logger = logger;
 		}
 
-	public static eMailSender geteMSender()
+	public synchronized static eMailSender geteMSender()
 		{
 		return eMSender;
 		}
@@ -265,7 +265,7 @@ public class Variables
 		AXLConnectionToCUCMV105 = aXLConnectionToCUCMV105;
 		}
 
-	public static ArrayList<User> getUserList() throws Exception
+	public synchronized static ArrayList<User> getUserList() throws Exception
 		{
 		if(userList == null)
 			{
