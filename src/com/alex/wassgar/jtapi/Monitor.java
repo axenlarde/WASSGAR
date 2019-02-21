@@ -33,11 +33,12 @@ public class Monitor implements ProviderObserver
 		this.password = password;
 		this.server = server;
 		
-		getProvider();
+		getJTAPIProvider();//JTAPI
+		startCURRIMonitoring();//CURRI
 		}
 
 
-	private void getProvider()
+	private void getJTAPIProvider()
 		{
 		Variables.getLogger().debug("JTAPI init");
 		
@@ -65,6 +66,22 @@ public class Monitor implements ProviderObserver
 			Variables.getLogger().error("ERROR : JTAPI init Failed : "+e.getMessage(),e);
 			}
 		}
+	
+	
+	/**
+	 * Method used to start CURRI monitoring thread
+	 * 
+	 * FYI : CURRI allow among other features to change alerting name
+	 * And we need that ;)
+	 */
+	private void startCURRIMonitoring()
+		{
+		/**
+		 * Has to be written. Indeed, this is a required feature but is not in the
+		 * top priority
+		 */
+		}
+	
 	
 	/**
 	 * Method used to manage monitored line

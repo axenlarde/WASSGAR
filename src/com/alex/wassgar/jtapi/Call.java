@@ -95,50 +95,26 @@ public class Call
 		{
 		return callID;
 		}
-	public void setCallID(String callID)
-		{
-		this.callID = callID;
-		}
 	public CiscoPartyInfo getCalledParty()
 		{
 		return calledParty;
-		}
-	public void setCalledParty(CiscoPartyInfo calledParty)
-		{
-		this.calledParty = calledParty;
 		}
 	public CiscoPartyInfo getCallingParty()
 		{
 		return callingParty;
 		}
-	public void setCallingParty(CiscoPartyInfo callingParty)
-		{
-		this.callingParty = callingParty;
-		}
 	public long getStartTime()
 		{
 		return startTime;
-		}
-	public void setStartTime(long startTime)
-		{
-		this.startTime = startTime;
 		}
 	public long getEndTime()
 		{
 		return endTime;
 		}
-	public void setEndTime(long endTime)
-		{
-		this.endTime = endTime;
-		}
 	public long getDuration()
 		{
 		duration = System.currentTimeMillis() - startTime;
 		return duration;
-		}
-	public void setDuration(long duration)
-		{
-		this.duration = duration;
 		}
 	public callStatus getStatus()
 		{
@@ -150,65 +126,49 @@ public class Call
 		}
 	public String getFormatStartTime()
 		{
-		Date myDate = new Date();
-		myDate.setTime(getStartTime());
-		setFormatStartTime(dateFormat.format(myDate));
-		
+		if(formatStartTime == null)
+			{
+			Date myDate = new Date();
+			myDate.setTime(getStartTime());
+			formatStartTime = dateFormat.format(myDate);
+			}
+			
 		return formatStartTime;
-		}
-	public void setFormatStartTime(String formatStartTime)
-		{
-		this.formatStartTime = formatStartTime;
 		}
 	public String getFormatEndTime()
 		{
-		Date myDate = new Date();
-		myDate.setTime(getEndTime());
-		setFormatEndTime(dateFormat.format(myDate));
-		
+		if(formatEndTime == null)
+			{
+			Date myDate = new Date();
+			myDate.setTime(getEndTime());
+			formatEndTime = dateFormat.format(myDate);
+			}
+			
 		return formatEndTime;
-		}
-	public void setFormatEndTime(String formatEndTime)
-		{
-		this.formatEndTime = formatEndTime;
 		}
 	public String getFormatDuration()
 		{
-		Date myDate = new Date();
-		myDate.setTime(getDuration());
-		setFormatDuration(timeFormat.format(myDate));
+		if(formatDuration == null)
+			{
+			Date myDate = new Date();
+			myDate.setTime(getDuration());
+			formatDuration = timeFormat.format(myDate);
+			}
 		
 		return formatDuration;
-		}
-	public void setFormatDuration(String formatDuration)
-		{
-		this.formatDuration = formatDuration;
 		}
 	public callType getType()
 		{
 		return type;
 		}
-	public void setType(callType type)
-		{
-		this.type = type;
-		}
 	public User getUser()
 		{
 		return user;
-		}
-	public void setUser(User user)
-		{
-		this.user = user;
 		}
 	public Address getLine()
 		{
 		return line;
 		}
-	public void setLine(Address line)
-		{
-		this.line = line;
-		}
-	
 	}
 
 /*2019*//*RATEL Alexandre 8)*/

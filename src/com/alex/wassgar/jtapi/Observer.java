@@ -99,7 +99,7 @@ public class Observer implements CallControlCallObserver, MediaCallObserver, Cis
 						
 						if(calledParty.getAddress().getName().equals(this.line.getName()))
 							{
-							ManageCallList.addCall(new Call(user,
+							CallListManager.addCall(new Call(user,
 									line,
 									Integer.toString(localCall.getCallID().getGlobalCallID()),
 									calledParty,
@@ -123,7 +123,7 @@ public class Observer implements CallControlCallObserver, MediaCallObserver, Cis
 						
 						if(callingParty.getAddress().getName().equals(this.line.getName()))
 							{
-							ManageCallList.addCall(new Call(user,
+							CallListManager.addCall(new Call(user,
 									line,
 									Integer.toString(localCall.getCallID().getGlobalCallID()),
 									calledParty,
@@ -139,7 +139,7 @@ public class Observer implements CallControlCallObserver, MediaCallObserver, Cis
 						
 						CiscoCall localCall = (CiscoCall)((CallObservationEndedEv) events[i]).getCall();
 						
-						ManageCallList.endCall(line.getName(),Integer.toString(localCall.getCallID().getGlobalCallID()));
+						CallListManager.endCall(line.getName(),Integer.toString(localCall.getCallID().getGlobalCallID()));
 						}
 					
 					//Variables.getLogger().debug("### "+events[i].getClass().getName());//Temp

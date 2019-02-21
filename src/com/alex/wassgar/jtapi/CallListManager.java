@@ -7,7 +7,7 @@ import com.alex.wassgar.utils.Variables.callStatus;
  * Calls used to store static method used to manage call list
  * @author Alexandre
  */
-public class ManageCallList
+public class CallListManager
 	{
 
 	/**
