@@ -12,5 +12,12 @@
 	<classpathentry kind="lib" path="C:/JAVAOxygen/WASSGAR/lib/jtracing.jar"/>
 	<classpathentry kind="lib" path="C:/JAVAOxygen/WASSGAR/lib/sslj.jar"/>
 	<classpathentry kind="lib" path="C:/JAVAOxygen/WASSGAR/lib/updater.jar"/>
+	<classpathentry kind="lib" path="C:/JAVAOxygen/WASSGAR/lib/appengine-api-1.0-sdk-1.9.71.jar"/>
+	<classpathentry kind="lib" path="C:/JAVAOxygen/WASSGAR/lib/commons-beanutils-1.9.3.jar"/>
+	<classpathentry kind="lib" path="C:/JAVAOxygen/WASSGAR/lib/jackson-core-asl-1.9.13.jar"/>
+	<classpathentry kind="lib" path="C:/JAVAOxygen/WASSGAR/lib/jackson-mapper-asl-1.9.13.jar"/>
+	<classpathentry kind="lib" path="C:/JAVAOxygen/WASSGAR/lib/js.jar"/>
+	<classpathentry kind="lib" path="C:/JAVAOxygen/WASSGAR/lib/ST-4.1.jar"/>
+	<classpathentry kind="lib" path="C:/JAVAOxygen/WASSGAR/lib/SFEnterpriseAPI.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

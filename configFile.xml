@@ -31,7 +31,14 @@ Overal configuration file
 		<axlusername>WASSGAR</axlusername><!--AXL user name to contact the CUCM server-->
 		<axlpassword>CCMCisco92</axlpassword><!--Password of the AXL user in clear !!!!Warning : keep it secret!!!!-->
 		<!--SalesForce parameters-->
-		
+		<sfusername>alexandre.ratel@mylab.com</sfusername><!--SalesForce username for the API-->
+		<sfpassword>Salesforce2alex</sfpassword><!--SalesForce password for the API-->
+		<sfsecuritytoken>ZpKsZSI0nC6vwFJae99Ta7a6</sfsecuritytoken><!--Salesforce security token-->
+		<sfcontacturlpattern>https://eu19.lightning.force.com/lightning/r/Contact/*/view</sfcontacturlpattern><!--Url to use to display a contact information. The * will be replaced by the object ID-->
+		<sfleadurlpattern>https://eu19.lightning.force.com/lightning/r/Lead/*/view</sfleadurlpattern><!--Url to use to display a lead information. The * will be replaced by the object ID-->
+		<sfaccounturlpattern>https://eu19.lightning.force.com/lightning/r/Account/*/view</sfaccounturlpattern><!--Url to use to display an account information. The * will be replaced by the object ID-->
+		<sfremembercontacts>true</sfremembercontacts><!--Once retrieved we remember the user contacts and wont ask salesforce again if the contact is found-->
+		<sfalertingnametemplate>firstname+" "+lastname+" ("+company+")"</sfalertingnametemplate><!--Alerting name template to display during calls-->
 		<!--SalesForce parameters end-->
 	</config>
 </xml>

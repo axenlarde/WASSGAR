@@ -7,6 +7,7 @@ import java.util.TimeZone;
 import javax.telephony.Address;
 
 import com.alex.wassgar.misc.User;
+import com.alex.wassgar.salesforce.SFObject;
 import com.alex.wassgar.utils.Variables;
 import com.alex.wassgar.utils.Variables.callStatus;
 import com.alex.wassgar.utils.Variables.callType;
@@ -37,6 +38,7 @@ public class Call
 	private callType type;
 	private User user;
 	private Address line;
+	private SFObject relatedSFObject;
 	
 	/**
 	 * Constructor
@@ -87,7 +89,7 @@ public class Call
 	 */
 	public String getInfo()
 		{
-		return line.getName()+callID;
+		return line.getName()+" "+callID;
 		}
 	
 	
@@ -169,6 +171,15 @@ public class Call
 		{
 		return line;
 		}
+	public SFObject getRelatedSFObject()
+		{
+		return relatedSFObject;
+		}
+	public void setRelatedSFObject(SFObject relatedSFObject)
+		{
+		this.relatedSFObject = relatedSFObject;
+		}
+	
 	}
 
 /*2019*//*RATEL Alexandre 8)*/

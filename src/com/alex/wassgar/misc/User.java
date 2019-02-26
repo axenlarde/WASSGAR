@@ -22,6 +22,11 @@ public class User
 		this.reverseLookup = reverseLookup;
 		this.emailReminder = emailReminder;
 		}
+	
+	public String getInfo()
+		{
+		return firstName+" "+lastName;
+		}
 
 	public String getFirstName()
 		{

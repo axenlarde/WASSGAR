@@ -8,6 +8,7 @@ import com.alex.wassgar.jtapi.Call;
 import com.alex.wassgar.jtapi.Observer;
 import com.alex.wassgar.misc.User;
 import com.alex.wassgar.misc.storedUUID;
+import com.sforce.soap.enterprise.EnterpriseConnection;
 
 
 
@@ -86,6 +87,16 @@ public class Variables
 		outgoing
 		};
 		
+	/**
+	 * SF Object type
+	 */
+	public enum sfObjectType
+		{
+		contact,
+		lead,
+		account
+		};
+		
 	/**	MISC	**/
 	private static String softwareName;
 	private static String softwareVersion;
@@ -113,6 +124,9 @@ public class Variables
 	
 	/** JTAPI **/
 	private static ArrayList<Observer> observerList;
+	
+	/** SalesForce **/
+	private static EnterpriseConnection sFConnection;
 	
 	/**************
      * Constructor
@@ -319,6 +333,17 @@ public class Variables
 		{
 		Variables.callList = callList;
 		}
+
+	public static EnterpriseConnection getSFConnection()
+		{
+		return sFConnection;
+		}
+
+	public static void setSFConnection(EnterpriseConnection sFConnection)
+		{
+		Variables.sFConnection = sFConnection;
+		}
+	
 	
 	/*2019*//*RATEL Alexandre 8)*/
 	}

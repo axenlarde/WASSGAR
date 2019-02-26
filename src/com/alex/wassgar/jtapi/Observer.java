@@ -10,6 +10,7 @@ import javax.telephony.callcontrol.events.CallCtlConnEstablishedEv;
 import javax.telephony.callcontrol.events.CallCtlConnOfferedEv;
 import javax.telephony.callcontrol.events.CallCtlEv;
 
+import com.alex.wassgar.misc.ManageUser;
 import com.alex.wassgar.misc.User;
 import com.alex.wassgar.utils.Variables;
 import com.alex.wassgar.utils.Variables.callType;
@@ -99,12 +100,16 @@ public class Observer implements CallControlCallObserver, MediaCallObserver, Cis
 						
 						if(calledParty.getAddress().getName().equals(this.line.getName()))
 							{
-							CallListManager.addCall(new Call(user,
+							Call call = new Call(user,
 									line,
 									Integer.toString(localCall.getCallID().getGlobalCallID()),
 									calledParty,
 									callingParty,
-									callType.incoming));
+									callType.incoming);
+									
+							CallListManager.addCall(call);
+							
+							ManageUser.processNewCall(user, call);
 							}
 						}
 					else if(events[i].getID() == CallCtlConnEstablishedEv.ID)
@@ -123,12 +128,16 @@ public class Observer implements CallControlCallObserver, MediaCallObserver, Cis
 						
 						if(callingParty.getAddress().getName().equals(this.line.getName()))
 							{
-							CallListManager.addCall(new Call(user,
+							Call call = new Call(user,
 									line,
 									Integer.toString(localCall.getCallID().getGlobalCallID()),
 									calledParty,
 									callingParty,
-									callType.outgoing));
+									callType.outgoing);
+							
+							CallListManager.addCall(call);//We add the call to the call list
+							
+							ManageUser.processNewCall(user, call);
 							}
 						}
 					else if(events[i].getID() == CallObservationEndedEv.ID)
