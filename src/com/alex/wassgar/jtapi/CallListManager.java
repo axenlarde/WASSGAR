@@ -63,8 +63,6 @@ public class CallListManager
 				c.callEnds();
 				Variables.getLogger().debug("Line "+c.getLine().getName()+" call "+callID+" ends, duration : "+c.getFormatDuration());
 				
-				ManageUser.logNewCall(c.getUser(), c);//We log the call in salesforce
-				
 				/**
 				 * Each time a call ends, we remove it from the list
 				 */

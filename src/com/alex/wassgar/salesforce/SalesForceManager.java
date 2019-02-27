@@ -3,7 +3,11 @@ package com.alex.wassgar.salesforce;
 import com.sforce.soap.enterprise.Connector;
 import com.sforce.soap.enterprise.GetUserInfoResult;
 import com.sforce.soap.enterprise.QueryResult;
+import com.sforce.soap.enterprise.SearchRecord;
+import com.sforce.soap.enterprise.SearchResult;
+import com.sforce.soap.enterprise.sobject.Account;
 import com.sforce.soap.enterprise.sobject.Contact;
+import com.sforce.soap.enterprise.sobject.Lead;
 import com.sforce.soap.enterprise.sobject.SObject;
 import com.sforce.ws.ConnectionException;
 import com.sforce.ws.ConnectorConfig;
@@ -12,6 +16,7 @@ import com.alex.wassgar.jtapi.Call;
 import com.alex.wassgar.utils.UsefulMethod;
 import com.alex.wassgar.utils.Variables;
 import com.alex.wassgar.utils.Variables.callType;
+import com.alex.wassgar.utils.Variables.searchArea;
 import com.alex.wassgar.utils.Variables.sfObjectType;
 
 
@@ -68,6 +73,7 @@ public class SalesForceManager
 			}
 			*/
 		
+		/*
 		//Temp
 		String query = "SELECT Id, FirstName, LastName, OwnerId FROM Contact";
 		//String query = "SELECT Id, FirstName, LastName FROM User";
@@ -86,7 +92,7 @@ public class SalesForceManager
 		GetUserInfoResult r = Variables.getSFConnection().getUserInfo();
 		Variables.getLogger().debug("User Info : ");
 		Variables.getLogger().debug(r.getUserName());
-		Variables.getLogger().debug(r.getUserId());
+		Variables.getLogger().debug(r.getUserId());*/
 		}
 	
 	/**
@@ -101,24 +107,9 @@ public class SalesForceManager
 	 * Used to look for an extension number in salesforce
 	 * Will return directly an alerting name if something is found
 	 */
-	public static String lookForExtension(String userID, Call call) throws Exception
+	public static SFObject lookForExtension(String userID, String extension) throws Exception
 		{
-		String firstName = "";
-		String lastName = "";
-		String company = "";
-		String alertingNameTemplate = UsefulMethod.getTargetOption("sfalertingnametemplate");
-		StringBuffer alertingName = new StringBuffer();
-		String extension;
-		
-		//The extension taken depends of the call type
-		if(call.getType().equals(callType.incoming))
-			{
-			extension = call.getCallingParty().getAddress().getName();
-			}
-		else
-			{
-			extension = call.getCalledParty().getAddress().getName();
-			}
+		SFObject sfo = null;
 		
 		/**
 		 * If multiple items are found we just return the first one
@@ -130,29 +121,45 @@ public class SalesForceManager
 		 * - Accounts
 		 */
 		
-		//To be written
-		alertingNameTemplate = alertingNameTemplate.replaceAll("\"", "");//We first remove the "
-		for(String s : alertingNameTemplate.split("+"))
+		String query;
+		if(UsefulMethod.getSearchArea().equals(searchArea.all))
 			{
-			if(s.equals("firstname"))
+			query = "FIND {"+extension+"} IN Phone FIELDS RETURNING "+
+					"Contact(Id, Phone, FirstName, LastName),"+
+					"Lead(Id, Phone, FirstName, LastName),"+
+					"Account(Id, Phone, Name)";
+			}
+		else //User only
+			{
+			query = "FIND {"+extension+"} IN Phone FIELDS RETURNING "+ 
+					"Contact(Id, Phone, FirstName, LastName WHERE OwnerId='"+userID+"'),"+ 
+					"Lead(Id, Phone, FirstName, LastName WHERE OwnerId='"+userID+"'),"+ 
+					"Account(Id, Phone, Name)";
+			}
+		
+		SearchResult result = Variables.getSFConnection().search(query);
+		
+		for(SearchRecord sr : result.getSearchRecords())
+			{
+			SObject r = sr.getRecord();
+			
+			if(r instanceof Contact)
 				{
-				alertingName.append(firstName);
+				sfo = new SFObject(sfObjectType.contact, r.getId(), r);
 				}
-			else if(s.equals("lastname"))
+			else if(r instanceof Lead)
 				{
-				alertingName.append(lastName);
+				sfo = new SFObject(sfObjectType.lead, r.getId(), r);
 				}
-			else if(s.equals("company"))
+			else if(r instanceof Account)
 				{
-				alertingName.append(company);
-				}
-			else
-				{
-				alertingName.append(s);
+				sfo = new SFObject(sfObjectType.account, r.getId(), r);
 				}
 			}
 		
-		return alertingNameTemplate.toString();
+		if(sfo != null)Variables.getLogger().debug("Data found for extention : "+extension);
+		
+		return sfo;
 		}
 	
 	/**
@@ -173,6 +180,14 @@ public class SalesForceManager
 			{
 			
 			}
+		}
+	
+	/**
+	 * Used to propose to the user to create a new entry
+	 */
+	public static void createNewEntry(String userID, String Extension)
+		{
+		//Has to be written
 		}
 
 	}

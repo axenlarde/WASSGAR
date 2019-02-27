@@ -1,5 +1,6 @@
 package com.alex.wassgar.salesforce;
 
+import com.alex.wassgar.utils.UsefulMethod;
 import com.alex.wassgar.utils.Variables.sfObjectType;
 
 /**
@@ -21,6 +22,15 @@ public class SFObject
 		this.type = type;
 		ID = iD;
 		this.object = object;
+		}
+	
+	/**
+	 * Used to return object info
+	 * @throws Exception 
+	 */
+	public String getInfo() throws Exception
+		{
+		return UsefulMethod.getAlertingNameFromSFObject(this);
 		}
 
 	public sfObjectType getType()

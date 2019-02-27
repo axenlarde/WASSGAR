@@ -1,6 +1,7 @@
 package com.alex.wassgar.action;
 
 import com.alex.wassgar.jtapi.Monitor;
+import com.alex.wassgar.salesforce.SFObject;
 import com.alex.wassgar.salesforce.SalesForceManager;
 import com.alex.wassgar.utils.UsefulMethod;
 import com.alex.wassgar.utils.Variables;
@@ -65,6 +66,16 @@ public class Action
 		/**
 		 * We now wait for events ;)
 		 */
+		//Temp
+		try
+			{
+			SFObject sfo = SalesForceManager.lookForExtension("0051i0000011rvcAAA", "0712983467");
+			Variables.getLogger().debug("Found : "+sfo.getType()+" - "+sfo.getID()+" - "+sfo.getInfo());
+			}
+		catch (Exception e)
+			{
+			Variables.getLogger().error("ERROR : "+e.getMessage(),e);
+			}
 		}
 	
 	

@@ -97,6 +97,15 @@ public class Variables
 		account
 		};
 		
+	/**
+	 * Contact search area
+	 */
+	public enum searchArea
+		{
+		all,
+		user
+		};
+		
 	/**	MISC	**/
 	private static String softwareName;
 	private static String softwareVersion;

@@ -1,7 +1,9 @@
 package com.alex.wassgar.misc;
 
 import com.alex.wassgar.jtapi.Call;
+import com.alex.wassgar.salesforce.SFObject;
 import com.alex.wassgar.salesforce.SalesForceManager;
+import com.alex.wassgar.utils.UsefulMethod;
 import com.alex.wassgar.utils.Variables;
 import com.alex.wassgar.utils.Variables.callType;
 
@@ -19,27 +21,64 @@ public class ManageUser
 		{
 		if(call.getType().equals(callType.incoming))
 			{
-			
+			/**
+			 * To do when an incoming call is in progress
+			 */
+			try
+				{
+				//Look for a SalesForce contact
+				SFObject sfo = SalesForceManager.lookForExtension(user.getSalesforceID(), call.getCallingParty().getAddress().getName());
+				
+				if(sfo != null)
+					{
+					//If found we display an alerting name on the phone
+					ManageUser.displayAlertingName(user, UsefulMethod.getAlertingNameFromSFObject(sfo), call);
+					
+					//Display the contact in salesforce
+					SalesForceManager.displaySFToast(user.getSalesforceID(), sfo);
+					
+					//We log the call in salesforce
+					SalesForceManager.logNewSFCall(user.getSalesforceID(), call);
+					}
+				else
+					{
+					//If not found we propose to create a new entry in salesforce
+					SalesForceManager.createNewEntry(user.getSalesforceID(), call.getLine().getName());
+					}
+				}
+			catch (Exception e)
+				{
+				Variables.getLogger().error("ERROR : While processing a new incoming call : "+e.getMessage(),e);
+				}
 			}
 		else
 			{
-			
-			}
-		}
-	
-	/**
-	 * Used to log a new call for a given user
-	 */
-	public static void logNewCall(User user, Call call)
-		{
-		if(call.getRelatedSFObject() != null)//we check if the call is about a known contact
-			{
-			Variables.getLogger().debug("Logging new call for "+user.getInfo()+" : "+call.getInfo());
-			SalesForceManager.logNewSFCall(user.getSalesforceID(), call);
-			}
-		else
-			{
-			Variables.getLogger().debug("This call was not related to a SF contact so we do not log it : "+call.getInfo());
+			/**
+			 * To do when an outgoing call is in progress
+			 */
+			try
+				{
+				//Look for a SalesForce contact
+				SFObject sfo = SalesForceManager.lookForExtension(user.getSalesforceID(), call.getCalledParty().getAddress().getName());
+				
+				if(sfo != null)
+					{
+					//If found we display an alerting name on the phone
+					ManageUser.displayAlertingName(user, UsefulMethod.getAlertingNameFromSFObject(sfo), call);
+					
+					//We log the call in salesforce
+					SalesForceManager.logNewSFCall(user.getSalesforceID(), call);
+					}
+				else
+					{
+					//If not found we propose to create a new entry in salesforce
+					SalesForceManager.createNewEntry(user.getSalesforceID(), call.getLine().getName());
+					}
+				}
+			catch (Exception e)
+				{
+				Variables.getLogger().error("ERROR : While processing a new outgoing call : "+e.getMessage(),e);
+				}
 			}
 		}
 	
@@ -47,7 +86,7 @@ public class ManageUser
 	/**
 	 * Used to display the alerting name of an in progress call
 	 */
-	public static void displayAlertingName(User user, String AlertingName)
+	public static void displayAlertingName(User user, String AlertingName, Call call)
 		{
 		//To be written
 		}

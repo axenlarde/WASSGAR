@@ -17,8 +17,14 @@ import org.apache.log4j.Level;
 
 import com.alex.wassgar.misc.SimpleRequest;
 import com.alex.wassgar.misc.User;
+import com.alex.wassgar.salesforce.SFObject;
 import com.alex.wassgar.utils.Variables.cucmAXLVersion;
 import com.alex.wassgar.utils.Variables.itemType;
+import com.alex.wassgar.utils.Variables.searchArea;
+import com.alex.wassgar.utils.Variables.sfObjectType;
+import com.sforce.soap.enterprise.sobject.Account;
+import com.sforce.soap.enterprise.sobject.Contact;
+import com.sforce.soap.enterprise.sobject.Lead;
 
 
 /**********************************
@@ -504,6 +510,85 @@ public class UsefulMethod
 			Variables.getLogger().error(exc.getMessage(),exc);
 			throw new Exception("ERROR with the file : "+fileName+" : "+exc.getMessage());
 			}
+		}
+	
+	/**
+	 * Method used to get the alerting name from
+	 * a salesforce object
+	 * @throws Exception 
+	 */
+	public static String getAlertingNameFromSFObject(SFObject sfo) throws Exception
+		{
+		String firstName = "";
+		String lastName = "";
+		String alertingNameTemplate = UsefulMethod.getTargetOption("sfalertingnametemplate");
+		StringBuffer alertingNameBuffer = new StringBuffer();
+		String alertingName = "";
+		
+		if(sfo.getType().equals(sfObjectType.contact))
+			{
+			Contact c = (Contact)sfo.getObject();
+			firstName = c.getFirstName();
+			lastName = c.getLastName();
+			}
+		else if (sfo.getType().equals(sfObjectType.lead))
+			{
+			Lead l = (Lead)sfo.getObject();
+			firstName = l.getFirstName();
+			lastName = l.getLastName();
+			}
+		else if (sfo.getType().equals(sfObjectType.account))
+			{
+			Account a = (Account)sfo.getObject();
+			firstName = a.getName();
+			}
+		
+		alertingNameTemplate = alertingNameTemplate.replaceAll("\"", "");//We first remove the "
+		for(String s : alertingNameTemplate.split("\\+"))
+			{
+			if(s.equals("firstname"))
+				{
+				alertingNameBuffer.append(firstName);
+				}
+			else if(s.equals("lastname"))
+				{
+				alertingNameBuffer.append(lastName);
+				}
+			else
+				{
+				alertingNameBuffer.append(s);
+				}
+			}
+		
+		if(sfo.getType().equals(sfObjectType.account))
+			{
+			alertingName = firstName;//Because for a company, we just have a company name
+			}
+		else
+			{
+			alertingName = alertingNameBuffer.toString();
+			}
+		
+		Variables.getLogger().debug("Returned alerting name : "+alertingName);
+		
+		return alertingName;
+		}
+	
+	public static searchArea getSearchArea()
+		{
+		searchArea sa = searchArea.user;
+		
+		try
+			{
+			String searchAreaTemplate = UsefulMethod.getTargetOption("sfsearcharea");
+			sa = searchArea.valueOf(searchAreaTemplate);
+			}
+		catch (Exception e)
+			{
+			Variables.getLogger().error("ERROR : While resolving searchArea, applying default value : "+e.getMessage(),e);
+			}
+		
+		return sa;
 		}
 	
 	
