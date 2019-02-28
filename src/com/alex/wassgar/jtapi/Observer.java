@@ -15,7 +15,6 @@ import com.alex.wassgar.misc.User;
 import com.alex.wassgar.utils.Variables;
 import com.alex.wassgar.utils.Variables.callType;
 import com.cisco.jtapi.JTAPIDecoder;
-import com.cisco.jtapi.TermConnActiveEvImpl;
 import com.cisco.jtapi.extensions.CiscoAddressObserver;
 import com.cisco.jtapi.extensions.CiscoCall;
 import com.cisco.jtapi.extensions.CiscoCallChangedEv;

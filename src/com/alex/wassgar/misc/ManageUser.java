@@ -3,6 +3,7 @@ package com.alex.wassgar.misc;
 import com.alex.wassgar.jtapi.Call;
 import com.alex.wassgar.salesforce.SFObject;
 import com.alex.wassgar.salesforce.SalesForceManager;
+import com.alex.wassgar.utils.LanguageManagement;
 import com.alex.wassgar.utils.UsefulMethod;
 import com.alex.wassgar.utils.Variables;
 import com.alex.wassgar.utils.Variables.callType;
@@ -32,18 +33,22 @@ public class ManageUser
 				if(sfo != null)
 					{
 					//If found we display an alerting name on the phone
-					ManageUser.displayAlertingName(user, UsefulMethod.getAlertingNameFromSFObject(sfo), call);
+					String alertingName = UsefulMethod.getAlertingNameFromSFObject(sfo);
+					ManageUser.displayAlertingName(user, alertingName, call);
 					
-					//Display the contact in salesforce
-					SalesForceManager.displaySFToast(user.getSalesforceID(), sfo);
+					//Fire notification
+					ManageUser.fireNotification(user, sfo);
 					
 					//We log the call in salesforce
-					SalesForceManager.logNewSFCall(user.getSalesforceID(), call);
+					String taskID = SalesForceManager.logNewSFCall(user.getSalesforceID(), call, sfo);
+					
+					//We ask the user to add a comment
+					ManageUser.sendCommentRequest(user, call, sfo, taskID);
 					}
 				else
 					{
 					//If not found we propose to create a new entry in salesforce
-					SalesForceManager.createNewEntry(user.getSalesforceID(), call.getLine().getName());
+					if(UsefulMethod.shouldIProposeNewEntry(callType.incoming))ManageUser.proposeNewEntry(user, call.getCallingParty().getAddress().getName());
 					}
 				}
 			catch (Exception e)
@@ -64,15 +69,16 @@ public class ManageUser
 				if(sfo != null)
 					{
 					//If found we display an alerting name on the phone
-					ManageUser.displayAlertingName(user, UsefulMethod.getAlertingNameFromSFObject(sfo), call);
+					String alertingName = UsefulMethod.getAlertingNameFromSFObject(sfo);
+					ManageUser.displayAlertingName(user, alertingName, call);
 					
 					//We log the call in salesforce
-					SalesForceManager.logNewSFCall(user.getSalesforceID(), call);
+					SalesForceManager.logNewSFCall(user.getSalesforceID(), call, sfo);
 					}
 				else
 					{
 					//If not found we propose to create a new entry in salesforce
-					SalesForceManager.createNewEntry(user.getSalesforceID(), call.getLine().getName());
+					if(UsefulMethod.shouldIProposeNewEntry(callType.incoming))ManageUser.proposeNewEntry(user, call.getCalledParty().getAddress().getName());
 					}
 				}
 			catch (Exception e)
@@ -88,15 +94,108 @@ public class ManageUser
 	 */
 	public static void displayAlertingName(User user, String AlertingName, Call call)
 		{
-		//To be written
+		try
+			{
+			//To be written
+			}
+		catch(Exception e)
+			{
+			Variables.getLogger().error("ERROR : While displaying alerting name on the phone : "+e.getMessage(),e);
+			}
 		}
 	
+	/**
+	 * Send a comment request to the user
+	 * @throws Exception 
+	 */
+	public static void sendCommentRequest(User user, Call call, SFObject sfo, String objectID)
+		{
+		try
+			{
+			String alertingName = sfo.getInfo();
+			
+			/**
+			 * Here we just send an email at the moment
+			 * 
+			 * We could change that later
+			 */
+			StringBuffer eMailContent = new StringBuffer();
+			eMailContent.append(LanguageManagement.getString("emailhello"));
+			eMailContent.append("\r\n");
+			eMailContent.append(LanguageManagement.getString("emailcommentcontent"));
+			eMailContent.append("\r\n");
+			eMailContent.append(LanguageManagement.getString("incomingcall"));
+			eMailContent.append(LanguageManagement.getString("calldescription"));
+			eMailContent.append(alertingName);
+			eMailContent.append(call.getFormatStartTime());
+			eMailContent.append("\r\n");
+			eMailContent.append(UsefulMethod.getFormattedURL(UsefulMethod.getTargetOption("sfcommenturlpattern"),objectID));
+			eMailContent.append("\r\n");
+			eMailContent.append(LanguageManagement.getString("emailsignature"));
+			
+			Variables.geteMSender().send(user.getEmail(),
+					LanguageManagement.getString("emailcommentobject"),
+					eMailContent.toString(),
+					"Email sent for user "+user.getInfo()+" call from "+alertingName);
+			}
+		catch (Exception e)
+			{
+			Variables.getLogger().error("ERROR : While sending a comment request : "+e.getMessage(),e);
+			}
+		}
 	
+	/**
+	 * Method used to propose to the user to create a new entry
+	 * @throws Exception 
+	 */
+	public static void proposeNewEntry(User user, String extension)
+		{
+		/**
+		 * At the moment we just send an email to remind to create a new entry
+		 */
+		try
+			{
+			StringBuffer eMailContent = new StringBuffer();
+			eMailContent.append(LanguageManagement.getString("emailhello"));
+			eMailContent.append("\r\n");
+			eMailContent.append(LanguageManagement.getString("emailnewentrycontent"));
+			eMailContent.append(" : "+extension);
+			eMailContent.append("\r\n");
+			eMailContent.append(LanguageManagement.getString("emailsignature"));
+			
+			Variables.geteMSender().send(user.getEmail(),
+					LanguageManagement.getString("emailnewentryobject"),
+					eMailContent.toString(),
+					"Email sent for user "+user.getInfo()+" propose to create a new entry for extension : "+extension);
+			}
+		catch (Exception e)
+			{
+			Variables.getLogger().error("ERROR : While proposing a new entry : "+e.getMessage(),e);
+			}
+		}
 	
+	/**
+	 * Used to fire notification
+	 */
+	public static void fireNotification(User user, SFObject sfo)
+		{
+		try
+			{
+			/**
+			 * At the moment we just open a new tab to display the notification
+			 */
+			String urlToDisplay = UsefulMethod.getFormattedURL(UsefulMethod.getSFObjectURL(sfo.getType()),sfo.getID());
+			Runtime.getRuntime().exec("\""+user.getDefaultBrowser()+"\" "+urlToDisplay);
+			
+			//The best would be to trigger a SF Toast
+			SalesForceManager.displaySFToast(user.getSalesforceID(), sfo);
+			}
+		catch(Exception e)
+			{
+			Variables.getLogger().error("ERROR : While firing a notification Toast : "+e.getMessage(),e);
+			}
+		}
 	
-	
-	
-
 	}
 
 /*2019*//*RATEL Alexandre 8)*/

@@ -94,7 +94,8 @@ public class Variables
 		{
 		contact,
 		lead,
-		account
+		account,
+		task
 		};
 		
 	/**

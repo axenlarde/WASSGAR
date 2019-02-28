@@ -5,11 +5,11 @@ public class User
 	/**
 	 * Variables
 	 */
-	private String firstName, lastName, extension, email, cucmID, salesforceID;
+	private String firstName, lastName, extension, email, cucmID, salesforceID, defaultBrowser;
 	private boolean incomingCallPopup, reverseLookup, emailReminder;
 	
 	public User(String firstName, String lastName, String extension, String email, String cucmID, String salesforceID,
-			boolean incomingCallPopup, boolean reverseLookup, boolean emailReminder)
+			boolean incomingCallPopup, boolean reverseLookup, boolean emailReminder, String defaultBrowser)
 		{
 		super();
 		this.firstName = firstName;
@@ -21,6 +21,7 @@ public class User
 		this.incomingCallPopup = incomingCallPopup;
 		this.reverseLookup = reverseLookup;
 		this.emailReminder = emailReminder;
+		this.defaultBrowser = defaultBrowser;
 		}
 	
 	public String getInfo()
@@ -116,6 +117,16 @@ public class User
 	public void setEmailReminder(boolean emailReminder)
 		{
 		this.emailReminder = emailReminder;
+		}
+
+	public String getDefaultBrowser()
+		{
+		return defaultBrowser;
+		}
+
+	public void setDefaultBrowser(String defaultBrowser)
+		{
+		this.defaultBrowser = defaultBrowser;
 		}
 	
 	}

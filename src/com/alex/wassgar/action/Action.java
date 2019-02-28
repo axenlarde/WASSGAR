@@ -1,9 +1,6 @@
 package com.alex.wassgar.action;
 
-import com.alex.wassgar.jtapi.Monitor;
-import com.alex.wassgar.salesforce.SFObject;
-import com.alex.wassgar.salesforce.SalesForceManager;
-import com.alex.wassgar.utils.UsefulMethod;
+
 import com.alex.wassgar.utils.Variables;
 
 /**
@@ -36,9 +33,9 @@ public class Action
 		 */
 		try
 			{
-			SalesForceManager.connection(UsefulMethod.getTargetOption("sfusername"),
+			/*SalesForceManager.connection(UsefulMethod.getTargetOption("sfusername"),
 					UsefulMethod.getTargetOption("sfpassword"),
-					UsefulMethod.getTargetOption("sfsecuritytoken"));
+					UsefulMethod.getTargetOption("sfsecuritytoken"));*/
 			}
 		catch (Exception e)
 			{
@@ -69,8 +66,8 @@ public class Action
 		//Temp
 		try
 			{
-			SFObject sfo = SalesForceManager.lookForExtension("0051i0000011rvcAAA", "0712983467");
-			Variables.getLogger().debug("Found : "+sfo.getType()+" - "+sfo.getID()+" - "+sfo.getInfo());
+			//Process result = Runtime.getRuntime().exec("start \"toto\" \"www.google.com\"");//Start doesn't work thta way
+			Process result = Runtime.getRuntime().exec("\"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe\" www.google.com");
 			}
 		catch (Exception e)
 			{

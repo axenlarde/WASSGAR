@@ -15,6 +15,15 @@ Language configuration file
 			<yes>Yes</yes>
 			<no>No</no>
 			<error>Error</error>
+			<incomingcall>Incoming call</incomingcall>
+			<outgoingcall>Outgoing call</outgoingcall>
+			<calldescription> from </calldescription>
+			<emailhello>Hi,</emailhello>
+			<emailcommentobject>New call : comment required !</emailcommentobject>
+			<emailcommentcontent>A new call has been automatically added to salesforce. Please do not forget to add a comment.</emailcommentcontent>
+			<emailnewentryobject>Unknown contact : want to create it ?</emailnewentryobject>
+			<emailnewentrycontent>You have just had a call with an unknown contact, maybe you should add it to your contact list.</emailnewentrycontent>
+			<emailsignature>The SalesForce team.</emailsignature>
 		</values>
 	</language>
 	<language>
@@ -29,6 +38,15 @@ Language configuration file
 			<yes>Yes</yes>
 			<no>No</no>
 			<error>Error</error>
+			<incomingcall>Appel entrant</incomingcall>
+			<outgoingcall>Appel sortant</outgoingcall>
+			<calldescription> de </calldescription>
+			<emailhello>Bonjour,</emailhello>
+			<emailcommentobject>Nouvel appel : commentaire requis !</emailcommentobject>
+			<emailcommentcontent>Un nouvel apple a été ajouté à salesforce. N'oubliez pas d'ajouter un commentaire</emailcommentcontent>
+			<emailnewentryobject>Contact inconnu : voulez-vous le créer ?</emailnewentryobject>
+			<emailnewentrycontent>Vous venez juste d'avoir un appel avec un corresppondant inconnu. Peut-être devriez-vous l'ajouter à votre liste de contact ?</emailnewentrycontent>
+			<emailsignature>L'équipe SalesForce.</emailsignature>
 		</values>
 	</language>
 </languages>

@@ -1,18 +1,21 @@
 package com.alex.wassgar.salesforce;
 
 import com.sforce.soap.enterprise.Connector;
-import com.sforce.soap.enterprise.GetUserInfoResult;
-import com.sforce.soap.enterprise.QueryResult;
+import com.sforce.soap.enterprise.SaveResult;
 import com.sforce.soap.enterprise.SearchRecord;
 import com.sforce.soap.enterprise.SearchResult;
 import com.sforce.soap.enterprise.sobject.Account;
 import com.sforce.soap.enterprise.sobject.Contact;
 import com.sforce.soap.enterprise.sobject.Lead;
 import com.sforce.soap.enterprise.sobject.SObject;
+import com.sforce.soap.enterprise.sobject.Task;
 import com.sforce.ws.ConnectionException;
 import com.sforce.ws.ConnectorConfig;
-import com.sforce.ws.bind.XmlObject;
+
+import java.io.IOException;
+
 import com.alex.wassgar.jtapi.Call;
+import com.alex.wassgar.utils.LanguageManagement;
 import com.alex.wassgar.utils.UsefulMethod;
 import com.alex.wassgar.utils.Variables;
 import com.alex.wassgar.utils.Variables.callType;
@@ -47,60 +50,71 @@ public class SalesForceManager
 		Variables.getLogger().debug("SF : Service EndPoint: "+config.getServiceEndpoint());
 		Variables.getLogger().debug("SF : Username: "+config.getUsername());
 		Variables.getLogger().debug("SF : SessionId: "+config.getSessionId());
-		
-		/** To test only
-		DescribeGlobalResult dgr = connection.describeGlobal();
-		
-		for(DescribeGlobalSObjectResult result : dgr.getSobjects())
-			{
-			Variables.getLogger().debug("# "+result.getName());
-			}
-		*/
-		/**
-		DescribeSObjectResult[] dsrArray = Variables.getSfConnection().describeSObjects(new String[] { "Contact" });
-		
-		for(DescribeSObjectResult contact : dsrArray)
-			{
-			Variables.getLogger().debug("Name : "+contact.getName());
-			Variables.getLogger().debug("Label : "+contact.getLabel());
-			
-			Variables.getLogger().debug("Fields : ");
-			for(Field f : contact.getFields())
-				{
-				Variables.getLogger().debug(f.getName());
-				Variables.getLogger().debug(f.getLabel());
-				}
-			}
-			*/
-		
-		/*
-		//Temp
-		String query = "SELECT Id, FirstName, LastName, OwnerId FROM Contact";
-		//String query = "SELECT Id, FirstName, LastName FROM User";
-		QueryResult qr = Variables.getSFConnection().query(query);
-		for(SObject so : qr.getRecords())
-			{
-			Contact c = (Contact)so;
-			Variables.getLogger().debug("Contact Info :");
-			Variables.getLogger().debug("ID : "+c.getId());
-			Variables.getLogger().debug("Last Name : "+c.getLastName());
-			Variables.getLogger().debug("First Name : "+c.getFirstName());
-			Variables.getLogger().debug("Mobile Phone : "+c.getMobilePhone());
-			Variables.getLogger().debug("Owner ID : "+c.getOwnerId());
-			}
-		
-		GetUserInfoResult r = Variables.getSFConnection().getUserInfo();
-		Variables.getLogger().debug("User Info : ");
-		Variables.getLogger().debug(r.getUserName());
-		Variables.getLogger().debug(r.getUserId());*/
 		}
 	
 	/**
 	 * Used to log a new call for a given user
 	 */
-	public static void logNewSFCall(String userID, Call call)
+	public static String logNewSFCall(String userID, Call call, SFObject sfo)
 		{
-		//To be written
+		
+		try
+			{
+			String alertingName = UsefulMethod.getAlertingNameFromSFObject(sfo);
+			
+			Task task = new Task();
+			task.setOwnerId(userID);
+			task.setTaskSubtype("Call");
+			if(call.getType().equals(callType.incoming))
+				{
+				String ic = LanguageManagement.getString("incomingcall");
+				task.setSubject(ic);
+				
+				StringBuffer description = new StringBuffer();
+				description.append(ic);
+				description.append(LanguageManagement.getString("calldescription"));
+				description.append(alertingName);
+				
+				task.setDescription(description.toString());
+				}
+			else
+				{
+				String oc = LanguageManagement.getString("outgoingcall");
+				task.setSubject(oc);
+				
+				StringBuffer description = new StringBuffer();
+				description.append(oc);
+				description.append(LanguageManagement.getString("calldescription"));
+				description.append(alertingName);
+				
+				task.setDescription(description.toString());
+				}
+			
+			if(sfo.getType().equals(sfObjectType.account))
+				{
+				task.setWhatId(sfo.getID());//To validate
+				}
+			else
+				{
+				task.setWhoId(sfo.getID());
+				}
+			
+			SaveResult[] results = Variables.getSFConnection().create(new Task[] {task});
+			
+			if(results[0].getSuccess())
+				{
+				Variables.getLogger().debug("New Call created for user "+userID+" from "+alertingName);
+				return results[0].getId();
+				}
+			else
+				{
+				throw new Exception("The task creation failed");
+				}
+			}
+		catch (Exception e)
+			{
+			Variables.getLogger().error("ERROR : While creating a new task : "+e.getMessage(),e);
+			}
 		}
 	
 	/**
@@ -165,29 +179,21 @@ public class SalesForceManager
 	/**
 	 * Used to display a toast in salesforce to display the salesforce object information to the given user
 	 * For instance : the SFObject is a contact, so we display the contact page to the user
+	 * @throws IOException 
 	 */
-	public static void displaySFToast(String userID, SFObject object)
+	public static void displaySFToast(String userID, SFObject sfo)
 		{
-		if(object.getType().equals(sfObjectType.contact))
+		/**
+		 * At the moment we just display a new tab in the choosen browser
+		 */
+		try
 			{
-			
+			//To be written
 			}
-		else if(object.getType().equals(sfObjectType.lead))
+		catch(Exception e)
 			{
-			
+			Variables.getLogger().error("ERROR : While firing a SF notification Toast : "+e.getMessage(),e);
 			}
-		else if(object.getType().equals(sfObjectType.account))
-			{
-			
-			}
-		}
-	
-	/**
-	 * Used to propose to the user to create a new entry
-	 */
-	public static void createNewEntry(String userID, String Extension)
-		{
-		//Has to be written
 		}
 
 	}

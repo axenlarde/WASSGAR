@@ -37,6 +37,7 @@ Overal configuration file
 		<sfcontacturlpattern>https://eu19.lightning.force.com/lightning/r/Contact/*/view</sfcontacturlpattern><!--Url to use to display a contact information. The * will be replaced by the object ID-->
 		<sfleadurlpattern>https://eu19.lightning.force.com/lightning/r/Lead/*/view</sfleadurlpattern><!--Url to use to display a lead information. The * will be replaced by the object ID-->
 		<sfaccounturlpattern>https://eu19.lightning.force.com/lightning/r/Account/*/view</sfaccounturlpattern><!--Url to use to display an account information. The * will be replaced by the object ID-->
+		<sfcommenturlpattern>https://eu19.lightning.force.com/lightning/r/Task/*/view</sfcommenturlpattern><!--Url to use to display a task information. The * will be replaced by the object ID-->
 		<sfremembercontacts>true</sfremembercontacts><!--Once retrieved we remember the user contacts and wont ask salesforce again if the contact is found-->
 		<sfalertingnametemplate>firstname+" "+lastname</sfalertingnametemplate><!--Alerting name template to display during calls-->
 		<sfproposenewentry>both</sfproposenewentry><!--incoming,outgoing,both--><!--Propose to create a new entry in salesforce only for incoming, outgoing or both-->

@@ -18,6 +18,7 @@ import org.apache.log4j.Level;
 import com.alex.wassgar.misc.SimpleRequest;
 import com.alex.wassgar.misc.User;
 import com.alex.wassgar.salesforce.SFObject;
+import com.alex.wassgar.utils.Variables.callType;
 import com.alex.wassgar.utils.Variables.cucmAXLVersion;
 import com.alex.wassgar.utils.Variables.itemType;
 import com.alex.wassgar.utils.Variables.searchArea;
@@ -476,7 +477,8 @@ public class UsefulMethod
 					UsefulMethod.getItemByName("salesforceid", sTab),
 					Boolean.parseBoolean(UsefulMethod.getItemByName("incomingcallpopup", sTab)),
 					Boolean.parseBoolean(UsefulMethod.getItemByName("reverselookup", sTab)),
-					Boolean.parseBoolean(UsefulMethod.getItemByName("emailreminder", sTab))));
+					Boolean.parseBoolean(UsefulMethod.getItemByName("emailreminder", sTab)),
+					UsefulMethod.getItemByName("defaultbrowser", sTab)));
 			}
 		
 		return myList;
@@ -517,63 +519,75 @@ public class UsefulMethod
 	 * a salesforce object
 	 * @throws Exception 
 	 */
-	public static String getAlertingNameFromSFObject(SFObject sfo) throws Exception
+	public static String getAlertingNameFromSFObject(SFObject sfo)
 		{
-		String firstName = "";
-		String lastName = "";
-		String alertingNameTemplate = UsefulMethod.getTargetOption("sfalertingnametemplate");
-		StringBuffer alertingNameBuffer = new StringBuffer();
-		String alertingName = "";
+		String alertingName = "M.x";
 		
-		if(sfo.getType().equals(sfObjectType.contact))
+		try
 			{
-			Contact c = (Contact)sfo.getObject();
-			firstName = c.getFirstName();
-			lastName = c.getLastName();
-			}
-		else if (sfo.getType().equals(sfObjectType.lead))
-			{
-			Lead l = (Lead)sfo.getObject();
-			firstName = l.getFirstName();
-			lastName = l.getLastName();
-			}
-		else if (sfo.getType().equals(sfObjectType.account))
-			{
-			Account a = (Account)sfo.getObject();
-			firstName = a.getName();
-			}
-		
-		alertingNameTemplate = alertingNameTemplate.replaceAll("\"", "");//We first remove the "
-		for(String s : alertingNameTemplate.split("\\+"))
-			{
-			if(s.equals("firstname"))
+			String firstName = "";
+			String lastName = "";
+			String alertingNameTemplate = UsefulMethod.getTargetOption("sfalertingnametemplate");
+			StringBuffer alertingNameBuffer = new StringBuffer();
+			
+			
+			if(sfo.getType().equals(sfObjectType.contact))
 				{
-				alertingNameBuffer.append(firstName);
+				Contact c = (Contact)sfo.getObject();
+				firstName = c.getFirstName();
+				lastName = c.getLastName();
 				}
-			else if(s.equals("lastname"))
+			else if (sfo.getType().equals(sfObjectType.lead))
 				{
-				alertingNameBuffer.append(lastName);
+				Lead l = (Lead)sfo.getObject();
+				firstName = l.getFirstName();
+				lastName = l.getLastName();
+				}
+			else if (sfo.getType().equals(sfObjectType.account))
+				{
+				Account a = (Account)sfo.getObject();
+				firstName = a.getName();
+				}
+			
+			alertingNameTemplate = alertingNameTemplate.replaceAll("\"", "");//We first remove the "
+			for(String s : alertingNameTemplate.split("\\+"))
+				{
+				if(s.equals("firstname"))
+					{
+					alertingNameBuffer.append(firstName);
+					}
+				else if(s.equals("lastname"))
+					{
+					alertingNameBuffer.append(lastName);
+					}
+				else
+					{
+					alertingNameBuffer.append(s);
+					}
+				}
+			
+			if(sfo.getType().equals(sfObjectType.account))
+				{
+				alertingName = firstName;//Because for a company, we just have a company name
 				}
 			else
 				{
-				alertingNameBuffer.append(s);
+				alertingName = alertingNameBuffer.toString();
 				}
+			
+			Variables.getLogger().debug("Returned alerting name : "+alertingName);
 			}
-		
-		if(sfo.getType().equals(sfObjectType.account))
+		catch (Exception e)
 			{
-			alertingName = firstName;//Because for a company, we just have a company name
+			Variables.getLogger().error("ERROR : While resolving the alerting name : "+e.getMessage(),e);
 			}
-		else
-			{
-			alertingName = alertingNameBuffer.toString();
-			}
-		
-		Variables.getLogger().debug("Returned alerting name : "+alertingName);
 		
 		return alertingName;
 		}
 	
+	/**
+	 * Used to get a searcharea from a string
+	 */
 	public static searchArea getSearchArea()
 		{
 		searchArea sa = searchArea.user;
@@ -591,6 +605,62 @@ public class UsefulMethod
 		return sa;
 		}
 	
+	/**
+	 * Used to get a formatted URL
+	 */
+	public static String getFormattedURL(String url, String ID)
+		{
+		Variables.getLogger().debug("URL before : "+url);
+		String s = url.replace("*", ID);
+		Variables.getLogger().debug("URL after : "+ID);
+		return s;
+		}
+	
+	/**
+	 * Used to get the url related to the SalesForce object type
+	 * @throws Exception 
+	 */
+	public static String getSFObjectURL(sfObjectType sfot) throws Exception
+		{
+		if(sfot.equals(sfObjectType.contact))
+			{
+			return UsefulMethod.getTargetOption("sfcontacturlpattern");
+			}
+		else if(sfot.equals(sfObjectType.lead))
+			{
+			return UsefulMethod.getTargetOption("sfleadurlpattern");
+			}
+		else if(sfot.equals(sfObjectType.account))
+			{
+			return UsefulMethod.getTargetOption("sfaccounturlpattern");
+			}
+		else
+			{
+			throw new Exception("SFObject type not found !");
+			}
+		}
+	
+	
+	public static boolean shouldIProposeNewEntry(callType ct)
+		{
+		try
+			{
+			String allowed = UsefulMethod.getTargetOption("sfproposenewentry");
+			if((ct.name().equals(allowed)) || allowed.equals("both"))
+				{
+				return true;
+				}
+			else
+				{
+				return false;
+				}
+			}
+		catch (Exception e)
+			{
+			Variables.getLogger().error("ERROR : "+e.getMessage(),e);
+			}
+		return true;
+		}
 	
 	/*2019*//*RATEL Alexandre 8)*/
 	}
