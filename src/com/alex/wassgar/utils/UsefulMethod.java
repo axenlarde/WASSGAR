@@ -612,7 +612,7 @@ public class UsefulMethod
 		{
 		Variables.getLogger().debug("URL before : "+url);
 		String s = url.replace("*", ID);
-		Variables.getLogger().debug("URL after : "+ID);
+		Variables.getLogger().debug("URL after : "+s);
 		return s;
 		}
 	
@@ -661,6 +661,37 @@ public class UsefulMethod
 			}
 		return true;
 		}
+	
+	/************
+	 * Method used to read an advanced configuration file
+	 * @throws Exception 
+	 */
+	public static ArrayList<ArrayList<String[][]>> readExtFile(String param, String fileName) throws Exception
+		{
+		String file;
+		ArrayList<String> listParams = new ArrayList<String>();
+		
+		try
+			{
+			Variables.getLogger().info("Reading of the file : "+fileName);
+			file = xMLReader.fileRead(Variables.getMainConfigFileDirectory()+"\\"+fileName);
+			
+			listParams.add(param);
+			return xMLGear.getResultListTabExt(file, listParams);
+			}
+		catch(FileNotFoundException fnfexc)
+			{
+			fnfexc.printStackTrace();
+			throw new FileNotFoundException("The "+fileName+" file was not found : "+fnfexc.getMessage());
+			}
+		catch(Exception exc)
+			{
+			exc.printStackTrace();
+			Variables.getLogger().error(exc.getMessage(),exc);
+			throw new Exception("ERROR with the file : "+exc.getMessage());
+			}
+		}
+	
 	
 	/*2019*//*RATEL Alexandre 8)*/
 	}

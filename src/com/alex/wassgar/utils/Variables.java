@@ -145,8 +145,10 @@ public class Variables
 		{
 		configFileName = "configFile.xml";
 		userFileName = "userFile.xml";
+		languageFileName = "languages.xml";
 		observerList = new ArrayList<Observer>();
 		callList = new ArrayList<Call>();
+		mainConfigFileDirectory = ".";
 		}
 
 	public static String getSoftwareName()
@@ -249,8 +251,14 @@ public class Variables
 		Variables.languageFileName = languageFileName;
 		}
 
-	public static ArrayList<ArrayList<String[][]>> getLanguageContentList()
+	public static ArrayList<ArrayList<String[][]>> getLanguageContentList() throws Exception
 		{
+		if(languageContentList == null)
+			{
+			Variables.getLogger().debug("Initialisation of languageContentList");
+			Variables.setLanguageContentList(UsefulMethod.readExtFile("language", Variables.getLanguageFileName()));
+			}
+		
 		return languageContentList;
 		}
 

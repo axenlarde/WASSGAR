@@ -125,11 +125,12 @@ public class ManageUser
 			eMailContent.append(LanguageManagement.getString("emailcommentcontent"));
 			eMailContent.append("\r\n");
 			eMailContent.append(LanguageManagement.getString("incomingcall"));
-			eMailContent.append(LanguageManagement.getString("calldescription"));
-			eMailContent.append(alertingName);
+			eMailContent.append(LanguageManagement.getString("calldescriptionincoming"));
+			eMailContent.append(" "+alertingName);
 			eMailContent.append(call.getFormatStartTime());
 			eMailContent.append("\r\n");
 			eMailContent.append(UsefulMethod.getFormattedURL(UsefulMethod.getTargetOption("sfcommenturlpattern"),objectID));
+			eMailContent.append("\r\n");
 			eMailContent.append("\r\n");
 			eMailContent.append(LanguageManagement.getString("emailsignature"));
 			

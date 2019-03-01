@@ -18,6 +18,7 @@ public class eMailSender
 	 * Variables
 	 */
 	private String port, protocol, server, user, password;
+	private boolean noAuth;
 	
 	/**
 	 * Constructeur
@@ -59,12 +60,15 @@ public class eMailSender
 	        if((password != null) && (!password.equals("")))
 	        	{
 	        	props.put("mail."+proto+".auth", "true");
+	        	noAuth = false;
 	        	}
 	        else
 	        	{
 	        	props.put("mail."+proto+".auth", "false");
+	        	noAuth = true;
+	        	Variables.getLogger().debug("EMail sender init : No authentication required");
 	        	}
-			
+	        
 			// Get session
 			Session session = Session.getDefaultInstance(props, null);
 			session.setDebug(false);
@@ -80,12 +84,20 @@ public class eMailSender
 			message.setText(content+"\r\n\r\nEmail sent with "+Variables.getSoftwareName()+" "+Variables.getSoftwareVersion(),"utf-8");
 			
 			//Connection
-			transport.connect(server, Integer.parseInt(port), user, password);
+			if(noAuth)
+				{
+				transport.connect();
+				}
+			else
+				{
+				transport.connect(server, Integer.parseInt(port), user, password);
+				}
 			
 			//Send message
 			transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
 			transport.close();
-			Variables.getLogger().info("Email sent ! Subject : "+subject+" To : "+sendTo+ " Type : "+eMailDesc+" Content : "+content);
+			//Variables.getLogger().info("Email sent ! Subject : "+subject+" To : "+sendTo+ " Type : "+eMailDesc+" Content : "+content);
+			Variables.getLogger().info("Email sent to : "+sendTo+" !");
 			}
 		catch(Exception exc)
 			{

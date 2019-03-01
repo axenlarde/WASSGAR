@@ -15,8 +15,8 @@ Overal configuration file
 		<!--Smtp parameters-->
 		<smtpemailport>25</smtpemailport>
 		<smtpemailprotocol>smtp</smtpemailprotocol>
-		<smtpemailserver>smtp.certiam.cnaf</smtpemailserver>
-		<smtpemail>yuza_noreply@certiam.cnaf</smtpemail>
+		<smtpemailserver>smtp.ce.int.amecspie.com</smtpemailserver>
+		<smtpemail>wassgar_noreply@spie.com</smtpemail>
 		<smtpemailpassword></smtpemailpassword>
 		<smtpemailreceiver>alexandre.ratel@spie.com</smtpemailreceiver><!--One or more destinations separated by ;-->
 		<!--Cti parameters-->

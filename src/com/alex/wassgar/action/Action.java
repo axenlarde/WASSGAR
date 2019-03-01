@@ -1,6 +1,9 @@
 package com.alex.wassgar.action;
 
 
+import com.alex.wassgar.jtapi.Monitor;
+import com.alex.wassgar.salesforce.SalesForceManager;
+import com.alex.wassgar.utils.UsefulMethod;
 import com.alex.wassgar.utils.Variables;
 
 /**
@@ -33,9 +36,9 @@ public class Action
 		 */
 		try
 			{
-			/*SalesForceManager.connection(UsefulMethod.getTargetOption("sfusername"),
+			SalesForceManager.connection(UsefulMethod.getTargetOption("sfusername"),
 					UsefulMethod.getTargetOption("sfpassword"),
-					UsefulMethod.getTargetOption("sfsecuritytoken"));*/
+					UsefulMethod.getTargetOption("sfsecuritytoken"));
 			}
 		catch (Exception e)
 			{
@@ -50,10 +53,10 @@ public class Action
 			/***
 			 * Maybe rewrite the following as a static "MonitoringManager"
 			 */
-			/*new Monitor(UsefulMethod.getTargetOption("ctihost"),
+			new Monitor(UsefulMethod.getTargetOption("ctihost"),
 					UsefulMethod.getTargetOption("ctidelay"),
 					UsefulMethod.getTargetOption("ctiusername"),
-					UsefulMethod.getTargetOption("ctipassword"));*/
+					UsefulMethod.getTargetOption("ctipassword"));
 			}
 		catch (Exception e)
 			{
@@ -63,16 +66,6 @@ public class Action
 		/**
 		 * We now wait for events ;)
 		 */
-		//Temp
-		try
-			{
-			//Process result = Runtime.getRuntime().exec("start \"toto\" \"www.google.com\"");//Start doesn't work thta way
-			Process result = Runtime.getRuntime().exec("\"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe\" www.google.com");
-			}
-		catch (Exception e)
-			{
-			Variables.getLogger().error("ERROR : "+e.getMessage(),e);
-			}
 		}
 	
 	

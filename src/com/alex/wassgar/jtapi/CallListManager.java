@@ -1,6 +1,6 @@
 package com.alex.wassgar.jtapi;
 
-import com.alex.wassgar.misc.ManageUser;
+
 import com.alex.wassgar.utils.Variables;
 import com.alex.wassgar.utils.Variables.callStatus;
 
@@ -16,22 +16,9 @@ public class CallListManager
 	 */
 	public synchronized static void addCall(Call call)
 		{
-		boolean found = false;
-		for(Call c : Variables.getCallList())
-			{
-			if(c.getInfo().equals(call.getLine().getName()+call.getCallID()))
-				{
-				found = true;
-				break;
-				}
-			}
-		
-		if(!found)
-			{
-			Variables.getCallList().add(call);
-			Variables.getLogger().debug("JTAPI : Line "+call.getLine().getName()+", new call added to the list : "+call.getCallID());
-			Variables.getLogger().debug("Line "+call.getLine().getName()+" Type "+call.getType().name()+" Called "+call.getCalledParty().getAddress().getName()+" Calling "+call.getCallingParty().getAddress().getName());
-			}
+		Variables.getCallList().add(call);
+		Variables.getLogger().debug("JTAPI : Line "+call.getLine().getName()+", new call added to the list : "+call.getCallID());
+		Variables.getLogger().debug("Line "+call.getLine().getName()+" Type "+call.getType().name()+" Called "+call.getCalledParty().getAddress().getName()+" Calling "+call.getCallingParty().getAddress().getName());
 		}
 	
 	/**
@@ -72,6 +59,21 @@ public class CallListManager
 			}
 		}
 	
+	/**
+	 * Used to check if the call already exist in the call list
+	 */
+	public synchronized static boolean isThisCallExisting(Call call)
+		{
+		for(Call c : Variables.getCallList())
+			{
+			if(c.getInfo().equals(call.getLine().getName()+" "+call.getCallID()))
+				{
+				return true;
+				}
+			}
+		
+		return false;
+		}
 	
 	
 	

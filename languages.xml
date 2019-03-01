@@ -17,7 +17,8 @@ Language configuration file
 			<error>Error</error>
 			<incomingcall>Incoming call</incomingcall>
 			<outgoingcall>Outgoing call</outgoingcall>
-			<calldescription> from </calldescription>
+			<calldescriptionincoming> from </calldescriptionincoming>
+			<calldescriptionoutgoing> to </calldescriptionoutgoing>
 			<emailhello>Hi,</emailhello>
 			<emailcommentobject>New call : comment required !</emailcommentobject>
 			<emailcommentcontent>A new call has been automatically added to salesforce. Please do not forget to add a comment.</emailcommentcontent>
@@ -40,7 +41,8 @@ Language configuration file
 			<error>Error</error>
 			<incomingcall>Appel entrant</incomingcall>
 			<outgoingcall>Appel sortant</outgoingcall>
-			<calldescription> de </calldescription>
+			<calldescriptionincoming> de </calldescriptionincoming>
+			<calldescriptionoutgoing> vers </calldescriptionoutgoing>
 			<emailhello>Bonjour,</emailhello>
 			<emailcommentobject>Nouvel appel : commentaire requis !</emailcommentobject>
 			<emailcommentcontent>Un nouvel apple a été ajouté à salesforce. N'oubliez pas d'ajouter un commentaire</emailcommentcontent>

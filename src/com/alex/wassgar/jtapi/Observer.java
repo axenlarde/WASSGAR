@@ -105,10 +105,12 @@ public class Observer implements CallControlCallObserver, MediaCallObserver, Cis
 									calledParty,
 									callingParty,
 									callType.incoming);
-									
-							CallListManager.addCall(call);
 							
-							ManageUser.processNewCall(user, call);
+							if(!CallListManager.isThisCallExisting(call))
+								{
+								CallListManager.addCall(call);
+								ManageUser.processNewCall(user, call);
+								}
 							}
 						}
 					else if(events[i].getID() == CallCtlConnEstablishedEv.ID)
@@ -134,9 +136,11 @@ public class Observer implements CallControlCallObserver, MediaCallObserver, Cis
 									callingParty,
 									callType.outgoing);
 							
-							CallListManager.addCall(call);//We add the call to the call list
-							
-							ManageUser.processNewCall(user, call);
+							if(!CallListManager.isThisCallExisting(call))
+								{
+								CallListManager.addCall(call);
+								ManageUser.processNewCall(user, call);
+								}
 							}
 						}
 					else if(events[i].getID() == CallObservationEndedEv.ID)

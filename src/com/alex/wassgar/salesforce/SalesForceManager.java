@@ -57,7 +57,6 @@ public class SalesForceManager
 	 */
 	public static String logNewSFCall(String userID, Call call, SFObject sfo)
 		{
-		
 		try
 			{
 			String alertingName = UsefulMethod.getAlertingNameFromSFObject(sfo);
@@ -72,7 +71,7 @@ public class SalesForceManager
 				
 				StringBuffer description = new StringBuffer();
 				description.append(ic);
-				description.append(LanguageManagement.getString("calldescription"));
+				description.append(LanguageManagement.getString("calldescriptionincoming"));
 				description.append(alertingName);
 				
 				task.setDescription(description.toString());
@@ -84,7 +83,7 @@ public class SalesForceManager
 				
 				StringBuffer description = new StringBuffer();
 				description.append(oc);
-				description.append(LanguageManagement.getString("calldescription"));
+				description.append(LanguageManagement.getString("calldescriptionoutgoing"));
 				description.append(alertingName);
 				
 				task.setDescription(description.toString());
@@ -115,6 +114,7 @@ public class SalesForceManager
 			{
 			Variables.getLogger().error("ERROR : While creating a new task : "+e.getMessage(),e);
 			}
+		return "";
 		}
 	
 	/**
