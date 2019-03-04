@@ -16,7 +16,7 @@ Contains all the activated users
 			<defaultbrowser>C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe</defaultbrowser>
 			<incomingcallpopup>true</incomingcallpopup><!--Boolean : Launch a new salesforcetab in case of incoming call-->
 			<reverselookup>true</reverselookup><!--Boolean : Change the caller name if found in salesforce-->
-			<emailreminder>true</emailreminder><!--Boolean : sen an email to the user to ask to comment the call-->
+			<emailreminder>true</emailreminder><!--Boolean : send an email to the user to ask to comment the call-->
 		</user>
 		<user>
 			<firstname>bob</firstname>
@@ -28,7 +28,7 @@ Contains all the activated users
 			<defaultbrowser>C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe</defaultbrowser>
 			<incomingcallpopup>true</incomingcallpopup><!--Boolean : Launch a new salesforcetab in case of incoming call-->
 			<reverselookup>true</reverselookup><!--Boolean : Change the caller name if found in salesforce-->
-			<emailreminder>true</emailreminder><!--Boolean : sen an email to the user to ask to comment the call-->
+			<emailreminder>true</emailreminder><!--Boolean : send an email to the user to ask to comment the call-->
 		</user>
 		<user>
 			<firstname>New Alex</firstname>
@@ -40,7 +40,7 @@ Contains all the activated users
 			<defaultbrowser>C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe</defaultbrowser>
 			<incomingcallpopup>true</incomingcallpopup><!--Boolean : Launch a new salesforcetab in case of incoming call-->
 			<reverselookup>true</reverselookup><!--Boolean : Change the caller name if found in salesforce-->
-			<emailreminder>true</emailreminder><!--Boolean : sen an email to the user to ask to comment the call-->
+			<emailreminder>true</emailreminder><!--Boolean : send an email to the user to ask to comment the call-->
 		</user>
 		<user>
 			<firstname>John</firstname>
@@ -52,7 +52,7 @@ Contains all the activated users
 			<defaultbrowser>C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe</defaultbrowser>
 			<incomingcallpopup>true</incomingcallpopup><!--Boolean : Launch a new salesforcetab in case of incoming call-->
 			<reverselookup>true</reverselookup><!--Boolean : Change the caller name if found in salesforce-->
-			<emailreminder>true</emailreminder><!--Boolean : sen an email to the user to ask to comment the call-->
+			<emailreminder>true</emailreminder><!--Boolean : send an email to the user to ask to comment the call-->
 		</user>
 	</users>
 </xml>

@@ -3,6 +3,7 @@ package com.alex.wassgar.action;
 
 import com.alex.wassgar.jtapi.Monitor;
 import com.alex.wassgar.salesforce.SalesForceManager;
+import com.alex.wassgar.server.ListenerManager;
 import com.alex.wassgar.utils.UsefulMethod;
 import com.alex.wassgar.utils.Variables;
 
@@ -53,14 +54,26 @@ public class Action
 			/***
 			 * Maybe rewrite the following as a static "MonitoringManager"
 			 */
-			new Monitor(UsefulMethod.getTargetOption("ctihost"),
+			Variables.setJtapiMonitor(new Monitor(UsefulMethod.getTargetOption("ctihost"),
 					UsefulMethod.getTargetOption("ctidelay"),
 					UsefulMethod.getTargetOption("ctiusername"),
-					UsefulMethod.getTargetOption("ctipassword"));
+					UsefulMethod.getTargetOption("ctipassword")));
 			}
 		catch (Exception e)
 			{
 			Variables.getLogger().error("ERROR setting up the monitor thread : "+e.getMessage(), e);
+			}
+		
+		/**
+		 * We start the client manager thread
+		 */
+		try
+			{
+			Variables.setWatchman(new ListenerManager());
+			}
+		catch (Exception e)
+			{
+			Variables.getLogger().error("ERROR setting up the listener manager thread : "+e.getMessage(), e);
 			}
 		
 		/**

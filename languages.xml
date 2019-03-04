@@ -23,7 +23,7 @@ Language configuration file
 			<emailcommentobject>New call : comment required !</emailcommentobject>
 			<emailcommentcontent>A new call has been automatically added to salesforce. Please do not forget to add a comment.</emailcommentcontent>
 			<emailnewentryobject>Unknown contact : want to create it ?</emailnewentryobject>
-			<emailnewentrycontent>You have just had a call with an unknown contact, maybe you should add it to your contact list.</emailnewentrycontent>
+			<emailnewentrycontent>You have just had a call with an unknown contact, maybe you should add it to your contact list</emailnewentrycontent>
 			<emailsignature>The SalesForce team.</emailsignature>
 		</values>
 	</language>

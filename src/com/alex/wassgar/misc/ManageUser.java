@@ -3,6 +3,9 @@ package com.alex.wassgar.misc;
 import com.alex.wassgar.jtapi.Call;
 import com.alex.wassgar.salesforce.SFObject;
 import com.alex.wassgar.salesforce.SalesForceManager;
+import com.alex.wassgar.server.ManageRequest;
+import com.alex.wassgar.server.Request;
+import com.alex.wassgar.server.RequestBuilder;
 import com.alex.wassgar.utils.LanguageManagement;
 import com.alex.wassgar.utils.UsefulMethod;
 import com.alex.wassgar.utils.Variables;
@@ -96,7 +99,11 @@ public class ManageUser
 		{
 		try
 			{
-			//To be written
+			//We do it only if activated for this particular user
+			if(user.isReverseLookup())
+				{
+				//To be written
+				}
 			}
 		catch(Exception e)
 			{
@@ -112,32 +119,36 @@ public class ManageUser
 		{
 		try
 			{
-			String alertingName = sfo.getInfo();
-			
-			/**
-			 * Here we just send an email at the moment
-			 * 
-			 * We could change that later
-			 */
-			StringBuffer eMailContent = new StringBuffer();
-			eMailContent.append(LanguageManagement.getString("emailhello"));
-			eMailContent.append("\r\n");
-			eMailContent.append(LanguageManagement.getString("emailcommentcontent"));
-			eMailContent.append("\r\n");
-			eMailContent.append(LanguageManagement.getString("incomingcall"));
-			eMailContent.append(LanguageManagement.getString("calldescriptionincoming"));
-			eMailContent.append(" "+alertingName);
-			eMailContent.append(call.getFormatStartTime());
-			eMailContent.append("\r\n");
-			eMailContent.append(UsefulMethod.getFormattedURL(UsefulMethod.getTargetOption("sfcommenturlpattern"),objectID));
-			eMailContent.append("\r\n");
-			eMailContent.append("\r\n");
-			eMailContent.append(LanguageManagement.getString("emailsignature"));
-			
-			Variables.geteMSender().send(user.getEmail(),
-					LanguageManagement.getString("emailcommentobject"),
-					eMailContent.toString(),
-					"Email sent for user "+user.getInfo()+" call from "+alertingName);
+			//We do it only if activated for this particular user
+			if(user.isEmailReminder())
+				{
+				String alertingName = sfo.getInfo();
+				
+				/**
+				 * Here we just send an email at the moment
+				 * 
+				 * We could change that later
+				 */
+				StringBuffer eMailContent = new StringBuffer();
+				eMailContent.append(LanguageManagement.getString("emailhello"));
+				eMailContent.append("\r\n");
+				eMailContent.append(LanguageManagement.getString("emailcommentcontent"));
+				eMailContent.append("\r\n");
+				eMailContent.append(LanguageManagement.getString("incomingcall"));
+				eMailContent.append(LanguageManagement.getString("calldescriptionincoming"));
+				eMailContent.append(" "+alertingName);
+				eMailContent.append(call.getFormatStartTime());
+				eMailContent.append("\r\n");
+				eMailContent.append(UsefulMethod.getFormattedURL(UsefulMethod.getTargetOption("sfcommenturlpattern"),objectID));
+				eMailContent.append("\r\n");
+				eMailContent.append("\r\n");
+				eMailContent.append(LanguageManagement.getString("emailsignature"));
+				
+				Variables.geteMSender().send(user.getEmail(),
+						LanguageManagement.getString("emailcommentobject"),
+						eMailContent.toString(),
+						"Email sent for user "+user.getInfo()+" call from "+alertingName);
+				}
 			}
 		catch (Exception e)
 			{
@@ -159,8 +170,10 @@ public class ManageUser
 			StringBuffer eMailContent = new StringBuffer();
 			eMailContent.append(LanguageManagement.getString("emailhello"));
 			eMailContent.append("\r\n");
+			eMailContent.append("\r\n");
 			eMailContent.append(LanguageManagement.getString("emailnewentrycontent"));
 			eMailContent.append(" : "+extension);
+			eMailContent.append("\r\n");
 			eMailContent.append("\r\n");
 			eMailContent.append(LanguageManagement.getString("emailsignature"));
 			
@@ -185,11 +198,18 @@ public class ManageUser
 			/**
 			 * At the moment we just open a new tab to display the notification
 			 */
-			String urlToDisplay = UsefulMethod.getFormattedURL(UsefulMethod.getSFObjectURL(sfo.getType()),sfo.getID());
-			Runtime.getRuntime().exec("\""+user.getDefaultBrowser()+"\" "+urlToDisplay);
-			
-			//The best would be to trigger a SF Toast
-			SalesForceManager.displaySFToast(user.getSalesforceID(), sfo);
+			//We do it only if activated for this particular user
+			if(user.isIncomingCallPopup())
+				{
+				String urlToDisplay = UsefulMethod.getFormattedURL(UsefulMethod.getSFObjectURL(sfo.getType()),sfo.getID());
+				
+				//Runtime.getRuntime().exec("\""+user.getDefaultBrowser()+"\" "+urlToDisplay);
+				Request r = RequestBuilder.buildPopup("\""+user.getDefaultBrowser()+"\" "+urlToDisplay);
+				ManageRequest.send(user, r);
+				
+				//The best would be to trigger a SF Toast
+				SalesForceManager.displaySFToast(user.getSalesforceID(), sfo);
+				}
 			}
 		catch(Exception e)
 			{

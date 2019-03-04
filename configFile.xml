@@ -40,8 +40,9 @@ Overal configuration file
 		<sfcommenturlpattern>https://eu19.lightning.force.com/lightning/r/Task/*/view</sfcommenturlpattern><!--Url to use to display a task information. The * will be replaced by the object ID-->
 		<sfremembercontacts>true</sfremembercontacts><!--Once retrieved we remember the user contacts and wont ask salesforce again if the contact is found-->
 		<sfalertingnametemplate>firstname+" "+lastname</sfalertingnametemplate><!--Alerting name template to display during calls-->
-		<sfproposenewentry>both</sfproposenewentry><!--incoming,outgoing,both--><!--Propose to create a new entry in salesforce only for incoming, outgoing or both-->
+		<sfproposenewentry>both</sfproposenewentry><!--incoming,outgoing,both,none--><!--Propose to create a new entry in salesforce only for incoming, outgoing or both-->
 		<sfsearcharea>user</sfsearcharea><!--all,user--><!--When resolving name, search for extension in the whole company or just in the user's contact list-->
-		<!--SalesForce parameters end-->
+		<!--Server parameters-->
+		<listenerport>8090</listenerport>
 	</config>
 </xml>

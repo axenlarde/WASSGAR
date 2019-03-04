@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 
 import com.alex.wassgar.jtapi.Call;
+import com.alex.wassgar.jtapi.Monitor;
 import com.alex.wassgar.jtapi.Observer;
 import com.alex.wassgar.misc.User;
 import com.alex.wassgar.misc.storedUUID;
+import com.alex.wassgar.server.ListenerManager;
 import com.sforce.soap.enterprise.EnterpriseConnection;
 
 
@@ -107,6 +109,32 @@ public class Variables
 		user
 		};
 		
+	/**
+	 * Request type
+	 */
+	public enum requestType
+		{
+		connectionRequest,
+		connectionAccepted,
+		connectionRejected,
+		displayPopup,
+		status,
+		call,
+		success,
+		failed
+		};
+	
+	/**
+	 * Client status
+	 */
+	public enum clientStatus
+		{
+		init,
+		onLine,
+		offLine,
+		toDelete
+		};
+		
 	/**	MISC	**/
 	private static String softwareName;
 	private static String softwareVersion;
@@ -134,9 +162,13 @@ public class Variables
 	
 	/** JTAPI **/
 	private static ArrayList<Observer> observerList;
+	private static Monitor jtapiMonitor;
 	
 	/** SalesForce **/
 	private static EnterpriseConnection sFConnection;
+	
+	/** Client management**/
+	private static ListenerManager watchman;
 	
 	/**************
      * Constructor
@@ -360,6 +392,26 @@ public class Variables
 	public static void setSFConnection(EnterpriseConnection sFConnection)
 		{
 		Variables.sFConnection = sFConnection;
+		}
+
+	public static Monitor getJtapiMonitor()
+		{
+		return jtapiMonitor;
+		}
+
+	public static void setJtapiMonitor(Monitor jtapiMonitor)
+		{
+		Variables.jtapiMonitor = jtapiMonitor;
+		}
+
+	public static ListenerManager getWatchman()
+		{
+		return watchman;
+		}
+
+	public static void setWatchman(ListenerManager watchman)
+		{
+		Variables.watchman = watchman;
 		}
 	
 	
