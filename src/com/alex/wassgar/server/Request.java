@@ -2,7 +2,7 @@ package com.alex.wassgar.server;
 
 import java.io.Serializable;
 
-import com.alex.wassgar.utils.Variables.requestType;
+
 
 /**
  * Represent a simple request
@@ -12,6 +12,20 @@ public class Request implements Serializable
 	/**
 	 * Variables
 	 */
+	
+	public enum requestType
+		{
+		connectionRequest,
+		connectionAccepted,
+		connectionRejected,
+		displayPopup,
+		status,
+		call,
+		success,
+		failed
+		};
+	
+	private static final long serialVersionUID = 1L;
 	requestType type;
 	String content;
 	

@@ -1,9 +1,13 @@
 package com.alex.wassgar.action;
 
 
+import com.alex.wassgar.curri.CURRIHTTPServer;
+import com.alex.wassgar.curri.CURRIRequest;
+import com.alex.wassgar.curri.ManageCURRI;
 import com.alex.wassgar.jtapi.Monitor;
 import com.alex.wassgar.salesforce.SalesForceManager;
 import com.alex.wassgar.server.ListenerManager;
+import com.alex.wassgar.server.Watchman;
 import com.alex.wassgar.utils.UsefulMethod;
 import com.alex.wassgar.utils.Variables;
 
@@ -54,10 +58,10 @@ public class Action
 			/***
 			 * Maybe rewrite the following as a static "MonitoringManager"
 			 */
-			Variables.setJtapiMonitor(new Monitor(UsefulMethod.getTargetOption("ctihost"),
+			/*Variables.setJtapiMonitor(new Monitor(UsefulMethod.getTargetOption("ctihost"),
 					UsefulMethod.getTargetOption("ctidelay"),
 					UsefulMethod.getTargetOption("ctiusername"),
-					UsefulMethod.getTargetOption("ctipassword")));
+					UsefulMethod.getTargetOption("ctipassword")));*/
 			}
 		catch (Exception e)
 			{
@@ -69,12 +73,26 @@ public class Action
 		 */
 		try
 			{
-			Variables.setWatchman(new ListenerManager());
+			//Variables.setClientMonitor(new ListenerManager());//To monitor for new connection
+			//Variables.setWatchman(new Watchman());//To monitor existing connection
 			}
 		catch (Exception e)
 			{
 			Variables.getLogger().error("ERROR setting up the listener manager thread : "+e.getMessage(), e);
 			}
+		
+		/**
+		 * We start the CURRI Server
+		 */
+		try
+			{
+			Variables.setCurriServer(new CURRIHTTPServer());
+			}
+		catch(Exception e)
+			{
+			Variables.getLogger().error("ERROR setting up the CURRI Thread : "+e.getMessage(), e);
+			}
+		
 		
 		/**
 		 * We now wait for events ;)

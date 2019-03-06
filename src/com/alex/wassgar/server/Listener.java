@@ -6,8 +6,8 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import com.alex.wassgar.misc.User;
+import com.alex.wassgar.server.Request.requestType;
 import com.alex.wassgar.utils.Variables;
-import com.alex.wassgar.utils.Variables.requestType;
 
 /**
  * Class used to listen for new client request
@@ -25,17 +25,20 @@ public class Listener extends Thread
 		{
 		super();
 		this.myS = socket;
+		start();
 		}
 
 	public void run()
 		{
 		try
 			{
-			//Init buffers
+			Variables.getLogger().debug("Managing the new connection");
+			
 			in = new ObjectInputStream(myS.getInputStream());
 			out = new ObjectOutputStream(myS.getOutputStream());
 			String IP = myS.getInetAddress().getHostAddress();
 			int port = myS.getPort();
+			Variables.getLogger().debug("Connexion request from : "+IP+":"+port);
 			
 			//We receive the request;
 			Object o = in.readObject();
@@ -43,14 +46,13 @@ public class Listener extends Thread
 			//We check if the request has the correct format
 			if(o instanceof Request)
 				{
-				Request r = (Request)in.readObject();
+				Request r = (Request)o;
 				
-				if(r.getType().equals(requestType.connexionRequest))
+				if(r.getType().equals(requestType.connectionRequest))
 					{
 					String[] content = r.getContent().split(",");
 					String extension = content[0];
 					
-					Variables.getLogger().debug("Connexion request from : "+IP+":"+port);
 					Variables.getLogger().debug("Extension received : "+extension);
 					
 					//We add this socket to the corresponding user
@@ -60,7 +62,7 @@ public class Listener extends Thread
 						if(u.getExtension().equals(extension))
 							{
 							//We check for an existing socket
-							if((u.getSocket() != null) && (u.getSocket().isConnected()))
+							if(u.getSocket() != null)
 								{
 								Variables.getLogger().debug("An existing socket were found for user "+u.getInfo()+" so we close it first");
 								u.getSocket().close();
@@ -109,10 +111,13 @@ public class Listener extends Thread
 	 * Used to drop the socket
 	 * @throws IOException 
 	 */
-	private void dropS() throws IOException
+	private void dropS() throws Exception
 		{
-		this.myS.close();
+		in.close();
+		out.close();
+		myS.close();
 		}
+	
 	}
 
 /*2019*//*RATEL Alexandre 8)*/

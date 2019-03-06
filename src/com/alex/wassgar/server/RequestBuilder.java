@@ -1,6 +1,6 @@
 package com.alex.wassgar.server;
 
-import com.alex.wassgar.utils.Variables.requestType;
+import com.alex.wassgar.server.Request.requestType;
 
 /**
  * Static method to build request
@@ -51,12 +51,9 @@ public class RequestBuilder
 	/**
 	 * To build a success request
 	 */
-	public static Request buildSuccess(String desc)
+	public static Request buildSuccess()
 		{
-		StringBuffer buf = new StringBuffer();
-		buf.append(desc);
-		Request r = new Request(requestType.success, buf.toString());
-		
+		Request r = new Request(requestType.success, "OK");
 		return r;
 		}
 	
@@ -68,6 +65,16 @@ public class RequestBuilder
 		StringBuffer buf = new StringBuffer();
 		buf.append(desc);
 		Request r = new Request(requestType.failed, buf.toString());
+		
+		return r;
+		}
+	
+	/**
+	 * To build a status request
+	 */
+	public static Request buildStatus()
+		{
+		Request r = new Request(requestType.status, "OK ?");
 		
 		return r;
 		}

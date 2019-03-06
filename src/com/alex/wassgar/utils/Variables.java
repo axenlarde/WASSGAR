@@ -4,12 +4,14 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
+import com.alex.wassgar.curri.CURRIHTTPServer;
 import com.alex.wassgar.jtapi.Call;
 import com.alex.wassgar.jtapi.Monitor;
 import com.alex.wassgar.jtapi.Observer;
 import com.alex.wassgar.misc.User;
 import com.alex.wassgar.misc.storedUUID;
 import com.alex.wassgar.server.ListenerManager;
+import com.alex.wassgar.server.Watchman;
 import com.sforce.soap.enterprise.EnterpriseConnection;
 
 
@@ -109,32 +111,6 @@ public class Variables
 		user
 		};
 		
-	/**
-	 * Request type
-	 */
-	public enum requestType
-		{
-		connectionRequest,
-		connectionAccepted,
-		connectionRejected,
-		displayPopup,
-		status,
-		call,
-		success,
-		failed
-		};
-	
-	/**
-	 * Client status
-	 */
-	public enum clientStatus
-		{
-		init,
-		onLine,
-		offLine,
-		toDelete
-		};
-		
 	/**	MISC	**/
 	private static String softwareName;
 	private static String softwareVersion;
@@ -168,7 +144,11 @@ public class Variables
 	private static EnterpriseConnection sFConnection;
 	
 	/** Client management**/
-	private static ListenerManager watchman;
+	private static Watchman watchman;
+	private static ListenerManager clientMonitor;
+	
+	/** CURRI management**/
+	private static CURRIHTTPServer curriServer;
 	
 	/**************
      * Constructor
@@ -404,14 +384,34 @@ public class Variables
 		Variables.jtapiMonitor = jtapiMonitor;
 		}
 
-	public static ListenerManager getWatchman()
+	public static ListenerManager getClientMonitor()
+		{
+		return clientMonitor;
+		}
+
+	public static void setClientMonitor(ListenerManager clientMonitor)
+		{
+		Variables.clientMonitor = clientMonitor;
+		}
+
+	public static Watchman getWatchman()
 		{
 		return watchman;
 		}
 
-	public static void setWatchman(ListenerManager watchman)
+	public static void setWatchman(Watchman watchman)
 		{
 		Variables.watchman = watchman;
+		}
+
+	public static CURRIHTTPServer getCurriServer()
+		{
+		return curriServer;
+		}
+
+	public static void setCurriServer(CURRIHTTPServer curriServer)
+		{
+		Variables.curriServer = curriServer;
 		}
 	
 	

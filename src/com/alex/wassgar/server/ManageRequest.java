@@ -4,8 +4,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import com.alex.wassgar.misc.User;
+import com.alex.wassgar.server.Request.requestType;
 import com.alex.wassgar.utils.Variables;
-import com.alex.wassgar.utils.Variables.requestType;
 
 /**
  * Class used to manager request to clients
@@ -21,15 +21,15 @@ public class ManageRequest
 		{
 		try
 			{
-			if(user.getSocket() != null && user.getSocket().isConnected())
+			if(user.getSocket() != null)
 				{
-				ObjectInputStream in = new ObjectInputStream(user.getSocket().getInputStream());
 				ObjectOutputStream out = new ObjectOutputStream(user.getSocket().getOutputStream());
 				
 				out.writeObject((Object)r);
 				out.flush();
 				
 				//We now wait for the response
+				ObjectInputStream in = new ObjectInputStream(user.getSocket().getInputStream());
 				Object o = in.readObject();
 				
 				if(o instanceof Request)
@@ -57,6 +57,15 @@ public class ManageRequest
 		catch (Exception e)
 			{
 			Variables.getLogger().error("ERROR : While sending a request : "+e.getMessage(),e);
+			try
+				{
+				user.getSocket().close();
+				user.setSocket(null);
+				}
+			catch (Exception exc)
+				{
+				Variables.getLogger().error("ERROR : While closing the socket : "+e.getMessage(),e);
+				}
 			}
 		
 		}

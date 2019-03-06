@@ -44,5 +44,8 @@ Overal configuration file
 		<sfsearcharea>user</sfsearcharea><!--all,user--><!--When resolving name, search for extension in the whole company or just in the user's contact list-->
 		<!--Server parameters-->
 		<listenerport>8090</listenerport>
+		<retryinterval>30</retryinterval><!--In seconds-->
+		<!--CURRI parameters-->
+		<curriserverport>8091</curriserverport>
 	</config>
 </xml>

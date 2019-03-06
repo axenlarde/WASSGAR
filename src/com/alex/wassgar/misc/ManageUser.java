@@ -137,7 +137,7 @@ public class ManageUser
 				eMailContent.append(LanguageManagement.getString("incomingcall"));
 				eMailContent.append(LanguageManagement.getString("calldescriptionincoming"));
 				eMailContent.append(" "+alertingName);
-				eMailContent.append(call.getFormatStartTime());
+				eMailContent.append(" "+call.getFormatStartTime());
 				eMailContent.append("\r\n");
 				eMailContent.append(UsefulMethod.getFormattedURL(UsefulMethod.getTargetOption("sfcommenturlpattern"),objectID));
 				eMailContent.append("\r\n");

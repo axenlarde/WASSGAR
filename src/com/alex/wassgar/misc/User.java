@@ -2,7 +2,6 @@ package com.alex.wassgar.misc;
 
 import java.net.Socket;
 
-import com.alex.wassgar.server.Client;
 
 public class User
 	{
@@ -134,7 +133,7 @@ public class User
 		this.defaultBrowser = defaultBrowser;
 		}
 
-	public Socket getSocket()
+	public synchronized Socket getSocket()
 		{
 		return socket;
 		}

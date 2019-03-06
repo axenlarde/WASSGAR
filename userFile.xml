@@ -9,7 +9,7 @@ Contains all the activated users
 		<user>
 			<firstname>Alexandre</firstname>
 			<lastname>RATEL</lastname>
-			<extension>98765432</extension>
+			<extension>32214937</extension>
 			<email>alexandre.ratel@spie.com</email>
 			<cucmid>oizeuoirpuzeporduzpoeinrucza</cucmid>
 			<salesforceid>0051i0000011rvcAAA</salesforceid>
@@ -21,10 +21,10 @@ Contains all the activated users
 		<user>
 			<firstname>bob</firstname>
 			<lastname>THE KING</lastname>
-			<extension>654321</extension>
+			<extension>123456</extension>
 			<email>bob.theking@spie.com</email>
 			<cucmid>oizeuoirpuzeporduzpoeinruczb</cucmid>
-			<salesforceid>ejrlnezjrlkezjrzncjrr</salesforceid>
+			<salesforceid>0051i0000011rvcAAA</salesforceid>
 			<defaultbrowser>C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe</defaultbrowser>
 			<incomingcallpopup>true</incomingcallpopup><!--Boolean : Launch a new salesforcetab in case of incoming call-->
 			<reverselookup>true</reverselookup><!--Boolean : Change the caller name if found in salesforce-->
