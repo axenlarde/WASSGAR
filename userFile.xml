@@ -7,48 +7,60 @@ Contains all the activated users
 <xml>
 	<users>
 		<user>
-			<firstname>Alexandre</firstname>
-			<lastname>RATEL</lastname>
-			<extension>32214937</extension>
+			<firstname>Prestataire</firstname>
+			<lastname>1</lastname>
+			<extension>3926</extension>
 			<email>alexandre.ratel@spie.com</email>
 			<cucmid>oizeuoirpuzeporduzpoeinrucza</cucmid>
-			<salesforceid>0051i0000011rvcAAA</salesforceid>
+			<salesforceid>0051r000008XFyEAAW</salesforceid>
 			<defaultbrowser>C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe</defaultbrowser>
 			<incomingcallpopup>true</incomingcallpopup><!--Boolean : Launch a new salesforcetab in case of incoming call-->
 			<reverselookup>true</reverselookup><!--Boolean : Change the caller name if found in salesforce-->
 			<emailreminder>true</emailreminder><!--Boolean : send an email to the user to ask to comment the call-->
 		</user>
 		<user>
-			<firstname>bob</firstname>
-			<lastname>THE KING</lastname>
-			<extension>123456</extension>
-			<email>bob.theking@spie.com</email>
+			<firstname>Emmanuel</firstname>
+			<lastname>GIRIN</lastname>
+			<extension>3917</extension>
+			<email>emmanuel.girin@cdcarkhineo.fr</email>
 			<cucmid>oizeuoirpuzeporduzpoeinruczb</cucmid>
-			<salesforceid>0051i0000011rvcAAA</salesforceid>
+			<salesforceid>00520000002I4mXAAS</salesforceid>
 			<defaultbrowser>C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe</defaultbrowser>
 			<incomingcallpopup>true</incomingcallpopup><!--Boolean : Launch a new salesforcetab in case of incoming call-->
 			<reverselookup>true</reverselookup><!--Boolean : Change the caller name if found in salesforce-->
 			<emailreminder>true</emailreminder><!--Boolean : send an email to the user to ask to comment the call-->
 		</user>
 		<user>
-			<firstname>New Alex</firstname>
-			<lastname>RATEL</lastname>
-			<extension>32214938</extension>
-			<email>alex.@spie.com</email>
+			<firstname>Philippe</firstname>
+			<lastname>DELAHAYE</lastname>
+			<extension>3912</extension>
+			<email>philippe.delahaye@cdcarkhineo.fr</email>
 			<cucmid>oizeuoirpuzeporduzpoeinruczb</cucmid>
-			<salesforceid>ejrlnezjrlkezjrzncjrr</salesforceid>
+			<salesforceid>00520000001SEnXAAW</salesforceid>
 			<defaultbrowser>C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe</defaultbrowser>
 			<incomingcallpopup>true</incomingcallpopup><!--Boolean : Launch a new salesforcetab in case of incoming call-->
 			<reverselookup>true</reverselookup><!--Boolean : Change the caller name if found in salesforce-->
 			<emailreminder>true</emailreminder><!--Boolean : send an email to the user to ask to comment the call-->
 		</user>
 		<user>
-			<firstname>John</firstname>
-			<lastname>SNOW</lastname>
-			<extension>32214939</extension>
-			<email>alexandre.ratel@spie.com</email>
+			<firstname>Sebastien</firstname>
+			<lastname>DUVAL</lastname>
+			<extension>3921</extension>
+			<email>sebastien.duval@cdcarkhineo.fr</email>
 			<cucmid>oizeuoirpuzeporduzpoeinruczb</cucmid>
-			<salesforceid>0051i00000128sSAAQ</salesforceid>
+			<salesforceid>0051r0000083z9iAAA</salesforceid>
+			<defaultbrowser>C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe</defaultbrowser>
+			<incomingcallpopup>true</incomingcallpopup><!--Boolean : Launch a new salesforcetab in case of incoming call-->
+			<reverselookup>true</reverselookup><!--Boolean : Change the caller name if found in salesforce-->
+			<emailreminder>true</emailreminder><!--Boolean : send an email to the user to ask to comment the call-->
+		</user>
+		<user>
+			<firstname>Alpha</firstname>
+			<lastname>CAMARA</lastname>
+			<extension>3919</extension>
+			<email>alpha.camara@cdcarkhineo.fr</email>
+			<cucmid>oizeuoirpuzeporduzpoeinruczb</cucmid>
+			<salesforceid>00520000002I4mhAAC</salesforceid>
 			<defaultbrowser>C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe</defaultbrowser>
 			<incomingcallpopup>true</incomingcallpopup><!--Boolean : Launch a new salesforcetab in case of incoming call-->
 			<reverselookup>true</reverselookup><!--Boolean : Change the caller name if found in salesforce-->

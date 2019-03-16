@@ -47,7 +47,7 @@ public class UsefulMethod
 		
 		try
 			{
-			file = xMLReader.fileRead(".\\"+fileName);
+			file = xMLReader.fileRead("./"+fileName);
 			
 			listParams.add("config");
 			return xMLGear.getResultListTab(file, listParams);
@@ -495,7 +495,7 @@ public class UsefulMethod
 		
 		try
 			{
-			file = xMLReader.fileRead(".\\"+fileName);
+			file = xMLReader.fileRead("./"+fileName);
 			
 			listParams.add("users");
 			listParams.add("user");
@@ -674,7 +674,7 @@ public class UsefulMethod
 		try
 			{
 			Variables.getLogger().info("Reading of the file : "+fileName);
-			file = xMLReader.fileRead(Variables.getMainConfigFileDirectory()+"\\"+fileName);
+			file = xMLReader.fileRead(Variables.getMainConfigFileDirectory()+"/"+fileName);
 			
 			listParams.add(param);
 			return xMLGear.getResultListTabExt(file, listParams);

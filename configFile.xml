@@ -7,33 +7,35 @@ Overal configuration file
 		<!--Misc parameters-->
 		<log4j>DEBUG</log4j><!--Logging level : ERROR,INFO,DEBUG-->
 		<advancedcalllogs>false</advancedcalllogs><!--Activate the advanced call traces, Warning : really verbose !-->
-		<language>english</language><!--french,english-->
+		<language>french</language><!--french,english-->
 		<javaversiondetection>disable</javaversiondetection><!--enable, disable-->
 		<minjavaversion>1.6:16</minjavaversion><!--Minimum java version allowed-->
 		<splitter>+</splitter>
 		<logunansweredcalls>true</logunansweredcalls><!--Log unanswered calls in salesforce--><!--true,false-->
+		<retryinterval>30</retryinterval><!--In seconds-->
+		<internalnumberpattern>\d{4}</internalnumberpattern><!--Internal numbers should not be resolved-->
 		<!--Smtp parameters-->
 		<smtpemailport>25</smtpemailport>
 		<smtpemailprotocol>smtp</smtpemailprotocol>
-		<smtpemailserver>smtp.ce.int.amecspie.com</smtpemailserver>
-		<smtpemail>wassgar_noreply@spie.com</smtpemail>
+		<smtpemailserver>151.80.188.39</smtpemailserver>
+		<smtpemail>salesforce_noreply@cdcarkhineo.fr</smtpemail>
 		<smtpemailpassword></smtpemailpassword>
 		<smtpemailreceiver>alexandre.ratel@spie.com</smtpemailreceiver><!--One or more destinations separated by ;-->
 		<!--Cti parameters-->
-		<ctihost>10.20.147.202</ctihost><!--IP or name of the cti server  10.0.1.172-->
+		<ctihost>10.10.50.2</ctihost><!--IP or name of the cti server  10.0.1.172-->
 		<ctidelay>1000</ctidelay><!--Cti delay-->
 		<ctiusername>WASSGAR</ctiusername><!--Cti username-->
 		<ctipassword>CCMCisco92</ctipassword><!--Cti user password-->
 		<!--AXL parameters-->
-		<axlhost>10.0.1.172</axlhost><!--IP of the CUCM server-->
+		<axlhost>10.10.50.2</axlhost><!--IP of the CUCM server-->
 		<axlport>8443</axlport><!--Port to contact the CUCM server using AXL-->
 		<axlversion>105</axlversion><!--105, 115--><!--AXL version of the CUCM-->
 		<axlusername>WASSGAR</axlusername><!--AXL user name to contact the CUCM server-->
 		<axlpassword>CCMCisco92</axlpassword><!--Password of the AXL user in clear !!!!Warning : keep it secret!!!!-->
 		<!--SalesForce parameters-->
-		<sfusername>alexandre.ratel@mylab.com</sfusername><!--SalesForce username for the API-->
+		<sfusername>alexandre.ratel@spie.com</sfusername><!--SalesForce username for the API-->
 		<sfpassword>Salesforce2alex</sfpassword><!--SalesForce password for the API-->
-		<sfsecuritytoken>ZpKsZSI0nC6vwFJae99Ta7a6</sfsecuritytoken><!--Salesforce security token-->
+		<sfsecuritytoken>Y0U356LcXPzfsgvPOwNBhDO49</sfsecuritytoken><!--Salesforce security token-->
 		<sfcontacturlpattern>https://eu19.lightning.force.com/lightning/r/Contact/*/view</sfcontacturlpattern><!--Url to use to display a contact information. The * will be replaced by the object ID-->
 		<sfleadurlpattern>https://eu19.lightning.force.com/lightning/r/Lead/*/view</sfleadurlpattern><!--Url to use to display a lead information. The * will be replaced by the object ID-->
 		<sfaccounturlpattern>https://eu19.lightning.force.com/lightning/r/Account/*/view</sfaccounturlpattern><!--Url to use to display an account information. The * will be replaced by the object ID-->
@@ -44,7 +46,6 @@ Overal configuration file
 		<sfsearcharea>user</sfsearcharea><!--all,user--><!--When resolving name, search for extension in the whole company or just in the user's contact list-->
 		<!--Server parameters-->
 		<listenerport>8090</listenerport>
-		<retryinterval>30</retryinterval><!--In seconds-->
 		<!--CURRI parameters-->
 		<curriserverport>8091</curriserverport>
 	</config>

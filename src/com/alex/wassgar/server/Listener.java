@@ -71,6 +71,9 @@ public class Listener extends Thread
 							u.setSocket(myS);
 							Variables.getLogger().debug("Socket associated to user : "+u.getInfo());
 							
+							//We create a client listener for further request
+							u.setClientListener(new ClientListener(u));
+							
 							//We send a successful response
 							Request reply = RequestBuilder.buildAcceptedConnection("You are currently connected for user "+u.getInfo());
 							out.writeObject((Object) reply);

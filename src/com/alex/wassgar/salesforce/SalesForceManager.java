@@ -1,6 +1,7 @@
 package com.alex.wassgar.salesforce;
 
 import com.sforce.soap.enterprise.Connector;
+import com.sforce.soap.enterprise.QueryResult;
 import com.sforce.soap.enterprise.SaveResult;
 import com.sforce.soap.enterprise.SearchRecord;
 import com.sforce.soap.enterprise.SearchResult;
@@ -9,12 +10,14 @@ import com.sforce.soap.enterprise.sobject.Contact;
 import com.sforce.soap.enterprise.sobject.Lead;
 import com.sforce.soap.enterprise.sobject.SObject;
 import com.sforce.soap.enterprise.sobject.Task;
+import com.sforce.soap.enterprise.sobject.User;
 import com.sforce.ws.ConnectionException;
 import com.sforce.ws.ConnectorConfig;
 
 import java.io.IOException;
 
 import com.alex.wassgar.jtapi.Call;
+import com.alex.wassgar.utils.ExtensionManipulation;
 import com.alex.wassgar.utils.LanguageManagement;
 import com.alex.wassgar.utils.UsefulMethod;
 import com.alex.wassgar.utils.Variables;
@@ -50,6 +53,38 @@ public class SalesForceManager
 		Variables.getLogger().debug("SF : Service EndPoint: "+config.getServiceEndpoint());
 		Variables.getLogger().debug("SF : Username: "+config.getUsername());
 		Variables.getLogger().debug("SF : SessionId: "+config.getSessionId());
+		
+		/**
+		 * TEMP
+		 * 
+		 * List all user
+		 */
+		/*
+		QueryResult qResult = null;
+		   try {
+		      String soqlQuery = "SELECT Id, FirstName, LastName, Email FROM User";
+		      qResult = Variables.getSFConnection().query(soqlQuery);
+		      boolean done = false;
+		      if (qResult.getSize() > 0)
+				{
+		       
+		            SObject[] records = qResult.getRecords();
+		            for (int i = 0; i < records.length; ++i)
+						{
+						User u = (User)records[i];
+						String s = u.getId()+" "+u.getFirstName()+" "+u.getLastName();
+						Variables.getLogger().debug("USER : "+s);
+		               }
+		         }
+		      else
+		    	  {
+		         System.out.println("No records found.");
+		      }
+		      System.out.println("\nQuery successfully executed.");
+		   } catch (ConnectionException ce) {
+		      ce.printStackTrace();
+		   }*/
+		
 		}
 	
 	/**
@@ -113,6 +148,8 @@ public class SalesForceManager
 		catch (Exception e)
 			{
 			Variables.getLogger().error("ERROR : While creating a new task : "+e.getMessage(),e);
+			Variables.getLogger().error("Clearing SF Connection");
+			Variables.setSFConnection(null);
 			}
 		return "";
 		}
@@ -121,57 +158,72 @@ public class SalesForceManager
 	 * Used to look for an extension number in salesforce
 	 * Will return directly an alerting name if something is found
 	 */
-	public static SFObject lookForExtension(String userID, String extension) throws Exception
+	public static SFObject lookForExtension(String userID, String extension)
 		{
 		SFObject sfo = null;
 		
 		/**
-		 * If multiple items are found we just return the first one
-		 * starting with contact
-		 * 
-		 * We are looking for extensions in the following items :
-		 * - Contacts
-		 * - Leads
-		 * - Accounts
+		 * If the extension is internal we do not resolve it
 		 */
-		
-		String query;
-		if(UsefulMethod.getSearchArea().equals(searchArea.all))
+		if(ExtensionManipulation.goodToGo(extension))
 			{
-			query = "FIND {"+extension+"} IN Phone FIELDS RETURNING "+
-					"Contact(Id, Phone, FirstName, LastName),"+
-					"Lead(Id, Phone, FirstName, LastName),"+
-					"Account(Id, Phone, Name)";
-			}
-		else //User only
-			{
-			query = "FIND {"+extension+"} IN Phone FIELDS RETURNING "+ 
-					"Contact(Id, Phone, FirstName, LastName WHERE OwnerId='"+userID+"'),"+ 
-					"Lead(Id, Phone, FirstName, LastName WHERE OwnerId='"+userID+"'),"+ 
-					"Account(Id, Phone, Name)";
-			}
-		
-		SearchResult result = Variables.getSFConnection().search(query);
-		
-		for(SearchRecord sr : result.getSearchRecords())
-			{
-			SObject r = sr.getRecord();
+			/**
+			 * If multiple items are found we just return the first one
+			 * starting with contact
+			 * 
+			 * We are looking for extensions in the following items :
+			 * - Contacts
+			 * - Leads
+			 * - Accounts
+			 */
 			
-			if(r instanceof Contact)
+			try
 				{
-				sfo = new SFObject(sfObjectType.contact, r.getId(), r);
+				String query;
+				if(UsefulMethod.getSearchArea().equals(searchArea.all))
+					{
+					query = "FIND {"+ExtensionManipulation.validate(extension)+"} IN Phone FIELDS RETURNING "+
+							"Contact(Id, Phone, FirstName, LastName),"+
+							"Lead(Id, Phone, FirstName, LastName),"+
+							"Account(Id, Phone, Name)";
+					}
+				else //User only
+					{
+					query = "FIND {"+ExtensionManipulation.validate(extension)+"} IN Phone FIELDS RETURNING "+ 
+							"Contact(Id, Phone, FirstName, LastName WHERE OwnerId='"+userID+"'),"+ 
+							"Lead(Id, Phone, FirstName, LastName WHERE OwnerId='"+userID+"'),"+ 
+							"Account(Id, Phone, Name)";
+					}
+				
+				SearchResult result = Variables.getSFConnection().search(query);
+				
+				for(SearchRecord sr : result.getSearchRecords())
+					{
+					SObject r = sr.getRecord();
+					
+					if(r instanceof Contact)
+						{
+						sfo = new SFObject(sfObjectType.contact, r.getId(), r);
+						}
+					else if(r instanceof Lead)
+						{
+						sfo = new SFObject(sfObjectType.lead, r.getId(), r);
+						}
+					else if(r instanceof Account)
+						{
+						sfo = new SFObject(sfObjectType.account, r.getId(), r);
+						}
+					}
+				
+				if(sfo != null)Variables.getLogger().debug("Data found for extention : "+extension);
 				}
-			else if(r instanceof Lead)
+			catch (Exception e)
 				{
-				sfo = new SFObject(sfObjectType.lead, r.getId(), r);
-				}
-			else if(r instanceof Account)
-				{
-				sfo = new SFObject(sfObjectType.account, r.getId(), r);
+				Variables.getLogger().error("ERROR : While looking for extension : "+e.getMessage(),e);
+				Variables.getLogger().error("Clearing SF Connection");
+				Variables.setSFConnection(null);
 				}
 			}
-		
-		if(sfo != null)Variables.getLogger().debug("Data found for extention : "+extension);
 		
 		return sfo;
 		}
@@ -193,6 +245,8 @@ public class SalesForceManager
 		catch(Exception e)
 			{
 			Variables.getLogger().error("ERROR : While firing a SF notification Toast : "+e.getMessage(),e);
+			Variables.getLogger().error("Clearing SF Connection");
+			Variables.setSFConnection(null);
 			}
 		}
 

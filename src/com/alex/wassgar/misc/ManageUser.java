@@ -35,10 +35,6 @@ public class ManageUser
 				
 				if(sfo != null)
 					{
-					//If found we display an alerting name on the phone
-					String alertingName = UsefulMethod.getAlertingNameFromSFObject(sfo);
-					ManageUser.displayAlertingName(user, alertingName, call);
-					
 					//Fire notification
 					ManageUser.fireNotification(user, sfo);
 					
@@ -73,7 +69,6 @@ public class ManageUser
 					{
 					//If found we display an alerting name on the phone
 					String alertingName = UsefulMethod.getAlertingNameFromSFObject(sfo);
-					ManageUser.displayAlertingName(user, alertingName, call);
 					
 					//We log the call in salesforce
 					SalesForceManager.logNewSFCall(user.getSalesforceID(), call, sfo);
@@ -88,26 +83,6 @@ public class ManageUser
 				{
 				Variables.getLogger().error("ERROR : While processing a new outgoing call : "+e.getMessage(),e);
 				}
-			}
-		}
-	
-	
-	/**
-	 * Used to display the alerting name of an in progress call
-	 */
-	public static void displayAlertingName(User user, String AlertingName, Call call)
-		{
-		try
-			{
-			//We do it only if activated for this particular user
-			if(user.isReverseLookup())
-				{
-				//To be written
-				}
-			}
-		catch(Exception e)
-			{
-			Variables.getLogger().error("ERROR : While displaying alerting name on the phone : "+e.getMessage(),e);
 			}
 		}
 	

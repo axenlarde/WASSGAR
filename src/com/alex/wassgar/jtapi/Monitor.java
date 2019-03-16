@@ -5,6 +5,7 @@ import javax.telephony.*;
 import javax.telephony.events.*;
 
 import com.alex.wassgar.misc.User;
+import com.alex.wassgar.utils.UsefulMethod;
 import com.alex.wassgar.utils.Variables;
 import com.cisco.cti.util.Condition;
 import com.cisco.jtapi.CiscoAddrCreatedEvImpl;
@@ -15,7 +16,7 @@ import com.cisco.jtapi.CiscoAddrRemovedEvImpl;
  * 
  * @author Alexandre
  */
-public class Monitor implements ProviderObserver
+public class Monitor extends Thread implements ProviderObserver
 	{
 	/**
 	 * Variables
@@ -24,6 +25,7 @@ public class Monitor implements ProviderObserver
 	private Provider provider;
 	private Condition conditionInService = new Condition ();
 	private Address[] addresses;
+	private boolean run = true;
 	
 	public Monitor(String server, String delay, String login,  String password)
 		{
@@ -33,53 +35,60 @@ public class Monitor implements ProviderObserver
 		this.password = password;
 		this.server = server;
 		
-		getJTAPIProvider();//JTAPI
-		startCURRIMonitoring();//CURRI
+		start();
 		}
 
-
+	public void run()
+		{
+		getJTAPIProvider();//JTAPI
+		}
+	
+	
 	private void getJTAPIProvider()
 		{
 		Variables.getLogger().debug("JTAPI init");
+		Variables.getLogger().info("JTAPI connection manager started !");
 		
-		try
+		while(run)
 			{
-			//We get a JTAPI Provider
-			JtapiPeer peer = JtapiPeerFactory.getJtapiPeer ( null );
-			Variables.getLogger().debug("JTAPI : Got peer "+peer);
-			
-			providerString = server + ";login=" + login + ";passwd=" + password;
-			Variables.getLogger().debug("JTAPI : providerString : "+providerString);
-			
-			provider = peer.getProvider(providerString);
-			Variables.getLogger().debug("JTAPI : Got provider "+provider);
-			
-			provider.addObserver(this);
-			conditionInService.waitTrue();
-			Variables.getLogger().debug("JTAPI : Now In service !");
-			
-			updateAddresseList();//We get the line a first time
-			addMonitoring();
+			try
+				{
+				if(provider == null)
+					{
+					Variables.getLogger().info("JTAPI connection innactive, trying to connect");
+					
+					//We get a JTAPI Provider
+					JtapiPeer peer = JtapiPeerFactory.getJtapiPeer ( null );
+					Variables.getLogger().debug("JTAPI : Got peer "+peer);
+					
+					providerString = server + ";login=" + login + ";passwd=" + password;
+					Variables.getLogger().debug("JTAPI : providerString : "+providerString);
+					
+					provider = peer.getProvider(providerString);
+					Variables.getLogger().debug("JTAPI : Got provider "+provider);
+					
+					provider.addObserver(this);
+					conditionInService.waitTrue();
+					Variables.getLogger().debug("JTAPI : Now In service !");
+					
+					updateAddresseList();//We get the line a first time
+					addMonitoring();
+					}
+				}
+			catch (Exception e)
+				{
+				Variables.getLogger().error("ERROR : JTAPI init Failed : "+e.getMessage(),e);
+				}
+			try
+				{
+				this.sleep(Integer.parseInt(UsefulMethod.getTargetOption("retryinterval")));
+				}
+			catch (Exception e)
+				{
+				Variables.getLogger().error("ERROR : While sleeping : "+e.getMessage(),e);
+				}
 			}
-		catch (Exception e)
-			{
-			Variables.getLogger().error("ERROR : JTAPI init Failed : "+e.getMessage(),e);
-			}
-		}
-	
-	
-	/**
-	 * Method used to start CURRI monitoring thread
-	 * 
-	 * FYI : CURRI allow among other features to change alerting name
-	 * And we need that ;)
-	 */
-	private void startCURRIMonitoring()
-		{
-		/**
-		 * Has to be written. Indeed, this is a required feature but is not in the
-		 * top priority
-		 */
+		Variables.getLogger().info("JTAPI connection manager stopped !");
 		}
 	
 	
@@ -131,6 +140,7 @@ public class Monitor implements ProviderObserver
 		catch (Exception e)
 			{
 			Variables.getLogger().error("ERROR : JTAPI address monitoring failed : "+e.getMessage(),e);
+			provider = null;
 			}
 		}
 	
@@ -249,6 +259,10 @@ public class Monitor implements ProviderObserver
 			}
 		}
 	
+	public void tchao()
+		{
+		run = false;
+		}
 	
 	}
 

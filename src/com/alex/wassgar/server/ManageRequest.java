@@ -15,7 +15,7 @@ public class ManageRequest
 	
 	
 	/**
-	 * Used to send request to the a client
+	 * Used to send request to a client
 	 */
 	public static synchronized void send(User user, Request r)
 		{
@@ -23,6 +23,8 @@ public class ManageRequest
 			{
 			if(user.getSocket() != null)
 				{
+				Variables.getLogger().debug("Trying to send "+r.getType().name()+" to "+user.getInfo());
+				
 				ObjectOutputStream out = new ObjectOutputStream(user.getSocket().getOutputStream());
 				
 				out.writeObject((Object)r);
@@ -37,11 +39,11 @@ public class ManageRequest
 					Request reply = (Request)o;
 					if(reply.getType().equals(requestType.success))
 						{
-						Variables.getLogger().debug(r.getType().name()+" success for user : "+user.getInfo());
+						Variables.getLogger().debug(r.getType().name()+" sent with success to "+user.getInfo());
 						}
 					else
 						{
-						Variables.getLogger().debug(r.getType().name()+" failed for user : "+user.getInfo());
+						Variables.getLogger().debug(r.getType().name()+" sending failed for user "+user.getInfo());
 						}
 					}
 				else

@@ -10,6 +10,7 @@ import com.alex.wassgar.jtapi.Monitor;
 import com.alex.wassgar.jtapi.Observer;
 import com.alex.wassgar.misc.User;
 import com.alex.wassgar.misc.storedUUID;
+import com.alex.wassgar.salesforce.ConnectionManager;
 import com.alex.wassgar.server.ListenerManager;
 import com.alex.wassgar.server.Watchman;
 import com.sforce.soap.enterprise.EnterpriseConnection;
@@ -141,6 +142,7 @@ public class Variables
 	private static Monitor jtapiMonitor;
 	
 	/** SalesForce **/
+	private static ConnectionManager sFConnectionManager;
 	private static EnterpriseConnection sFConnection;
 	
 	/** Client management**/
@@ -413,6 +415,17 @@ public class Variables
 		{
 		Variables.curriServer = curriServer;
 		}
+
+	public static ConnectionManager getsFConnectionManager()
+		{
+		return sFConnectionManager;
+		}
+
+	public static void setsFConnectionManager(ConnectionManager sFConnectionManager)
+		{
+		Variables.sFConnectionManager = sFConnectionManager;
+		}
+	
 	
 	
 	/*2019*//*RATEL Alexandre 8)*/

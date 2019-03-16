@@ -5,6 +5,7 @@ import com.alex.wassgar.curri.CURRIHTTPServer;
 import com.alex.wassgar.curri.CURRIRequest;
 import com.alex.wassgar.curri.ManageCURRI;
 import com.alex.wassgar.jtapi.Monitor;
+import com.alex.wassgar.salesforce.ConnectionManager;
 import com.alex.wassgar.salesforce.SalesForceManager;
 import com.alex.wassgar.server.ListenerManager;
 import com.alex.wassgar.server.Watchman;
@@ -41,9 +42,7 @@ public class Action
 		 */
 		try
 			{
-			SalesForceManager.connection(UsefulMethod.getTargetOption("sfusername"),
-					UsefulMethod.getTargetOption("sfpassword"),
-					UsefulMethod.getTargetOption("sfsecuritytoken"));
+			Variables.setsFConnectionManager(new ConnectionManager());
 			}
 		catch (Exception e)
 			{
@@ -58,10 +57,10 @@ public class Action
 			/***
 			 * Maybe rewrite the following as a static "MonitoringManager"
 			 */
-			/*Variables.setJtapiMonitor(new Monitor(UsefulMethod.getTargetOption("ctihost"),
+			Variables.setJtapiMonitor(new Monitor(UsefulMethod.getTargetOption("ctihost"),
 					UsefulMethod.getTargetOption("ctidelay"),
 					UsefulMethod.getTargetOption("ctiusername"),
-					UsefulMethod.getTargetOption("ctipassword")));*/
+					UsefulMethod.getTargetOption("ctipassword")));
 			}
 		catch (Exception e)
 			{
@@ -73,8 +72,8 @@ public class Action
 		 */
 		try
 			{
-			//Variables.setClientMonitor(new ListenerManager());//To monitor for new connection
-			//Variables.setWatchman(new Watchman());//To monitor existing connection
+			Variables.setClientMonitor(new ListenerManager());//To monitor for new connection
+			Variables.setWatchman(new Watchman());//To monitor existing connection
 			}
 		catch (Exception e)
 			{

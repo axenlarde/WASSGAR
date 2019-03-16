@@ -2,6 +2,8 @@ package com.alex.wassgar.misc;
 
 import java.net.Socket;
 
+import com.alex.wassgar.server.ClientListener;
+
 
 public class User
 	{
@@ -11,6 +13,7 @@ public class User
 	private String firstName, lastName, extension, email, cucmID, salesforceID, defaultBrowser;
 	private boolean incomingCallPopup, reverseLookup, emailReminder;
 	private Socket socket;
+	private ClientListener clientListener;
 	
 	public User(String firstName, String lastName, String extension, String email, String cucmID, String salesforceID,
 			boolean incomingCallPopup, boolean reverseLookup, boolean emailReminder, String defaultBrowser)
@@ -141,6 +144,16 @@ public class User
 	public void setSocket(Socket socket)
 		{
 		this.socket = socket;
+		}
+
+	public ClientListener getClientListener()
+		{
+		return clientListener;
+		}
+
+	public void setClientListener(ClientListener clientListener)
+		{
+		this.clientListener = clientListener;
 		}
 
 	
