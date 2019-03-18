@@ -38,16 +38,14 @@ public class ClientListener extends Thread
 			{
 			try
 				{
-				Socket s = u.getSocket();
-				if(s != null)
+				if(u.getConnection() != null)
 					{
-					ObjectInputStream in = new ObjectInputStream(u.getSocket().getInputStream());
-					Object o = in.readObject();
+					Object o = u.getConnection().getIn().readObject();
 					if(o instanceof Request)
 						{
 						Request reply = (Request)o;
 						
-						if(reply.getType().equals(requestType.updateUser))
+						if(reply.getType().equals(requestType.updateOption))
 							{
 							Variables.getLogger().debug(u.getInfo()+" "+u.getExtension()+" update user request received : \r\n"+reply.getContent());
 							
@@ -64,14 +62,20 @@ public class ClientListener extends Thread
 							
 							ManageUserFile.updateUser(u);
 							}
+						else if(reply.getType().equals(requestType.status))
+							{
+							Variables.getLogger().debug(u.getInfo()+" "+u.getExtension()+" status request received");
+							}
+						else
+							{
+							Variables.getLogger().debug("Warning : "+u.getInfo()+" "+u.getExtension()+" received request type is not managed : "+reply.getType().name());
+							}
 						}
 					else
 						{
 						throw new Exception("Unkown request received");
 						}
 					}
-				
-				this.sleep(Integer.parseInt(UsefulMethod.getTargetOption("retryinterval"))*1000);
 				}
 			catch (Exception e)
 				{
@@ -79,18 +83,26 @@ public class ClientListener extends Thread
 				Variables.getLogger().debug("ClientListener : "+u.getInfo()+" "+u.getExtension()+" closing socket");
 				try
 					{
-					u.getSocket().close();
-					u.setSocket(null);
+					u.getConnection().close();
+					u.setConnection(null);
 					}
 				catch (Exception exc)
 					{
 					Variables.getLogger().error("Watchman : Unable to close socket : "+e.getMessage(),e);
-					u.setSocket(null);
+					u.setConnection(null);
 					}
 				break;//we exit the client listener
 				}
 			}
 		Variables.getLogger().debug("Client listener stopped for user "+u.getInfo()+" !");
+		}
+	
+	/**
+	 * To stop it
+	 */
+	public void tchao()
+		{
+		run = false;
 		}
 	
 	}

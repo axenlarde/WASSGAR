@@ -39,35 +39,14 @@ public class Watchman extends Thread
 					{
 					try
 						{
-						Socket s = u.getSocket();
-						if(s != null)
+						if(u.getConnection() != null)
 							{
-							ObjectOutputStream out = new ObjectOutputStream(u.getSocket().getOutputStream());
-							
 							Request r = RequestBuilder.buildStatus();
-							out.writeObject((Object)r);
-							out.flush();
+							u.getConnection().getOut().writeObject(r);
+							u.getConnection().getOut().flush();
 							
 							//If the writing succeed, the connection is still up, otherwise an exception would have been raised
 							Variables.getLogger().debug("Watchman : "+u.getInfo()+" "+u.getExtension()+" client is UP");
-							
-							//manage the answer
-							/*
-							ObjectInputStream in = new ObjectInputStream(u.getSocket().getInputStream());
-							Object o = in.readObject();
-							if(o instanceof Request)
-								{
-								Request reply = (Request)o;
-								
-								if(reply.getType().equals(requestType.success))
-									{
-									Variables.getLogger().debug(u.getInfo()+" "+u.getExtension()+" client is UP");
-									}
-								}
-							else
-								{
-								throw new Exception("Unkown request received");
-								}*/
 							}
 						}
 					catch (Exception e)
@@ -76,13 +55,13 @@ public class Watchman extends Thread
 						Variables.getLogger().debug("Watchman : "+u.getInfo()+" "+u.getExtension()+" closing socket");
 						try
 							{
-							u.getSocket().close();
-							u.setSocket(null);
+							u.getConnection().close();
+							u.setConnection(null);
 							}
 						catch (Exception exc)
 							{
 							Variables.getLogger().error("Watchman : Unable to close socket : "+e.getMessage(),e);
-							u.setSocket(null);
+							u.setConnection(null);
 							}
 						}
 					}

@@ -1,12 +1,11 @@
 package com.alex.wassgar.server;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import com.alex.wassgar.misc.User;
 import com.alex.wassgar.server.Request.requestType;
+import com.alex.wassgar.utils.UsefulMethod;
 import com.alex.wassgar.utils.Variables;
 
 /**
@@ -18,8 +17,6 @@ public class Listener extends Thread
 	 * Variables
 	 */
 	private Socket myS;
-	private ObjectInputStream in;
-	private ObjectOutputStream out;
 	
 	public Listener(Socket socket)
 		{
@@ -34,14 +31,14 @@ public class Listener extends Thread
 			{
 			Variables.getLogger().debug("Managing the new connection");
 			
-			in = new ObjectInputStream(myS.getInputStream());
-			out = new ObjectOutputStream(myS.getOutputStream());
 			String IP = myS.getInetAddress().getHostAddress();
 			int port = myS.getPort();
 			Variables.getLogger().debug("Connexion request from : "+IP+":"+port);
 			
+			ClientConnection connection = new ClientConnection(myS);
+			
 			//We receive the request;
-			Object o = in.readObject();
+			Object o = connection.getIn().readObject();
 			
 			//We check if the request has the correct format
 			if(o instanceof Request)
@@ -62,13 +59,14 @@ public class Listener extends Thread
 						if(u.getExtension().equals(extension))
 							{
 							//We check for an existing socket
-							if(u.getSocket() != null)
+							if(u.getConnection() != null)
 								{
 								Variables.getLogger().debug("An existing socket were found for user "+u.getInfo()+" so we close it first");
-								u.getSocket().close();
+								u.getConnection().close();
+								if(u.getClientListener() != null)u.getClientListener().tchao();
 								}
 							//We pass the socket to the user for further usage
-							u.setSocket(myS);
+							u.setConnection(connection);
 							Variables.getLogger().debug("Socket associated to user : "+u.getInfo());
 							
 							//We create a client listener for further request
@@ -76,8 +74,14 @@ public class Listener extends Thread
 							
 							//We send a successful response
 							Request reply = RequestBuilder.buildAcceptedConnection("You are currently connected for user "+u.getInfo());
-							out.writeObject((Object) reply);
-							out.flush();
+							connection.getOut().writeObject(reply);
+							connection.getOut().flush();
+							
+							//We send the option status
+							//out = new ObjectOutputStream(myS.getOutputStream());//Needed, seams that only one object can be sent per stream
+							Request optionUpdate = RequestBuilder.buildOptionUpdate(UsefulMethod.encodeOptionList(u));
+							connection.getOut().writeObject(optionUpdate);
+							connection.getOut().flush();
 							
 							found = true;
 							break;
@@ -89,8 +93,8 @@ public class Listener extends Thread
 						{
 						//We send a rejected response
 						Request reply = RequestBuilder.buildRejectedConnection("No valid user were found for the given data");
-						out.writeObject((Object) reply);
-						out.flush();
+						connection.getOut().writeObject(reply);
+						connection.getOut().flush();
 						
 						//We drop the socket
 						Variables.getLogger().debug("No user found for extension "+extension+" dropping socket !");
@@ -116,8 +120,6 @@ public class Listener extends Thread
 	 */
 	private void dropS() throws Exception
 		{
-		in.close();
-		out.close();
 		myS.close();
 		}
 	

@@ -14,9 +14,9 @@ Contains all the activated users
 			<cucmid>oizeuoirpuzeporduzpoeinrucza</cucmid>
 			<salesforceid>0051r000008XFyEAAW</salesforceid>
 			<defaultbrowser>C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe</defaultbrowser>
-			<incomingcallpopup>true</incomingcallpopup><!--Boolean : Launch a new salesforcetab in case of incoming call-->
-			<reverselookup>true</reverselookup><!--Boolean : Change the caller name if found in salesforce-->
-			<emailreminder>true</emailreminder><!--Boolean : send an email to the user to ask to comment the call-->
+			<incomingcallpopup>false</incomingcallpopup>
+			<reverselookup>false</reverselookup>
+			<emailreminder>false</emailreminder>
 		</user>
 		<user>
 			<firstname>Emmanuel</firstname>
@@ -26,9 +26,9 @@ Contains all the activated users
 			<cucmid>oizeuoirpuzeporduzpoeinruczb</cucmid>
 			<salesforceid>00520000002I4mXAAS</salesforceid>
 			<defaultbrowser>C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe</defaultbrowser>
-			<incomingcallpopup>true</incomingcallpopup><!--Boolean : Launch a new salesforcetab in case of incoming call-->
-			<reverselookup>true</reverselookup><!--Boolean : Change the caller name if found in salesforce-->
-			<emailreminder>true</emailreminder><!--Boolean : send an email to the user to ask to comment the call-->
+			<incomingcallpopup>true</incomingcallpopup>
+			<reverselookup>true</reverselookup>
+			<emailreminder>true</emailreminder>
 		</user>
 		<user>
 			<firstname>Philippe</firstname>
@@ -38,9 +38,9 @@ Contains all the activated users
 			<cucmid>oizeuoirpuzeporduzpoeinruczb</cucmid>
 			<salesforceid>00520000001SEnXAAW</salesforceid>
 			<defaultbrowser>C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe</defaultbrowser>
-			<incomingcallpopup>true</incomingcallpopup><!--Boolean : Launch a new salesforcetab in case of incoming call-->
-			<reverselookup>true</reverselookup><!--Boolean : Change the caller name if found in salesforce-->
-			<emailreminder>true</emailreminder><!--Boolean : send an email to the user to ask to comment the call-->
+			<incomingcallpopup>true</incomingcallpopup>
+			<reverselookup>true</reverselookup>
+			<emailreminder>true</emailreminder>
 		</user>
 		<user>
 			<firstname>Sebastien</firstname>
@@ -50,9 +50,9 @@ Contains all the activated users
 			<cucmid>oizeuoirpuzeporduzpoeinruczb</cucmid>
 			<salesforceid>0051r0000083z9iAAA</salesforceid>
 			<defaultbrowser>C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe</defaultbrowser>
-			<incomingcallpopup>true</incomingcallpopup><!--Boolean : Launch a new salesforcetab in case of incoming call-->
-			<reverselookup>true</reverselookup><!--Boolean : Change the caller name if found in salesforce-->
-			<emailreminder>true</emailreminder><!--Boolean : send an email to the user to ask to comment the call-->
+			<incomingcallpopup>true</incomingcallpopup>
+			<reverselookup>true</reverselookup>
+			<emailreminder>true</emailreminder>
 		</user>
 		<user>
 			<firstname>Alpha</firstname>
@@ -62,9 +62,9 @@ Contains all the activated users
 			<cucmid>oizeuoirpuzeporduzpoeinruczb</cucmid>
 			<salesforceid>00520000002I4mhAAC</salesforceid>
 			<defaultbrowser>C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe</defaultbrowser>
-			<incomingcallpopup>true</incomingcallpopup><!--Boolean : Launch a new salesforcetab in case of incoming call-->
-			<reverselookup>true</reverselookup><!--Boolean : Change the caller name if found in salesforce-->
-			<emailreminder>true</emailreminder><!--Boolean : send an email to the user to ask to comment the call-->
+			<incomingcallpopup>true</incomingcallpopup>
+			<reverselookup>true</reverselookup>
+			<emailreminder>true</emailreminder>
 		</user>
 	</users>
 </xml>

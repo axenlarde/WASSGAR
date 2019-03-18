@@ -79,6 +79,15 @@ public class RequestBuilder
 		return r;
 		}
 
+	/**
+	 * To build an update request
+	 */
+	public static Request buildOptionUpdate(String content)
+		{
+		Request r = new Request(requestType.updateOption, content);
+		return r;
+		}
+	
 	}
 
 /*2019*//*RATEL Alexandre 8)*/

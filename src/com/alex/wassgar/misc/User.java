@@ -2,6 +2,7 @@ package com.alex.wassgar.misc;
 
 import java.net.Socket;
 
+import com.alex.wassgar.server.ClientConnection;
 import com.alex.wassgar.server.ClientListener;
 
 
@@ -12,7 +13,7 @@ public class User
 	 */
 	private String firstName, lastName, extension, email, cucmID, salesforceID, defaultBrowser;
 	private boolean incomingCallPopup, reverseLookup, emailReminder;
-	private Socket socket;
+	private ClientConnection connection;
 	private ClientListener clientListener;
 	
 	public User(String firstName, String lastName, String extension, String email, String cucmID, String salesforceID,
@@ -136,16 +137,6 @@ public class User
 		this.defaultBrowser = defaultBrowser;
 		}
 
-	public synchronized Socket getSocket()
-		{
-		return socket;
-		}
-
-	public void setSocket(Socket socket)
-		{
-		this.socket = socket;
-		}
-
 	public ClientListener getClientListener()
 		{
 		return clientListener;
@@ -154,6 +145,16 @@ public class User
 	public void setClientListener(ClientListener clientListener)
 		{
 		this.clientListener = clientListener;
+		}
+
+	public synchronized ClientConnection getConnection()
+		{
+		return connection;
+		}
+
+	public void setConnection(ClientConnection connection)
+		{
+		this.connection = connection;
 		}
 
 	

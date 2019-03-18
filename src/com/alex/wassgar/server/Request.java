@@ -19,8 +19,8 @@ public class Request implements Serializable
 		connectionAccepted,
 		connectionRejected,
 		displayPopup,
+		updateOption,
 		status,
-		updateUser,
 		call,
 		success,
 		failed

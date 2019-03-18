@@ -133,11 +133,11 @@ public class ManageUserFile
 				"-->\r\n" + 
 				"\r\n" + 
 				"<xml>\r\n" + 
-				"	<users>");
+				"	<users>\r\n");
 		
 		for(User u : Variables.getUserList())
 			{
-			content.append("<user>\r\n" + 
+			content.append("		<user>\r\n" + 
 					"			<firstname>"+u.getFirstName()+"</firstname>\r\n" + 
 					"			<lastname>"+u.getLastName()+"</lastname>\r\n" + 
 					"			<extension>"+u.getExtension()+"</extension>\r\n" + 
@@ -148,7 +148,7 @@ public class ManageUserFile
 					"			<incomingcallpopup>"+u.isIncomingCallPopup()+"</incomingcallpopup>\r\n" + 
 					"			<reverselookup>"+u.isReverseLookup()+"</reverselookup>\r\n" + 
 					"			<emailreminder>"+u.isEmailReminder()+"</emailreminder>\r\n" + 
-					"		</user>");
+					"		</user>\r\n");
 			}
 		content.append("	</users>\r\n" + 
 				"</xml>");

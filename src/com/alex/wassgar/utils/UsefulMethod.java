@@ -692,6 +692,24 @@ public class UsefulMethod
 			}
 		}
 	
+	/**
+	 * Used to generate the options xml content
+	 */
+	public static String encodeOptionList(User u)
+		{
+		StringBuffer buf = new StringBuffer();
+		
+		buf.append("<xml>\r\n");
+		buf.append("	<options>\r\n");
+		buf.append("		<incomingcallpopup>"+u.isIncomingCallPopup()+"</incomingcallpopup>\r\n");
+		buf.append("		<reverselookup>"+u.isReverseLookup()+"</reverselookup>\r\n");
+		buf.append("		<emailreminder>"+u.isEmailReminder()+"</emailreminder>\r\n");
+		buf.append("	</options>\r\n");
+		buf.append("</xml>");
+		
+		return buf.toString();
+		}
+	
 	
 	/*2019*//*RATEL Alexandre 8)*/
 	}

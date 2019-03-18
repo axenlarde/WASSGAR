@@ -42,7 +42,7 @@ public class Action
 		 */
 		try
 			{
-			Variables.setsFConnectionManager(new ConnectionManager());
+			//Variables.setsFConnectionManager(new ConnectionManager());
 			}
 		catch (Exception e)
 			{
@@ -57,10 +57,10 @@ public class Action
 			/***
 			 * Maybe rewrite the following as a static "MonitoringManager"
 			 */
-			Variables.setJtapiMonitor(new Monitor(UsefulMethod.getTargetOption("ctihost"),
+			/*Variables.setJtapiMonitor(new Monitor(UsefulMethod.getTargetOption("ctihost"),
 					UsefulMethod.getTargetOption("ctidelay"),
 					UsefulMethod.getTargetOption("ctiusername"),
-					UsefulMethod.getTargetOption("ctipassword")));
+					UsefulMethod.getTargetOption("ctipassword")));*/
 			}
 		catch (Exception e)
 			{
@@ -85,7 +85,7 @@ public class Action
 		 */
 		try
 			{
-			Variables.setCurriServer(new CURRIHTTPServer());
+			//Variables.setCurriServer(new CURRIHTTPServer());
 			}
 		catch(Exception e)
 			{
