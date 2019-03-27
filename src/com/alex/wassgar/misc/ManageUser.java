@@ -124,6 +124,10 @@ public class ManageUser
 						eMailContent.toString(),
 						"Email sent for user "+user.getInfo()+" call from "+alertingName);
 				}
+			else
+				{
+				Variables.getLogger().debug("We do not proceed because email is not activated for this user : "+user.getInfo());
+				}
 			}
 		catch (Exception e)
 			{
@@ -142,20 +146,28 @@ public class ManageUser
 		 */
 		try
 			{
-			StringBuffer eMailContent = new StringBuffer();
-			eMailContent.append(LanguageManagement.getString("emailhello"));
-			eMailContent.append("\r\n");
-			eMailContent.append("\r\n");
-			eMailContent.append(LanguageManagement.getString("emailnewentrycontent"));
-			eMailContent.append(" : "+extension);
-			eMailContent.append("\r\n");
-			eMailContent.append("\r\n");
-			eMailContent.append(LanguageManagement.getString("emailsignature"));
-			
-			Variables.geteMSender().send(user.getEmail(),
-					LanguageManagement.getString("emailnewentryobject"),
-					eMailContent.toString(),
-					"Email sent for user "+user.getInfo()+" propose to create a new entry for extension : "+extension);
+			//We do it only if activated for this particular user
+			if(user.isEmailReminder())
+				{
+				StringBuffer eMailContent = new StringBuffer();
+				eMailContent.append(LanguageManagement.getString("emailhello"));
+				eMailContent.append("\r\n");
+				eMailContent.append("\r\n");
+				eMailContent.append(LanguageManagement.getString("emailnewentrycontent"));
+				eMailContent.append(" : "+extension);
+				eMailContent.append("\r\n");
+				eMailContent.append("\r\n");
+				eMailContent.append(LanguageManagement.getString("emailsignature"));
+				
+				Variables.geteMSender().send(user.getEmail(),
+						LanguageManagement.getString("emailnewentryobject"),
+						eMailContent.toString(),
+						"Email sent for user "+user.getInfo()+" propose to create a new entry for extension : "+extension);
+				}
+			else
+				{
+				Variables.getLogger().debug("We do not proceed because email is not activated for this user : "+user.getInfo());
+				}
 			}
 		catch (Exception e)
 			{
@@ -184,6 +196,10 @@ public class ManageUser
 				
 				//The best would be to trigger a SF Toast
 				SalesForceManager.displaySFToast(user.getSalesforceID(), sfo);
+				}
+			else
+				{
+				Variables.getLogger().debug("We do not proceed because popup is not activated for this user : "+user.getInfo());
 				}
 			}
 		catch(Exception e)

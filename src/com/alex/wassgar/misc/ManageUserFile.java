@@ -18,7 +18,7 @@ public class ManageUserFile
 	 * Add a new user in the userFile and in
 	 * the users currently loaded in memory
 	 */
-	public static boolean addUser(String firstName, String lastName, String extension, String email, String cucmID, String salesforceID, boolean incomingCallPopup, boolean reverseLookup, boolean emailReminder, String defaultBrowser)
+	public synchronized static boolean addUser(String firstName, String lastName, String extension, String email, String cucmID, String salesforceID, boolean incomingCallPopup, boolean reverseLookup, boolean emailReminder, String defaultBrowser)
 		{
 		try
 			{
@@ -67,7 +67,7 @@ public class ManageUserFile
 	 * Delete a user in the userFile and in
 	 * the users currently loaded in memory
 	 */
-	public static boolean deleteUser(String userInfo)
+	public synchronized static boolean deleteUser(String userInfo)
 		{
 		try
 			{
@@ -98,7 +98,7 @@ public class ManageUserFile
 	 * Update a user in the userFile and in
 	 * the users currently loaded in memory
 	 */
-	public static boolean updateUser(User u)
+	public synchronized static boolean updateUser(User u)
 		{
 		try
 			{

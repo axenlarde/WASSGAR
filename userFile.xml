@@ -14,8 +14,8 @@ Contains all the activated users
 			<cucmid>oizeuoirpuzeporduzpoeinrucza</cucmid>
 			<salesforceid>0051r000008XFyEAAW</salesforceid>
 			<defaultbrowser>C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe</defaultbrowser>
-			<incomingcallpopup>false</incomingcallpopup>
-			<reverselookup>false</reverselookup>
+			<incomingcallpopup>true</incomingcallpopup>
+			<reverselookup>true</reverselookup>
 			<emailreminder>false</emailreminder>
 		</user>
 		<user>

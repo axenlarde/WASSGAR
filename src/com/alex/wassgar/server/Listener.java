@@ -78,7 +78,6 @@ public class Listener extends Thread
 							connection.getOut().flush();
 							
 							//We send the option status
-							//out = new ObjectOutputStream(myS.getOutputStream());//Needed, seams that only one object can be sent per stream
 							Request optionUpdate = RequestBuilder.buildOptionUpdate(UsefulMethod.encodeOptionList(u));
 							connection.getOut().writeObject(optionUpdate);
 							connection.getOut().flush();

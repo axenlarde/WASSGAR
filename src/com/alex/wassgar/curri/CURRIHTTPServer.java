@@ -53,15 +53,6 @@ public class CURRIHTTPServer implements HttpHandler
 		
 		try
 			{
-			/*
-			String r = "Hello world !";
-			
-			exc.sendResponseHeaders(200, r.getBytes().length);
-			OutputStream os = exc.getResponseBody();
-			os.write(r.getBytes());
-			os.close();
-			*/
-			
 			if(exc.getRequestMethod().equals("HEAD"))
 				{
 				Variables.getLogger().debug("CURRI Server : "+exc.getRequestMethod()+" Method received");
@@ -148,15 +139,23 @@ public class CURRIHTTPServer implements HttpHandler
 			{
 			if(u.getExtension().equals(extension))
 				{
-				//We then ask salesforce if the callingnumber is known
-				SFObject sfo = SalesForceManager.lookForExtension(u.getSalesforceID(), callingNumber);
-				if(sfo != null)
-					{					
-					return new CURRIRequest(callingNumber, extension, UsefulMethod.getAlertingNameFromSFObject(sfo), null, callType.incoming);
+				if(u.isReverseLookup())
+					{
+					//We then ask salesforce if the callingnumber is known
+					SFObject sfo = SalesForceManager.lookForExtension(u.getSalesforceID(), callingNumber);
+					if(sfo != null)
+						{					
+						return new CURRIRequest(callingNumber, extension, UsefulMethod.getAlertingNameFromSFObject(sfo), null, callType.incoming);
+						}
+					else
+						{
+						Variables.getLogger().debug("The callingNumber was not found in salesforce for user : "+u.getInfo());
+						return null;
+						}
 					}
 				else
 					{
-					Variables.getLogger().debug("The callingNumber was not found in salesforce for user : "+u.getInfo());
+					Variables.getLogger().debug("We do not proceed because reverselookup is not activated for this user : "+u.getInfo());
 					return null;
 					}
 				}
