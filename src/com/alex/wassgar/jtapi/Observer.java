@@ -58,6 +58,14 @@ public class Observer implements CallControlCallObserver, MediaCallObserver, Cis
 			Variables.getLogger().error("ERROR : JTAPI : Adding observer to line : "+line.getName()+" : "+e.getMessage(),e);
 			}
 		}
+	
+	/**
+	 * To clean observer dependencies before closing
+	 */
+	public void prepareToClose()
+		{
+		CallListManager.endCalls(user.getExtension());
+		}
 
 
 	@Override
@@ -381,7 +389,6 @@ public class Observer implements CallControlCallObserver, MediaCallObserver, Cis
 		}
 	
 
-
 	public Address getLine()
 		{
 		return line;
@@ -391,6 +398,18 @@ public class Observer implements CallControlCallObserver, MediaCallObserver, Cis
 		{
 		this.line = line;
 		}
+
+	public User getUser()
+		{
+		return user;
+		}
+
+	public void setUser(User user)
+		{
+		this.user = user;
+		}
+	
+	
 
 	}
 

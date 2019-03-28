@@ -7,6 +7,7 @@ Contains all the activated users
 <xml>
 	<users>
 		<user>
+			<id>fd9d5f72f332927f1c3924b26002466b</id>
 			<firstname>Prestataire</firstname>
 			<lastname>1</lastname>
 			<extension>3926</extension>
@@ -16,9 +17,10 @@ Contains all the activated users
 			<defaultbrowser>C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe</defaultbrowser>
 			<incomingcallpopup>true</incomingcallpopup>
 			<reverselookup>true</reverselookup>
-			<emailreminder>false</emailreminder>
+			<emailreminder>true</emailreminder>
 		</user>
 		<user>
+			<id>e59df76f4b1e621c8a0be8aa507661fd</id>
 			<firstname>Emmanuel</firstname>
 			<lastname>GIRIN</lastname>
 			<extension>3917</extension>
@@ -31,6 +33,7 @@ Contains all the activated users
 			<emailreminder>true</emailreminder>
 		</user>
 		<user>
+			<id>b446c1923a320ebef6e0c7f0f4c38cb1</id>
 			<firstname>Philippe</firstname>
 			<lastname>DELAHAYE</lastname>
 			<extension>3912</extension>
@@ -43,6 +46,7 @@ Contains all the activated users
 			<emailreminder>true</emailreminder>
 		</user>
 		<user>
+			<id>62246271afbe2f4c10e45ff0e50ec625</id>
 			<firstname>Sebastien</firstname>
 			<lastname>DUVAL</lastname>
 			<extension>3921</extension>
@@ -55,6 +59,7 @@ Contains all the activated users
 			<emailreminder>true</emailreminder>
 		</user>
 		<user>
+			<id>d8860538376eedbef6959912ebd5424d</id>
 			<firstname>Alpha</firstname>
 			<lastname>CAMARA</lastname>
 			<extension>3919</extension>

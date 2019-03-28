@@ -60,6 +60,26 @@ public class CallListManager
 		}
 	
 	/**
+	 * Will end all calls related to an extension
+	 * Used before removing line monitoring
+	 */
+	public synchronized static void endCalls(String extension)
+		{
+		for(Call c : Variables.getCallList())
+			{
+			if(c.getUser().getExtension().equals(extension))
+				{
+				c.callEnds();
+				Variables.getLogger().debug("Line "+c.getLine().getName()+" call "+c.getCallID()+" ends, duration : "+c.getFormatDuration());
+				Variables.getCallList().remove(c);
+				endCalls(extension);//We call it again to clear all the calls
+				}
+			}
+		
+		Variables.getLogger().debug("All call cleared for extension : "+extension);
+		}
+	
+	/**
 	 * Used to check if the call already exist in the call list
 	 */
 	public synchronized static boolean isThisCallExisting(Call call)

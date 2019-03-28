@@ -4,6 +4,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 
+import com.alex.wassgar.jtapi.Observer;
+import com.alex.wassgar.server.Request;
+import com.alex.wassgar.server.RequestBuilder;
+import com.alex.wassgar.utils.UsefulMethod;
 import com.alex.wassgar.utils.Variables;
 
 /**
@@ -48,6 +52,9 @@ public class ManageUserFile
 			//If we reach this point it means that the user doesn't already exists, so we add it
 			Variables.getUserList().add(newUser);
 			
+			//We start the JTAPI monitoring
+			Variables.getJtapiMonitor().updateMonitoring();
+			
 			/******
 			 * Add the new user in the user file
 			 */
@@ -67,14 +74,24 @@ public class ManageUserFile
 	 * Delete a user in the userFile and in
 	 * the users currently loaded in memory
 	 */
-	public synchronized static boolean deleteUser(String userInfo)
+	public synchronized static boolean deleteUser(String ID)
 		{
 		try
 			{
 			for(User u : Variables.getUserList())
 				{
-				if(u.getInfo().equals(userInfo))
+				if(u.getID().equals(ID))
 					{
+					/**
+					 * We now close all the user dependencies
+					 */
+					//Closing client socket
+					u.prepareRemoval();
+					
+					//Closing JTAPI observer
+					Variables.getJtapiMonitor().deleteUserMonitoring(u);
+					
+					//Finally we remove the user from the list
 					Variables.getUserList().remove(u);
 					
 					//Now we rewrite the userFile;
@@ -90,7 +107,7 @@ public class ManageUserFile
 			Variables.getLogger().error("Error : "+e.getMessage(),e);
 			}
 		
-		Variables.getLogger().debug("User \""+userInfo+"\" not found");
+		Variables.getLogger().debug("User ID \""+ID+"\" not found");
 		return false;
 		}
 	
@@ -98,22 +115,52 @@ public class ManageUserFile
 	 * Update a user in the userFile and in
 	 * the users currently loaded in memory
 	 */
-	public synchronized static boolean updateUser(User u)
+	public synchronized static boolean updateUser(String ID, String extension, boolean incomingCallPopup, boolean reverseLookup, boolean emailReminder)
 		{
 		try
 			{
-			//Now we rewrite the userFile;
-			rewriteUserFile();
+			for(User u : Variables.getUserList())
+				{
+				if(u.getID().equals(ID))
+					{
+					if((extension != null) && (!extension.equals("")))
+						{
+						u.setExtension(extension);
+						
+						//If the extension changed we restart the JTAPI monitoring
+						Variables.getJtapiMonitor().deleteUserMonitoring(u);
+						Variables.getJtapiMonitor().updateMonitoring();
+						}
+					u.setIncomingCallPopup(incomingCallPopup);
+					u.setReverseLookup(reverseLookup);
+					u.setEmailReminder(emailReminder);
 					
-			Variables.getLogger().debug("User \""+u.getInfo()+"\" updated !");
-			return true;
+					//We notify the user client
+					if(u.getConnection() != null)
+						{
+						Request optionUpdate = RequestBuilder.buildOptionUpdate(UsefulMethod.encodeOptionList(u));
+						u.getConnection().getOut().writeObject(optionUpdate);
+						u.getConnection().getOut().flush();
+						}
+					else
+						{
+						Variables.getLogger().debug("No client found for user "+u.getInfo()+" so no option update were sent");
+						}
+					
+					//Now we rewrite the userFile;
+					rewriteUserFile();
+							
+					Variables.getLogger().debug("User \""+u.getInfo()+"\" updated !");
+					return true;
+					}
+				}
 			}
 		catch (Exception e)
 			{
 			Variables.getLogger().error("Error : "+e.getMessage(),e);
 			}
 		
-		Variables.getLogger().debug("Failed to update the user \""+u.getInfo()+"\"");
+		Variables.getLogger().debug("Failed to update the user with ID \""+ID+"\"");
 		return false;
 		}
 	

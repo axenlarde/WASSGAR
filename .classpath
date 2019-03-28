@@ -19,5 +19,6 @@
 	<classpathentry kind="lib" path="C:/JAVAOxygen/WASSGAR/lib/js.jar"/>
 	<classpathentry kind="lib" path="C:/JAVAOxygen/WASSGAR/lib/ST-4.1.jar"/>
 	<classpathentry kind="lib" path="C:/JAVAOxygen/WASSGAR/lib/SFEnterpriseAPI.jar"/>
+	<classpathentry kind="lib" path="C:/JAVAOxygen/WASSGAR/lib/commons-codec-1.10.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

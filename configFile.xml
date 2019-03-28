@@ -48,5 +48,7 @@ Overal configuration file
 		<listenerport>8090</listenerport>
 		<!--CURRI Server parameters-->
 		<curriserverport>8091</curriserverport>
+		<!--Web server parameters-->
+		<webserverport>8092</webserverport>
 	</config>
 </xml>

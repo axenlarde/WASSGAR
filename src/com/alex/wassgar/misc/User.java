@@ -1,9 +1,12 @@
 package com.alex.wassgar.misc;
 
-import java.net.Socket;
+import java.io.IOException;
+
+import org.apache.commons.codec.digest.DigestUtils;
 
 import com.alex.wassgar.server.ClientConnection;
 import com.alex.wassgar.server.ClientListener;
+import com.alex.wassgar.utils.Variables;
 
 
 public class User
@@ -11,7 +14,7 @@ public class User
 	/**
 	 * Variables
 	 */
-	private String firstName, lastName, extension, email, cucmID, salesforceID, defaultBrowser;
+	private String ID, firstName, lastName, extension, email, cucmID, salesforceID, defaultBrowser;
 	private boolean incomingCallPopup, reverseLookup, emailReminder;
 	private ClientConnection connection;
 	private ClientListener clientListener;
@@ -30,11 +33,29 @@ public class User
 		this.reverseLookup = reverseLookup;
 		this.emailReminder = emailReminder;
 		this.defaultBrowser = defaultBrowser;
+		
+		this.ID = DigestUtils.md5Hex(this.getInfo());
 		}
 	
 	public String getInfo()
 		{
 		return firstName+" "+lastName;
+		}
+	
+	/**
+	 * Used to close everything related to the user before removing it
+	 */
+	public void prepareRemoval()
+		{
+		try
+			{
+			this.clientListener.tchao();
+			this.connection.close();
+			}
+		catch (IOException e)
+			{
+			Variables.getLogger().error("Failed to close user connection : "+this.getInfo()+" : "+e.getMessage(),e);
+			}
 		}
 
 	public String getFirstName()
@@ -155,6 +176,16 @@ public class User
 	public void setConnection(ClientConnection connection)
 		{
 		this.connection = connection;
+		}
+
+	public String getID()
+		{
+		return ID;
+		}
+
+	public void setID(String iD)
+		{
+		ID = iD;
 		}
 
 	

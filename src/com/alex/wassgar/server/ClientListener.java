@@ -60,7 +60,11 @@ public class ClientListener extends Thread
 								else if(tabs[0].equals("emailreminder"))u.setEmailReminder(Boolean.parseBoolean(tabs[1]));
 								}
 							
-							ManageUserFile.updateUser(u);
+							ManageUserFile.updateUser(u.getID(),
+									null,
+									u.isIncomingCallPopup(),
+									u.isReverseLookup(),
+									u.isEmailReminder());
 							}
 						else if(reply.getType().equals(requestType.status))
 							{

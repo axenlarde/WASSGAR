@@ -152,11 +152,11 @@ public class Monitor extends Thread implements ProviderObserver
 		try
 			{
 			boolean found = false;
-			for(int i=0; i<Variables.getObserverList().size(); i++)
+			for(Observer o : Variables.getObserverList())
 				{
 				for(Address myA : addresses)
 					{
-					if(Variables.getObserverList().get(i).getLine().getName().equals(myA.getName()))
+					if(o.getLine().getName().equals(myA.getName()))
 						{
 						found = true;
 						break;
@@ -164,8 +164,9 @@ public class Monitor extends Thread implements ProviderObserver
 					}
 				if(!found)
 					{
-					Variables.getLogger().debug("JTAPI : The following observer has not been found in the address list so we delete it : "+Variables.getObserverList().get(i).getLine().getName());
-					Variables.getObserverList().remove(i);
+					Variables.getLogger().debug("JTAPI : The following observer has not been found in the address list so we delete it : "+o.getLine().getName());
+					o.prepareToClose();
+					Variables.getObserverList().remove(o);
 					deleteMonitoring();//We call the method again in case more entry need to be removed
 					break;
 					}
@@ -202,6 +203,42 @@ public class Monitor extends Thread implements ProviderObserver
 		}
 	
 	/**
+	 * To update the monitored lines
+	 */
+	public synchronized void updateMonitoring()
+		{
+		try
+			{
+			updateAddresseList();
+			addMonitoring();
+			}
+		catch (Exception e)
+			{
+			Variables.getLogger().error("ERROR : Failed to update the observer list : "+e.getMessage(),e);
+			}
+		}
+	
+	/**
+	 * To delete a user monitoring
+	 */
+	public synchronized boolean deleteUserMonitoring(User u)
+		{
+		for(Observer o : Variables.getObserverList())
+			{
+			if(o.getUser().getID().equals(u.getID()))
+				{
+				o.prepareToClose();
+				Variables.getObserverList().remove(o);
+				Variables.getLogger().debug("Observer removed for user : "+u.getInfo());
+				return true;
+				}
+			}
+		
+		Variables.getLogger().error("ERROR : No observer to delete for user : "+u.getInfo());
+		return false;
+		}
+	
+	/**
 	 * Method used to stop the monitoring
 	 */
 	public void shutdown() throws Exception
@@ -230,15 +267,7 @@ public class Monitor extends Thread implements ProviderObserver
 				else if (eventList[i] instanceof CiscoAddrCreatedEvImpl)
 					{
 					Variables.getLogger().debug("JTAPI : A new line has been associated to the JTAPI user. We need to restart the monitoring");
-					try
-						{
-						updateAddresseList();
-						addMonitoring();
-						}
-					catch (Exception e)
-						{
-						Variables.getLogger().error("ERROR : Failed to update the observer list : "+e.getMessage(),e);
-						}
+					updateMonitoring();
 					}
 				else if (eventList[i] instanceof CiscoAddrRemovedEvImpl)
 					{

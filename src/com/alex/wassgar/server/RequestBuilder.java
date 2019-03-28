@@ -15,7 +15,7 @@ public class RequestBuilder
 	 * 
 	 * Content = url
 	 */
-	public static Request buildPopup(String exec)
+	public synchronized static Request buildPopup(String exec)
 		{
 		StringBuffer buf = new StringBuffer();
 		buf.append(exec);
@@ -27,7 +27,7 @@ public class RequestBuilder
 	/**
 	 * To build a connection accepted request
 	 */
-	public static Request buildAcceptedConnection(String desc)
+	public synchronized static Request buildAcceptedConnection(String desc)
 		{
 		StringBuffer buf = new StringBuffer();
 		buf.append(desc);
@@ -39,7 +39,7 @@ public class RequestBuilder
 	/**
 	 * To build a connection rejected request
 	 */
-	public static Request buildRejectedConnection(String desc)
+	public synchronized static Request buildRejectedConnection(String desc)
 		{
 		StringBuffer buf = new StringBuffer();
 		buf.append(desc);
@@ -51,7 +51,7 @@ public class RequestBuilder
 	/**
 	 * To build a success request
 	 */
-	public static Request buildSuccess()
+	public synchronized static Request buildSuccess()
 		{
 		Request r = new Request(requestType.success, "OK");
 		return r;
@@ -60,7 +60,7 @@ public class RequestBuilder
 	/**
 	 * To build a success request
 	 */
-	public static Request buildFailed(String desc)
+	public synchronized static Request buildFailed(String desc)
 		{
 		StringBuffer buf = new StringBuffer();
 		buf.append(desc);
@@ -72,7 +72,7 @@ public class RequestBuilder
 	/**
 	 * To build a status request
 	 */
-	public static Request buildStatus()
+	public synchronized static Request buildStatus()
 		{
 		Request r = new Request(requestType.status, "OK ?");
 		
@@ -82,7 +82,7 @@ public class RequestBuilder
 	/**
 	 * To build an update request
 	 */
-	public static Request buildOptionUpdate(String content)
+	public synchronized static Request buildOptionUpdate(String content)
 		{
 		Request r = new Request(requestType.updateOption, content);
 		return r;

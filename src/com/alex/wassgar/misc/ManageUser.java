@@ -21,7 +21,7 @@ public class ManageUser
 	/**
 	 * Used to process new calls
 	 */
-	public static void processNewCall(User user, Call call)
+	public synchronized static void processNewCall(User user, Call call)
 		{
 		if(call.getType().equals(callType.incoming))
 			{

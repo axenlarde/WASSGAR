@@ -15,6 +15,7 @@ import com.sforce.ws.ConnectionException;
 import com.sforce.ws.ConnectorConfig;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import com.alex.wassgar.jtapi.Call;
 import com.alex.wassgar.utils.ExtensionManipulation;
@@ -24,6 +25,7 @@ import com.alex.wassgar.utils.Variables;
 import com.alex.wassgar.utils.Variables.callType;
 import com.alex.wassgar.utils.Variables.searchArea;
 import com.alex.wassgar.utils.Variables.sfObjectType;
+import com.alex.wassgar.webserver.SalesForceUser;
 
 
 
@@ -53,38 +55,46 @@ public class SalesForceManager
 		Variables.getLogger().debug("SF : Service EndPoint: "+config.getServiceEndpoint());
 		Variables.getLogger().debug("SF : Username: "+config.getUsername());
 		Variables.getLogger().debug("SF : SessionId: "+config.getSessionId());
-		
-		/**
-		 * TEMP
-		 * 
-		 * List all user
-		 */
-		/*
+		}
+	
+	/**
+	 * To get all the salesforce users
+	 */
+	public synchronized static ArrayList<SalesForceUser> getUserList()
+		{
+		ArrayList<SalesForceUser> ul = new ArrayList<SalesForceUser>();
 		QueryResult qResult = null;
-		   try {
-		      String soqlQuery = "SELECT Id, FirstName, LastName, Email FROM User";
-		      qResult = Variables.getSFConnection().query(soqlQuery);
-		      boolean done = false;
-		      if (qResult.getSize() > 0)
-				{
-		       
-		            SObject[] records = qResult.getRecords();
-		            for (int i = 0; i < records.length; ++i)
-						{
-						User u = (User)records[i];
-						String s = u.getId()+" "+u.getFirstName()+" "+u.getLastName();
-						Variables.getLogger().debug("USER : "+s);
-		               }
-		         }
-		      else
-		    	  {
-		         System.out.println("No records found.");
-		      }
-		      System.out.println("\nQuery successfully executed.");
-		   } catch (ConnectionException ce) {
-		      ce.printStackTrace();
-		   }*/
 		
+		try
+			{
+			String soqlQuery = "SELECT Id, FirstName, LastName, Email, Alias FROM User";
+			qResult = Variables.getSFConnection().query(soqlQuery);
+			boolean done = false;
+			if (qResult.getSize() > 0)
+				{
+	            SObject[] records = qResult.getRecords();
+	            for (int i = 0; i < records.length; ++i)
+					{
+					User u = (User)records[i];
+					ul.add(new SalesForceUser(u.getFirstName(),
+							u.getLastName(),
+							u.getAlias(),
+							u.getEmail(),
+							u.getId()));
+					}
+				}
+			else
+				{
+				Variables.getLogger().debug("No Salesforce user found");
+				}
+			Variables.getLogger().debug(ul.size()+" Salesforce user retrieved");
+			}
+		catch (Exception e)
+			{
+			Variables.getLogger().error("Error while retrieving the salesforce user list : "+e.getMessage(),e);
+			}
+		
+		return ul;
 		}
 	
 	/**

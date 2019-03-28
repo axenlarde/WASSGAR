@@ -112,6 +112,22 @@ public class Variables
 		user
 		};
 		
+	/**
+	 * web request
+	 */
+	public enum webRequestType
+		{
+		getCUCMUsers,
+		getSalesforceUsers,
+		getUserList,
+		getUser,
+		addUser,
+		updateUser,
+		deleteUser,
+		getSettings,
+		updateSettings
+		}
+		
 	/**	MISC	**/
 	private static String softwareName;
 	private static String softwareVersion;
@@ -301,8 +317,12 @@ public class Variables
 		Variables.uuidList = uuidList;
 		}
 
-	public static com.cisco.axlapiservice10.AXLPort getAXLConnectionToCUCMV105()
+	public static com.cisco.axlapiservice10.AXLPort getAXLConnectionToCUCMV105() throws Exception
 		{
+		if(AXLConnectionToCUCMV105 == null)
+			{
+			UsefulMethod.initAXLConnectionToCUCM();
+			}
 		return AXLConnectionToCUCMV105;
 		}
 
