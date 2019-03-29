@@ -89,6 +89,8 @@ public class WebRequestBuilder
 				content.append("		<user>\r\n");
 				content.append("			<firstname>"+u.getFirstName()+"</firstname>\r\n");
 				content.append("			<lastname>"+u.getLastName()+"</lastname>\r\n");
+				content.append("			<extension>"+u.getExtension()+"</extension>\r\n");
+				content.append("			<id>"+u.getID()+"</id>\r\n");
 				content.append("		</user>\r\n");
 				}
 			
@@ -129,13 +131,14 @@ public class WebRequestBuilder
 			content.append("		<lastname>"+u.getLastName()+"</lastname>\r\n");
 			content.append("		<extension>"+u.getExtension()+"</extension>\r\n");
 			content.append("		<email>"+u.getEmail()+"</email>\r\n");
+			content.append("		<defaultbrowser>"+u.getDefaultBrowser()+"</defaultbrowser>\r\n");
 			content.append("		<emailreminder>"+u.isEmailReminder()+"</emailreminder>\r\n");
 			content.append("		<incomingcallpopup>"+u.isIncomingCallPopup()+"</incomingcallpopup>\r\n");
 			content.append("		<reverselookup>"+u.isReverseLookup()+"</reverselookup>\r\n");
 			content.append("	</user>\r\n");
 			content.append("</xml>\r\n");
 			
-			return new WebRequest(content.toString(), webRequestType.getUserList);
+			return new WebRequest(content.toString(), webRequestType.getUser);
 			}
 		catch (Exception e)
 			{
@@ -145,6 +148,13 @@ public class WebRequestBuilder
 		return null;
 		}
 	
+	/**
+	 * To build the requested request
+	 */
+	public synchronized static WebRequest buildSuccess()
+		{
+		return new WebRequest("Done !", webRequestType.success);
+		}
 	
 	
 	/*2019*//*RATEL Alexandre 8)*/

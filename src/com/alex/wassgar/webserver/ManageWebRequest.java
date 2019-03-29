@@ -98,17 +98,34 @@ public class ManageWebRequest
 	
 	/**
 	 * Get all the Salesforce users
+	 * 
+	 * Web request format :
+	 * <xml>
+	 * 	<request>
+	 * 		<type>getSalesforceUsers<type>
+	 * 	</request>
+ 	 * </xml> 
 	 */
 	public synchronized static WebRequest getSalesforceUsers(String content)
 		{
 		ArrayList<SalesForceUser> ul = SalesForceManager.getUserList();
 		if(ul.size() == 0)return null;
 		
+		//We remove from the list the user already created
+		UsefulMethod.removeDuplicate(ul);
+		
 		return WebRequestBuilder.buildGetSalesforceUsersReply(ul);
 		}
 	
 	/**
 	 * Get the internal user list
+	 * 
+	 * Web request format :
+	 * <xml>
+	 * 	<request>
+	 * 		<type>getUserList<type>
+	 * 	</request>
+ 	 * </xml> 
 	 */
 	public synchronized static WebRequest getUserList()
 		{
@@ -130,7 +147,7 @@ public class ManageWebRequest
 	 * 	</request>
  	 * </xml> 
 	 */
-	public synchronized static void addUser(String content)
+	public synchronized static WebRequest addUser(String content)
 		{
 		try
 			{
@@ -142,21 +159,37 @@ public class ManageWebRequest
 			ArrayList<String[][]> parsed = xMLGear.getResultListTab(content, params);
 			String[][] t = parsed.get(0);
 			
-			ManageUserFile.addUser(UsefulMethod.getItemByName("firstname", t),
-					UsefulMethod.getItemByName("lastname", t),
+			/**
+			 * At this point we just receive the salesforce user id and the extension
+			 * from the web portal. We do not check if the extension is correct and we do not
+			 * try to find the matching cucm user. In addition, after adding the user
+			 * we still have to manually add the ECCP to the line and add the device to the
+			 * application user. So could be a lot improved
+			 */
+			
+			//using the id received we get the user info from salesforce
+			String salesforceID = UsefulMethod.getItemByName("salesforceid", t);
+			SalesForceUser su = SalesForceManager.getUser(salesforceID);
+			
+			ManageUserFile.addUser(su.getFirstName(),
+					su.getLastName(),
 					UsefulMethod.getItemByName("extension", t),
-					UsefulMethod.getItemByName("email", t),
-					UsefulMethod.getItemByName("cucmid", t),
-					UsefulMethod.getItemByName("salesforceid", t),
-					Boolean.parseBoolean(UsefulMethod.getItemByName("incomingcallpopup", t)),
-					Boolean.parseBoolean(UsefulMethod.getItemByName("reverselookup", t)),
-					Boolean.parseBoolean(UsefulMethod.getItemByName("emailreminder", t)),
-					UsefulMethod.getItemByName("defaultbrowser", t));
+					su.getEmail(),
+					"forlateruse",
+					salesforceID,
+					true,
+					true,
+					true,
+					UsefulMethod.getTargetOption("defaultbrowser"));
+			
+			return WebRequestBuilder.buildSuccess();
 			}
 		catch (Exception e)
 			{
 			Variables.getLogger().error("Failed to add a new user : "+e.getMessage(),e);
 			}
+		
+		return null;
 		}
 	
 	/**
@@ -170,6 +203,7 @@ public class ManageWebRequest
 	 * 			<user>
 	 * 				<id>
 	 * 				<extension>
+	 * 				<defaultbrowser>
 	 * 				<incomingCallPopup>
 	 * 				<reverseLookup>
 	 * 				<emailReminder>
@@ -178,7 +212,7 @@ public class ManageWebRequest
 	 * 	</request>
  	 * </xml> 
 	 */
-	public synchronized static void updateUser(String content)
+	public synchronized static WebRequest updateUser(String content)
 		{
 		try
 			{
@@ -192,14 +226,19 @@ public class ManageWebRequest
 			
 			ManageUserFile.updateUser(UsefulMethod.getItemByName("id", t),
 					UsefulMethod.getItemByName("extension", t),
+					UsefulMethod.getItemByName("defaultbrowser", t),
 					Boolean.parseBoolean(UsefulMethod.getItemByName("incomingcallpopup", t)),
 					Boolean.parseBoolean(UsefulMethod.getItemByName("reverselookup", t)),
 					Boolean.parseBoolean(UsefulMethod.getItemByName("emailreminder", t)));
+			
+			return WebRequestBuilder.buildSuccess();
 			}
 		catch (Exception e)
 			{
 			Variables.getLogger().error("Failed to add a new user : "+e.getMessage(),e);
 			}
+		
+		return null;
 		}
 	
 	/**
@@ -217,7 +256,7 @@ public class ManageWebRequest
 	 * 	</request>
  	 * </xml> 
 	 */
-	public synchronized static void deleteUser(String content)
+	public synchronized static WebRequest deleteUser(String content)
 		{
 		try
 			{
@@ -230,11 +269,15 @@ public class ManageWebRequest
 			String[][] t = parsed.get(0);
 			
 			ManageUserFile.deleteUser(UsefulMethod.getItemByName("id", t));
+			
+			return WebRequestBuilder.buildSuccess();
 			}
 		catch (Exception e)
 			{
 			Variables.getLogger().error("Failed to delete user : "+e.getMessage(),e);
 			}
+		
+		return null;
 		}
 	
 	/**
@@ -274,7 +317,7 @@ public class ManageWebRequest
 			}
 		catch (Exception e)
 			{
-			Variables.getLogger().error("Failed to add a new user : "+e.getMessage(),e);
+			Variables.getLogger().error("Failed to retreive the given user : "+e.getMessage(),e);
 			}
 		
 		return null;
@@ -293,9 +336,10 @@ public class ManageWebRequest
 	/**
 	 * update settings
 	 */
-	public synchronized static void updateSettings(String content)
+	public synchronized static WebRequest updateSettings(String content)
 		{
 		//To be written
+		return null;
 		}
 	
 	/*2019*//*RATEL Alexandre 8)*/

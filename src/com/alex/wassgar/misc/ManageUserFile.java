@@ -43,7 +43,7 @@ public class ManageUserFile
 			//we check that the user doesn't already exists
 			for(User u : Variables.getUserList())
 				{
-				if(u.getInfo().equals(newUser.getInfo()))
+				if(u.getID().equals(newUser.getID()))
 					{
 					Variables.getLogger().debug("The user \""+newUser.getInfo()+"\"already exists so we abort the creation");
 					return false;
@@ -53,7 +53,7 @@ public class ManageUserFile
 			Variables.getUserList().add(newUser);
 			
 			//We start the JTAPI monitoring
-			Variables.getJtapiMonitor().updateMonitoring();
+			if(Variables.getJtapiMonitor() != null)Variables.getJtapiMonitor().updateMonitoring();
 			
 			/******
 			 * Add the new user in the user file
@@ -89,7 +89,7 @@ public class ManageUserFile
 					u.prepareRemoval();
 					
 					//Closing JTAPI observer
-					Variables.getJtapiMonitor().deleteUserMonitoring(u);
+					if(Variables.getJtapiMonitor() != null)Variables.getJtapiMonitor().deleteUserMonitoring(u);
 					
 					//Finally we remove the user from the list
 					Variables.getUserList().remove(u);
@@ -105,6 +105,7 @@ public class ManageUserFile
 		catch (Exception e)
 			{
 			Variables.getLogger().error("Error : "+e.getMessage(),e);
+			return false;
 			}
 		
 		Variables.getLogger().debug("User ID \""+ID+"\" not found");
@@ -115,7 +116,7 @@ public class ManageUserFile
 	 * Update a user in the userFile and in
 	 * the users currently loaded in memory
 	 */
-	public synchronized static boolean updateUser(String ID, String extension, boolean incomingCallPopup, boolean reverseLookup, boolean emailReminder)
+	public synchronized static boolean updateUser(String ID, String extension, String defaultBrowser, boolean incomingCallPopup, boolean reverseLookup, boolean emailReminder)
 		{
 		try
 			{
@@ -125,12 +126,27 @@ public class ManageUserFile
 					{
 					if((extension != null) && (!extension.equals("")))
 						{
-						u.setExtension(extension);
-						
-						//If the extension changed we restart the JTAPI monitoring
-						Variables.getJtapiMonitor().deleteUserMonitoring(u);
-						Variables.getJtapiMonitor().updateMonitoring();
+						if(!extension.equals(u.getExtension()))//We check that the new extension is not the same
+							{
+							u.setExtension(extension);
+							
+							//If the extension changed we restart the JTAPI monitoring
+							if(Variables.getJtapiMonitor() != null)
+								{
+								Variables.getJtapiMonitor().deleteUserMonitoring(u);
+								Variables.getJtapiMonitor().updateMonitoring();
+								}
+							}
 						}
+					
+					if((defaultBrowser != null) && (!defaultBrowser.equals("")))
+						{
+						if(!defaultBrowser.equals(u.getDefaultBrowser()))//We check that the new extension is not the same
+							{
+							u.setDefaultBrowser(defaultBrowser);
+							}
+						}
+					
 					u.setIncomingCallPopup(incomingCallPopup);
 					u.setReverseLookup(reverseLookup);
 					u.setEmailReminder(emailReminder);
@@ -185,6 +201,7 @@ public class ManageUserFile
 		for(User u : Variables.getUserList())
 			{
 			content.append("		<user>\r\n" + 
+					"			<id>"+u.getID()+"</id>\r\n" + 
 					"			<firstname>"+u.getFirstName()+"</firstname>\r\n" + 
 					"			<lastname>"+u.getLastName()+"</lastname>\r\n" + 
 					"			<extension>"+u.getExtension()+"</extension>\r\n" + 

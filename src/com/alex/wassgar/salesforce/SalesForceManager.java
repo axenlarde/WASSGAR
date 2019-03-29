@@ -58,6 +58,47 @@ public class SalesForceManager
 		}
 	
 	/**
+	 * To get the given salesforce user
+	 */
+	public synchronized static SalesForceUser getUser(String id)
+		{
+		QueryResult qResult = null;
+		
+		try
+			{
+			String soqlQuery = "SELECT Id, FirstName, LastName, Email, Alias FROM User where Id='"+id+"'";
+			qResult = Variables.getSFConnection().query(soqlQuery);
+			boolean done = false;
+			if (qResult.getSize() > 0)
+				{
+	            SObject[] records = qResult.getRecords();
+	            for (int i = 0; i < records.length; ++i)
+					{
+					User u = (User)records[i];
+					
+					Variables.getLogger().debug("Salesforce user retrieved");
+					//We care only for the first one
+					return new SalesForceUser(u.getFirstName(),
+							u.getLastName(),
+							u.getAlias(),
+							u.getEmail(),
+							u.getId());
+					}
+				}
+			else
+				{
+				Variables.getLogger().debug("No Salesforce user found");
+				}
+			}
+		catch (Exception e)
+			{
+			Variables.getLogger().error("Error while retrieving the salesforce user list : "+e.getMessage(),e);
+			}
+		
+		return null;
+		}
+	
+	/**
 	 * To get all the salesforce users
 	 */
 	public synchronized static ArrayList<SalesForceUser> getUserList()

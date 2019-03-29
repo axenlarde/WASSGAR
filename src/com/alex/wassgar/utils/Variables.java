@@ -13,6 +13,7 @@ import com.alex.wassgar.misc.storedUUID;
 import com.alex.wassgar.salesforce.ConnectionManager;
 import com.alex.wassgar.server.ListenerManager;
 import com.alex.wassgar.server.Watchman;
+import com.alex.wassgar.webserver.WebListenerManager;
 import com.sforce.soap.enterprise.EnterpriseConnection;
 
 
@@ -125,7 +126,9 @@ public class Variables
 		updateUser,
 		deleteUser,
 		getSettings,
-		updateSettings
+		updateSettings,
+		success,
+		error
 		}
 		
 	/**	MISC	**/
@@ -167,6 +170,9 @@ public class Variables
 	
 	/** CURRI management**/
 	private static CURRIHTTPServer curriServer;
+	
+	/** Web Management **/
+	private static WebListenerManager webServer;
 	
 	/**************
      * Constructor
@@ -444,6 +450,16 @@ public class Variables
 	public static void setsFConnectionManager(ConnectionManager sFConnectionManager)
 		{
 		Variables.sFConnectionManager = sFConnectionManager;
+		}
+
+	public static WebListenerManager getWebServer()
+		{
+		return webServer;
+		}
+
+	public static void setWebServer(WebListenerManager webServer)
+		{
+		Variables.webServer = webServer;
 		}
 	
 	

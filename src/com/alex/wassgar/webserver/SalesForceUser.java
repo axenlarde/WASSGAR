@@ -21,6 +21,11 @@ public class SalesForceUser
 		this.email = email;
 		ID = iD;
 		}
+	
+	public String getInfo()
+		{
+		return firstName+" "+lastName;
+		}
 
 	public String getFirstName()
 		{

@@ -14,6 +14,7 @@ Overal configuration file
 		<logunansweredcalls>true</logunansweredcalls><!--Log unanswered calls in salesforce--><!--true,false-->
 		<retryinterval>30</retryinterval><!--In seconds-->
 		<internalnumberpattern>\d{4}</internalnumberpattern><!--Internal numbers should not be resolved-->
+		<defaultbrowser>C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe</defaultbrowser><!--Default browser used while adding new user-->
 		<!--Smtp parameters-->
 		<smtpemailport>25</smtpemailport>
 		<smtpemailprotocol>smtp</smtpemailprotocol>

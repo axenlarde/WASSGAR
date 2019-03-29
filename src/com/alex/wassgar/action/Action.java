@@ -11,6 +11,7 @@ import com.alex.wassgar.server.ListenerManager;
 import com.alex.wassgar.server.Watchman;
 import com.alex.wassgar.utils.UsefulMethod;
 import com.alex.wassgar.utils.Variables;
+import com.alex.wassgar.webserver.WebListenerManager;
 
 /**
  * Class used to launch the main jobs
@@ -42,7 +43,7 @@ public class Action
 		 */
 		try
 			{
-			//Variables.setsFConnectionManager(new ConnectionManager());
+			Variables.setsFConnectionManager(new ConnectionManager());
 			}
 		catch (Exception e)
 			{
@@ -57,10 +58,10 @@ public class Action
 			/***
 			 * Maybe rewrite the following as a static "MonitoringManager"
 			 */
-			/*Variables.setJtapiMonitor(new Monitor(UsefulMethod.getTargetOption("ctihost"),
+			Variables.setJtapiMonitor(new Monitor(UsefulMethod.getTargetOption("ctihost"),
 					UsefulMethod.getTargetOption("ctidelay"),
 					UsefulMethod.getTargetOption("ctiusername"),
-					UsefulMethod.getTargetOption("ctipassword")));*/
+					UsefulMethod.getTargetOption("ctipassword")));
 			}
 		catch (Exception e)
 			{
@@ -85,11 +86,23 @@ public class Action
 		 */
 		try
 			{
-			//Variables.setCurriServer(new CURRIHTTPServer());
+			Variables.setCurriServer(new CURRIHTTPServer());
 			}
 		catch(Exception e)
 			{
 			Variables.getLogger().error("ERROR setting up the CURRI Thread : "+e.getMessage(), e);
+			}
+		
+		/**
+		 * We start the web server
+		 */
+		try
+			{
+			Variables.setWebServer(new WebListenerManager());
+			}
+		catch(Exception e)
+			{
+			Variables.getLogger().error("ERROR setting up the web server Thread : "+e.getMessage(), e);
 			}
 		
 		

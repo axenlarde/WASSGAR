@@ -23,6 +23,7 @@ import com.alex.wassgar.utils.Variables.cucmAXLVersion;
 import com.alex.wassgar.utils.Variables.itemType;
 import com.alex.wassgar.utils.Variables.searchArea;
 import com.alex.wassgar.utils.Variables.sfObjectType;
+import com.alex.wassgar.webserver.SalesForceUser;
 import com.sforce.soap.enterprise.sobject.Account;
 import com.sforce.soap.enterprise.sobject.Contact;
 import com.sforce.soap.enterprise.sobject.Lead;
@@ -695,7 +696,7 @@ public class UsefulMethod
 	/**
 	 * Used to generate the options xml content
 	 */
-	public static String encodeOptionList(User u)
+	public synchronized static String encodeOptionList(User u)
 		{
 		StringBuffer buf = new StringBuffer();
 		
@@ -708,6 +709,35 @@ public class UsefulMethod
 		buf.append("</xml>");
 		
 		return buf.toString();
+		}
+	
+	/**
+	 * To remove the already used salesforce user from the list
+	 */
+	public synchronized static boolean removeDuplicate(ArrayList<SalesForceUser> sul)
+		{
+		try
+			{
+			ArrayList<User> ul = Variables.getUserList();
+			
+			for(SalesForceUser su : sul)
+				{
+				for(User u : ul)
+					{
+					if(su.getInfo().equals(u.getInfo()))
+						{
+						sul.remove(su);
+						removeDuplicate(sul);//To remove the remaining duplicate
+						return true;
+						}
+					}
+				}
+			}
+		catch (Exception e)
+			{
+			Variables.getLogger().error("Error while removing duplicate : "+e.getMessage(), e);
+			}
+		return false;
 		}
 	
 	

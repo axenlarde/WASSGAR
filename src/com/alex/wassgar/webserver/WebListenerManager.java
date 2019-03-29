@@ -88,15 +88,15 @@ public class WebListenerManager implements HttpHandler
 						}
 					else if(wr.getType().equals(webRequestType.addUser))
 						{
-						ManageWebRequest.addUser(content);
+						reply = ManageWebRequest.addUser(content);
 						}
 					else if(wr.getType().equals(webRequestType.updateUser))
 						{
-						ManageWebRequest.updateUser(content);
+						reply = ManageWebRequest.updateUser(content);
 						}
 					else if(wr.getType().equals(webRequestType.deleteUser))
 						{
-						ManageWebRequest.deleteUser(content);
+						reply = ManageWebRequest.deleteUser(content);
 						}
 					else if(wr.getType().equals(webRequestType.getUser))
 						{
@@ -108,7 +108,7 @@ public class WebListenerManager implements HttpHandler
 						}
 					else if(wr.getType().equals(webRequestType.updateSettings))
 						{
-						ManageWebRequest.updateSettings(content);
+						reply = ManageWebRequest.updateSettings(content);
 						}
 					
 					OutputStream os = exc.getResponseBody();

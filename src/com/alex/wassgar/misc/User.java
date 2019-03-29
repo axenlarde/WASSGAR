@@ -52,7 +52,7 @@ public class User
 			this.clientListener.tchao();
 			this.connection.close();
 			}
-		catch (IOException e)
+		catch (Exception e)
 			{
 			Variables.getLogger().error("Failed to close user connection : "+this.getInfo()+" : "+e.getMessage(),e);
 			}
