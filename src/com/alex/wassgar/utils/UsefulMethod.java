@@ -470,7 +470,8 @@ public class UsefulMethod
 		
 		for(String[][] sTab: myTempList)
 			{
-			myList.add(new User(UsefulMethod.getItemByName("firstname", sTab),
+			myList.add(new User(UsefulMethod.getItemByName("id", sTab),
+					UsefulMethod.getItemByName("firstname", sTab),
 					UsefulMethod.getItemByName("lastname", sTab),
 					UsefulMethod.getItemByName("extension", sTab),
 					UsefulMethod.getItemByName("email", sTab),
@@ -479,7 +480,8 @@ public class UsefulMethod
 					Boolean.parseBoolean(UsefulMethod.getItemByName("incomingcallpopup", sTab)),
 					Boolean.parseBoolean(UsefulMethod.getItemByName("reverselookup", sTab)),
 					Boolean.parseBoolean(UsefulMethod.getItemByName("emailreminder", sTab)),
-					UsefulMethod.getItemByName("defaultbrowser", sTab)));
+					UsefulMethod.getItemByName("defaultbrowser", sTab),
+					UsefulMethod.getItemByName("browseroptions", sTab)));
 			}
 		
 		return myList;
@@ -714,7 +716,7 @@ public class UsefulMethod
 	/**
 	 * To remove the already used salesforce user from the list
 	 */
-	public synchronized static boolean removeDuplicate(ArrayList<SalesForceUser> sul)
+	public static boolean removeDuplicate(ArrayList<SalesForceUser> sul)
 		{
 		try
 			{
@@ -724,7 +726,7 @@ public class UsefulMethod
 				{
 				for(User u : ul)
 					{
-					if(su.getInfo().equals(u.getInfo()))
+					if(su.getID().equals(u.getSalesforceID()))//Based on the salesforce ID
 						{
 						sul.remove(su);
 						removeDuplicate(sul);//To remove the remaining duplicate

@@ -20,30 +20,12 @@ public class ManageRequest
 			{
 			if(u.getConnection() != null)
 				{
-				Variables.getLogger().debug("Trying to send "+r.getType().name()+" to "+u.getInfo());
+				Variables.getLogger().debug("Sending "+r.getType().name()+" to "+u.getInfo()+" : "+r.getContent());
 				
 				u.getConnection().getOut().writeObject(r);
 				u.getConnection().getOut().flush();
 				
-				//We now wait for the response
-				Object o = u.getConnection().getIn().readObject();
-				
-				if(o instanceof Request)
-					{
-					Request reply = (Request)o;
-					if(reply.getType().equals(requestType.success))
-						{
-						Variables.getLogger().debug(r.getType().name()+" sent with success to "+u.getInfo());
-						}
-					else
-						{
-						Variables.getLogger().debug(r.getType().name()+" sending failed for user "+u.getInfo());
-						}
-					}
-				else
-					{
-					throw new Exception("Bad reply for user : "+u.getInfo());
-					}
+				Variables.getLogger().debug("Popup Sent for "+u.getInfo());
 				}
 			else
 				{

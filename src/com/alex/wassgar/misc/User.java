@@ -14,13 +14,13 @@ public class User
 	/**
 	 * Variables
 	 */
-	private String ID, firstName, lastName, extension, email, cucmID, salesforceID, defaultBrowser;
+	private String ID, firstName, lastName, extension, email, cucmID, salesforceID, defaultBrowser, browserOptions;
 	private boolean incomingCallPopup, reverseLookup, emailReminder;
 	private ClientConnection connection;
 	private ClientListener clientListener;
 	
-	public User(String firstName, String lastName, String extension, String email, String cucmID, String salesforceID,
-			boolean incomingCallPopup, boolean reverseLookup, boolean emailReminder, String defaultBrowser)
+	public User(String ID, String firstName, String lastName, String extension, String email, String cucmID, String salesforceID,
+			boolean incomingCallPopup, boolean reverseLookup, boolean emailReminder, String defaultBrowser, String browserOptions)
 		{
 		super();
 		this.firstName = firstName;
@@ -33,8 +33,17 @@ public class User
 		this.reverseLookup = reverseLookup;
 		this.emailReminder = emailReminder;
 		this.defaultBrowser = defaultBrowser;
+		this.browserOptions = browserOptions;
 		
-		this.ID = DigestUtils.md5Hex(this.getInfo());
+		//If the user is new, we create the ID
+		if((ID == null) || (ID.equals("")))
+			{
+			this.ID = DigestUtils.md5Hex(this.getInfo());
+			}
+		else
+			{
+			this.ID = ID;
+			}
 		}
 	
 	public String getInfo()
@@ -56,6 +65,16 @@ public class User
 			{
 			Variables.getLogger().error("Failed to close user connection : "+this.getInfo()+" : "+e.getMessage(),e);
 			}
+		}
+	
+	/**
+	 * Used to know if this user has an active client connection
+	 */
+	public boolean getStatus()
+		{
+		if(connection != null)return true;
+		
+		return false;
 		}
 
 	public String getFirstName()
@@ -186,6 +205,16 @@ public class User
 	public void setID(String iD)
 		{
 		ID = iD;
+		}
+
+	public String getBrowserOptions()
+		{
+		return browserOptions;
+		}
+
+	public void setBrowserOptions(String browserOptions)
+		{
+		this.browserOptions = browserOptions;
 		}
 
 	

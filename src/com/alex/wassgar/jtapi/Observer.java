@@ -12,6 +12,7 @@ import javax.telephony.callcontrol.events.CallCtlEv;
 
 import com.alex.wassgar.misc.ManageUser;
 import com.alex.wassgar.misc.User;
+import com.alex.wassgar.utils.ExtensionManipulation;
 import com.alex.wassgar.utils.Variables;
 import com.alex.wassgar.utils.Variables.callType;
 import com.cisco.jtapi.JTAPIDecoder;
@@ -65,6 +66,8 @@ public class Observer implements CallControlCallObserver, MediaCallObserver, Cis
 	public void prepareToClose()
 		{
 		CallListManager.endCalls(user.getExtension());
+		line.removeObserver(this);
+		line.removeCallObserver(this);
 		}
 
 
@@ -137,17 +140,27 @@ public class Observer implements CallControlCallObserver, MediaCallObserver, Cis
 						
 						if(callingParty.getAddress().getName().equals(this.line.getName()))
 							{
-							Call call = new Call(user,
-									line,
-									Integer.toString(localCall.getCallID().getGlobalCallID()),
-									calledParty,
-									callingParty,
-									callType.outgoing);
-							
-							if(!CallListManager.isThisCallExisting(call))
+							/**
+							 * If the extension is internal we ignore it
+							 */
+							if(ExtensionManipulation.goodToGo(calledParty.getAddress().getName()))
 								{
-								CallListManager.addCall(call);
-								ManageUser.processNewCall(user, call);
+								Call call = new Call(user,
+										line,
+										Integer.toString(localCall.getCallID().getGlobalCallID()),
+										calledParty,
+										callingParty,
+										callType.outgoing);
+								
+								if(!CallListManager.isThisCallExisting(call))
+									{
+									CallListManager.addCall(call);
+									ManageUser.processNewCall(user, call);
+									}
+								}
+							else
+								{
+								Variables.getLogger().debug("This call was internal so we ignore it : "+calledParty.getAddress().getName());
 								}
 							}
 						}

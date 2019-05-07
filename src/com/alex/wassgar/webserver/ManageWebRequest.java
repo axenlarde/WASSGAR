@@ -10,7 +10,6 @@ import com.alex.wassgar.utils.Variables;
 import com.alex.wassgar.utils.Variables.webRequestType;
 import com.alex.wassgar.utils.xMLGear;
 import com.cisco.axl.api._10.LUser;
-import com.cisco.axlapiservice10.AXLError;
 
 
 /**
@@ -180,7 +179,8 @@ public class ManageWebRequest
 					true,
 					true,
 					true,
-					UsefulMethod.getTargetOption("defaultbrowser"));
+					UsefulMethod.getTargetOption("defaultbrowser"),
+					"");
 			
 			return WebRequestBuilder.buildSuccess();
 			}
@@ -204,6 +204,7 @@ public class ManageWebRequest
 	 * 				<id>
 	 * 				<extension>
 	 * 				<defaultbrowser>
+	 * 				<browseroptions>
 	 * 				<incomingCallPopup>
 	 * 				<reverseLookup>
 	 * 				<emailReminder>
@@ -227,6 +228,7 @@ public class ManageWebRequest
 			ManageUserFile.updateUser(UsefulMethod.getItemByName("id", t),
 					UsefulMethod.getItemByName("extension", t),
 					UsefulMethod.getItemByName("defaultbrowser", t),
+					UsefulMethod.getItemByName("browseroptions", t),
 					Boolean.parseBoolean(UsefulMethod.getItemByName("incomingcallpopup", t)),
 					Boolean.parseBoolean(UsefulMethod.getItemByName("reverselookup", t)),
 					Boolean.parseBoolean(UsefulMethod.getItemByName("emailreminder", t)));

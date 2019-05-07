@@ -63,7 +63,7 @@ public class CallListManager
 	 * Will end all calls related to an extension
 	 * Used before removing line monitoring
 	 */
-	public synchronized static void endCalls(String extension)
+	public static void endCalls(String extension)
 		{
 		for(Call c : Variables.getCallList())
 			{

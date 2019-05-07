@@ -53,8 +53,8 @@ public class Call
 		this.callingParty = callingParty;
 		this.type = type;
 		
-		timeFormat = new SimpleDateFormat("mm:ss:SSS");
-		dateFormat = new SimpleDateFormat("dd/MM/YYYY - mm:ss:SSS");
+		timeFormat = new SimpleDateFormat("HH:mm:ss");
+		dateFormat = new SimpleDateFormat("dd/MM/YYYY - HH:mm:ss");
 		//dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));//Check if needed
 		
 		//We consider that the following can be initialize with the call object
@@ -71,6 +71,7 @@ public class Call
 		{
 		endTime = System.currentTimeMillis();
 		status = callStatus.ended;
+		
 		Variables.getCallLogger().info(user.getFirstName()+","+
 				user.getLastName()+","+
 				line.getName()+","+

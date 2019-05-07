@@ -47,7 +47,7 @@ public class ConnectionManager extends Thread
 			
 			try
 				{
-				this.sleep(Integer.parseInt(UsefulMethod.getTargetOption("retryinterval")));
+				this.sleep(Integer.parseInt(UsefulMethod.getTargetOption("retryinterval"))*1000);
 				}
 			catch (Exception e)
 				{

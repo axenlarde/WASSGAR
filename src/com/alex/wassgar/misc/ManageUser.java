@@ -191,7 +191,7 @@ public class ManageUser
 				String urlToDisplay = UsefulMethod.getFormattedURL(UsefulMethod.getSFObjectURL(sfo.getType()),sfo.getID());
 				
 				//Runtime.getRuntime().exec("\""+user.getDefaultBrowser()+"\" "+urlToDisplay);
-				Request r = RequestBuilder.buildPopup("\""+user.getDefaultBrowser()+"\" "+urlToDisplay);
+				Request r = RequestBuilder.buildPopup("\""+user.getDefaultBrowser()+"\" "+user.getBrowserOptions()+" "+urlToDisplay);
 				ManageRequest.send(user, r);
 				
 				//The best would be to trigger a SF Toast

@@ -12,15 +12,20 @@ public class ExtensionManipulation
 	
 	public static String validate(String extension)
 		{
-		if(extension.startsWith("+"))
+		if(extension.startsWith("+33"))
 			{
-			//We add a \ before sending to salesforce
-			return "\\"+extension;
+			return extension.substring(3, extension.length());
 			}
 		else if(extension.startsWith("00"))
 			{
 			return extension.substring(1, extension.length());
 			}
+		else if(extension.startsWith("+"))
+			{
+			//We add a \ before sending to salesforce
+			return "\\"+extension;
+			}
+		
 		
 		return extension;
 		}

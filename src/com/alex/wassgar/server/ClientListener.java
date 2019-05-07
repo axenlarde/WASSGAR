@@ -63,6 +63,7 @@ public class ClientListener extends Thread
 							ManageUserFile.updateUser(u.getID(),
 									null,
 									null,
+									null,
 									u.isIncomingCallPopup(),
 									u.isReverseLookup(),
 									u.isEmailReminder());

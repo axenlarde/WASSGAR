@@ -150,6 +150,8 @@ public class SalesForceManager
 			Task task = new Task();
 			task.setOwnerId(userID);
 			task.setTaskSubtype("Call");
+			task.setIsClosed(true);
+			
 			if(call.getType().equals(callType.incoming))
 				{
 				String ic = LanguageManagement.getString("incomingcall");
@@ -214,66 +216,69 @@ public class SalesForceManager
 		SFObject sfo = null;
 		
 		/**
-		 * If the extension is internal we do not resolve it
+		 * First, we check if the number should be processed
 		 */
-		if(ExtensionManipulation.goodToGo(extension))
+		if(!ExtensionManipulation.goodToGo(extension))
 			{
-			/**
-			 * If multiple items are found we just return the first one
-			 * starting with contact
-			 * 
-			 * We are looking for extensions in the following items :
-			 * - Contacts
-			 * - Leads
-			 * - Accounts
-			 */
+			Variables.getLogger().debug("This call was internal so we ignore it : "+extension);
+			return null;
+			}
+		
+		/**
+		 * If multiple items are found we just return the first one
+		 * starting with contact
+		 * 
+		 * We are looking for extensions in the following items :
+		 * - Contacts
+		 * - Leads
+		 * - Accounts
+		 */
+		
+		try
+			{
+			String query;
+			if(UsefulMethod.getSearchArea().equals(searchArea.all))
+				{
+				query = "FIND {"+ExtensionManipulation.validate(extension)+"} IN Phone FIELDS RETURNING "+
+						"Contact(Id, Phone, FirstName, LastName),"+
+						"Lead(Id, Phone, FirstName, LastName),"+
+						"Account(Id, Phone, Name)";
+				}
+			else //User only
+				{
+				query = "FIND {"+ExtensionManipulation.validate(extension)+"} IN Phone FIELDS RETURNING "+ 
+						"Contact(Id, Phone, FirstName, LastName WHERE OwnerId='"+userID+"'),"+ 
+						"Lead(Id, Phone, FirstName, LastName WHERE OwnerId='"+userID+"'),"+ 
+						"Account(Id, Phone, Name)";
+				}
 			
-			try
+			SearchResult result = Variables.getSFConnection().search(query);
+			
+			for(SearchRecord sr : result.getSearchRecords())
 				{
-				String query;
-				if(UsefulMethod.getSearchArea().equals(searchArea.all))
-					{
-					query = "FIND {"+ExtensionManipulation.validate(extension)+"} IN Phone FIELDS RETURNING "+
-							"Contact(Id, Phone, FirstName, LastName),"+
-							"Lead(Id, Phone, FirstName, LastName),"+
-							"Account(Id, Phone, Name)";
-					}
-				else //User only
-					{
-					query = "FIND {"+ExtensionManipulation.validate(extension)+"} IN Phone FIELDS RETURNING "+ 
-							"Contact(Id, Phone, FirstName, LastName WHERE OwnerId='"+userID+"'),"+ 
-							"Lead(Id, Phone, FirstName, LastName WHERE OwnerId='"+userID+"'),"+ 
-							"Account(Id, Phone, Name)";
-					}
+				SObject r = sr.getRecord();
 				
-				SearchResult result = Variables.getSFConnection().search(query);
-				
-				for(SearchRecord sr : result.getSearchRecords())
+				if(r instanceof Contact)
 					{
-					SObject r = sr.getRecord();
-					
-					if(r instanceof Contact)
-						{
-						sfo = new SFObject(sfObjectType.contact, r.getId(), r);
-						}
-					else if(r instanceof Lead)
-						{
-						sfo = new SFObject(sfObjectType.lead, r.getId(), r);
-						}
-					else if(r instanceof Account)
-						{
-						sfo = new SFObject(sfObjectType.account, r.getId(), r);
-						}
+					sfo = new SFObject(sfObjectType.contact, r.getId(), r);
 					}
-				
-				if(sfo != null)Variables.getLogger().debug("Data found for extention : "+extension);
+				else if(r instanceof Lead)
+					{
+					sfo = new SFObject(sfObjectType.lead, r.getId(), r);
+					}
+				else if(r instanceof Account)
+					{
+					sfo = new SFObject(sfObjectType.account, r.getId(), r);
+					}
 				}
-			catch (Exception e)
-				{
-				Variables.getLogger().error("ERROR : While looking for extension : "+e.getMessage(),e);
-				Variables.getLogger().error("Clearing SF Connection");
-				Variables.setSFConnection(null);
-				}
+			
+			if(sfo != null)Variables.getLogger().debug("Data found for extention : "+extension);
+			}
+		catch (Exception e)
+			{
+			Variables.getLogger().error("ERROR : While looking for extension : "+e.getMessage(),e);
+			Variables.getLogger().error("Clearing SF Connection");
+			Variables.setSFConnection(null);
 			}
 		
 		return sfo;

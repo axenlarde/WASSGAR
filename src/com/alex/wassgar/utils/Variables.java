@@ -384,6 +384,10 @@ public class Variables
 
 	public static ArrayList<Call> getCallList()
 		{
+		if(callList == null)
+			{
+			callList = new ArrayList<Call>();
+			}
 		return callList;
 		}
 

@@ -9,6 +9,7 @@ import java.net.InetSocketAddress;
 import com.alex.wassgar.misc.User;
 import com.alex.wassgar.salesforce.SFObject;
 import com.alex.wassgar.salesforce.SalesForceManager;
+import com.alex.wassgar.utils.ExtensionManipulation;
 import com.alex.wassgar.utils.UsefulMethod;
 import com.alex.wassgar.utils.Variables;
 import com.alex.wassgar.utils.Variables.callType;
@@ -144,7 +145,7 @@ public class CURRIHTTPServer implements HttpHandler
 					//We then ask salesforce if the callingnumber is known
 					SFObject sfo = SalesForceManager.lookForExtension(u.getSalesforceID(), callingNumber);
 					if(sfo != null)
-						{					
+						{
 						return new CURRIRequest(callingNumber, extension, UsefulMethod.getAlertingNameFromSFObject(sfo), null, callType.incoming);
 						}
 					else

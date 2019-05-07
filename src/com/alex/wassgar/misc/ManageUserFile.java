@@ -22,14 +22,15 @@ public class ManageUserFile
 	 * Add a new user in the userFile and in
 	 * the users currently loaded in memory
 	 */
-	public synchronized static boolean addUser(String firstName, String lastName, String extension, String email, String cucmID, String salesforceID, boolean incomingCallPopup, boolean reverseLookup, boolean emailReminder, String defaultBrowser)
+	public synchronized static boolean addUser(String firstName, String lastName, String extension, String email, String cucmID, String salesforceID, boolean incomingCallPopup, boolean reverseLookup, boolean emailReminder, String defaultBrowser, String browserOptions)
 		{
 		try
 			{
 			/******
 			 * Add the new user in memory
 			 */
-			User newUser = new User(firstName,
+			User newUser = new User(null,
+					firstName,
 					lastName,
 					extension,
 					email,
@@ -38,7 +39,8 @@ public class ManageUserFile
 					incomingCallPopup,
 					reverseLookup,
 					emailReminder,
-					defaultBrowser);
+					defaultBrowser,
+					browserOptions);
 			
 			//we check that the user doesn't already exists
 			for(User u : Variables.getUserList())
@@ -116,7 +118,7 @@ public class ManageUserFile
 	 * Update a user in the userFile and in
 	 * the users currently loaded in memory
 	 */
-	public synchronized static boolean updateUser(String ID, String extension, String defaultBrowser, boolean incomingCallPopup, boolean reverseLookup, boolean emailReminder)
+	public synchronized static boolean updateUser(String ID, String extension, String defaultBrowser, String browserOptions, boolean incomingCallPopup, boolean reverseLookup, boolean emailReminder)
 		{
 		try
 			{
@@ -128,22 +130,28 @@ public class ManageUserFile
 						{
 						if(!extension.equals(u.getExtension()))//We check that the new extension is not the same
 							{
+							//If the extension changed we restart the JTAPI monitoring
+							if(Variables.getJtapiMonitor() != null)Variables.getJtapiMonitor().deleteUserMonitoring(u);
+							
 							u.setExtension(extension);
 							
-							//If the extension changed we restart the JTAPI monitoring
-							if(Variables.getJtapiMonitor() != null)
-								{
-								Variables.getJtapiMonitor().deleteUserMonitoring(u);
-								Variables.getJtapiMonitor().updateMonitoring();
-								}
+							if(Variables.getJtapiMonitor() != null)Variables.getJtapiMonitor().updateMonitoring();
 							}
 						}
 					
 					if((defaultBrowser != null) && (!defaultBrowser.equals("")))
 						{
-						if(!defaultBrowser.equals(u.getDefaultBrowser()))//We check that the new extension is not the same
+						if(!defaultBrowser.equals(u.getDefaultBrowser()))//We check that the new value is not the same
 							{
 							u.setDefaultBrowser(defaultBrowser);
+							}
+						}
+					
+					if(browserOptions != null)
+						{
+						if(!browserOptions.equals(u.getBrowserOptions()))//We check that the new value is not the same
+							{
+							u.setBrowserOptions(browserOptions);
 							}
 						}
 					
@@ -209,6 +217,7 @@ public class ManageUserFile
 					"			<cucmid>"+u.getCucmID()+"</cucmid>\r\n" + 
 					"			<salesforceid>"+u.getSalesforceID()+"</salesforceid>\r\n" + 
 					"			<defaultbrowser>"+u.getDefaultBrowser()+"</defaultbrowser>\r\n" + 
+					"			<browseroptions>"+u.getBrowserOptions()+"</browseroptions>\r\n" + 
 					"			<incomingcallpopup>"+u.isIncomingCallPopup()+"</incomingcallpopup>\r\n" + 
 					"			<reverselookup>"+u.isReverseLookup()+"</reverselookup>\r\n" + 
 					"			<emailreminder>"+u.isEmailReminder()+"</emailreminder>\r\n" + 

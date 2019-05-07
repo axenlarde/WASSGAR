@@ -90,6 +90,7 @@ public class WebRequestBuilder
 				content.append("			<firstname>"+u.getFirstName()+"</firstname>\r\n");
 				content.append("			<lastname>"+u.getLastName()+"</lastname>\r\n");
 				content.append("			<extension>"+u.getExtension()+"</extension>\r\n");
+				content.append("			<status>"+u.getStatus()+"</status>\r\n");
 				content.append("			<id>"+u.getID()+"</id>\r\n");
 				content.append("		</user>\r\n");
 				}
@@ -132,9 +133,11 @@ public class WebRequestBuilder
 			content.append("		<extension>"+u.getExtension()+"</extension>\r\n");
 			content.append("		<email>"+u.getEmail()+"</email>\r\n");
 			content.append("		<defaultbrowser>"+u.getDefaultBrowser()+"</defaultbrowser>\r\n");
+			content.append("		<browseroptions>"+u.getBrowserOptions()+"</browseroptions>\r\n");
 			content.append("		<emailreminder>"+u.isEmailReminder()+"</emailreminder>\r\n");
 			content.append("		<incomingcallpopup>"+u.isIncomingCallPopup()+"</incomingcallpopup>\r\n");
 			content.append("		<reverselookup>"+u.isReverseLookup()+"</reverselookup>\r\n");
+			content.append("		<status>"+u.getStatus()+"</status>\r\n");
 			content.append("	</user>\r\n");
 			content.append("</xml>\r\n");
 			
