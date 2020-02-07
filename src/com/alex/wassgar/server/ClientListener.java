@@ -1,13 +1,10 @@
 package com.alex.wassgar.server;
 
-import java.io.ObjectInputStream;
-import java.net.Socket;
 import java.util.ArrayList;
 
 import com.alex.wassgar.misc.ManageUserFile;
 import com.alex.wassgar.misc.User;
 import com.alex.wassgar.server.Request.requestType;
-import com.alex.wassgar.utils.UsefulMethod;
 import com.alex.wassgar.utils.Variables;
 import com.alex.wassgar.utils.xMLGear;
 

@@ -6,7 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
- * Used to store client conneciton socket and streams
+ * Used to store client connection socket and streams
  *
  * @author Alexandre
  */

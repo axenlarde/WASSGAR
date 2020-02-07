@@ -5,7 +5,7 @@ import com.alex.wassgar.server.Request.requestType;
 import com.alex.wassgar.utils.Variables;
 
 /**
- * Class used to manager request to clients
+ * Class used to manage request to clients
  */
 public class ManageRequest
 	{
